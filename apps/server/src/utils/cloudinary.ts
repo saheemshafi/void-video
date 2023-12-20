@@ -26,11 +26,11 @@ async function uploadFileToCloudinary(
   if (!filePath) return null;
   console.log('Started uploading for ' + filePath);
   try {
-    const imageResponse = await cloudinary.uploader.upload(filePath, {
+    const uploadResponse = await cloudinary.uploader.upload(filePath, {
       resource_type: 'auto',
       ...options,
     });
-    return imageResponse;
+    return uploadResponse;
   } catch (error) {
     console.log('CLOUDINARY: Failed to upload file. ', error);
     throw error;
