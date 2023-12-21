@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import ApiError from '../utils/api-error';
 import { User } from '../models/user.model';
 import { NextFunction, Request, Response } from 'express';
+import { STATUS_CODES } from '../constants';
 
 export const authorize = async (
   req: Request,
@@ -14,7 +15,7 @@ export const authorize = async (
       req.header('Authorization')?.replace('Bearer ', '');
 
     if (!token) {
-      throw new ApiError(401, 'Unauthorized.');
+      throw new ApiError(STATUS_CODES.UNAUTHORIZED, 'Unauthorized.');
     }
     const verifiedToken = jwt.verify(
       token,
@@ -26,12 +27,17 @@ export const authorize = async (
     );
 
     if (!user) {
-      throw new ApiError(401, 'Unauthorized.');
+      throw new ApiError(STATUS_CODES.UNAUTHORIZED, 'Unauthorized.');
     }
 
     req.user = user;
     next();
   } catch (error) {
-    next(new ApiError(401, error instanceof Error ? error.message : ''));
+    next(
+      new ApiError(
+        STATUS_CODES.UNAUTHORIZED,
+        error instanceof Error ? error.message : ''
+      )
+    );
   }
 };

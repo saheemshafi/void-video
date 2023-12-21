@@ -1,6 +1,8 @@
+import { STATUS_CODES_TYPE } from '../constants';
+
 class ApiError extends Error {
   constructor(
-    public status: number,
+    public status: STATUS_CODES_TYPE[keyof STATUS_CODES_TYPE],
     public message: string,
     public data = null,
     public success = false,

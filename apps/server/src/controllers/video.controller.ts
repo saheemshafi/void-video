@@ -6,6 +6,7 @@ import ApiError from '../utils/api-error';
 import ApiResponse from '../utils/api-response';
 import asyncHandler from '../utils/async-handler';
 import uploadFileToCloudinary, { mapToFileObject } from '../utils/cloudinary';
+import { STATUS_CODES } from '../constants';
 
 type IVideoUploadFiles =
   | {
@@ -22,7 +23,7 @@ const uploadVideo = asyncHandler(async (req, res) => {
   const { title, description, isPublished } = req.body;
 
   if (![title, description].every(Boolean)) {
-    throw new ApiError(400, 'All fields are required.');
+    throw new ApiError(STATUS_CODES.BAD_REQUEST, 'All fields are required.');
   }
 
   const tempThumbnailPath = (<IVideoUploadFiles>req.files)?.thumbnail?.[0]
@@ -30,7 +31,10 @@ const uploadVideo = asyncHandler(async (req, res) => {
   const tempVideoPath = (<IVideoUploadFiles>req.files)?.video?.[0]?.path;
 
   if (!tempVideoPath || !tempThumbnailPath) {
-    throw new ApiError(400, 'Video or thumbnail is missing.');
+    throw new ApiError(
+      STATUS_CODES.BAD_REQUEST,
+      'Video or thumbnail is missing.'
+    );
   }
 
   const uploads = [
@@ -46,11 +50,17 @@ const uploadVideo = asyncHandler(async (req, res) => {
     await Promise.allSettled(uploads);
 
   if (videoUploadResponse?.status == 'rejected') {
-    throw new ApiError(500, 'Video failed to upload.');
+    throw new ApiError(
+      STATUS_CODES.INTERNAL_SERVER_ERROR,
+      'Video failed to upload.'
+    );
   }
 
   if (thumbnailUploadResponse?.status == 'rejected') {
-    throw new ApiError(500, 'Thumbnail failed to upload.');
+    throw new ApiError(
+      STATUS_CODES.INTERNAL_SERVER_ERROR,
+      'Thumbnail failed to upload.'
+    );
   }
 
   const video = await Video.create({
@@ -63,10 +73,13 @@ const uploadVideo = asyncHandler(async (req, res) => {
   });
 
   if (!video) {
-    throw new ApiError(500, 'Video uploading failed.');
+    throw new ApiError(
+      STATUS_CODES.INTERNAL_SERVER_ERROR,
+      'Video uploading failed.'
+    );
   }
 
-  res.status(201).json(new ApiResponse(201, 'Video uploaded.', video));
+  res.status(STATUS_CODES.CREATED).json(new ApiResponse(STATUS_CODES.CREATED, 'Video uploaded.', video));
 });
 
 /**
@@ -77,7 +90,10 @@ const likeVideo = asyncHandler(async (req, res) => {
   const videoId = req.params.videoId;
 
   if (!isValidObjectId(videoId)) {
-    throw new ApiError(400, 'Video id is absent or not valid.');
+    throw new ApiError(
+      STATUS_CODES.BAD_REQUEST,
+      'Video id is absent or not valid.'
+    );
   }
 
   const likeExists = await Like.findOne({
@@ -93,12 +109,15 @@ const likeVideo = asyncHandler(async (req, res) => {
     const deletedLike = await Like.findByIdAndDelete(likeExists.id);
 
     if (!deletedLike) {
-      throw new ApiError(500, 'Failed to remove like.');
+      throw new ApiError(
+        STATUS_CODES.INTERNAL_SERVER_ERROR,
+        'Failed to remove like.'
+      );
     }
 
     res
-      .status(200)
-      .json(new ApiResponse(200, 'Removed the like.', deletedLike));
+      .status(STATUS_CODES.OK)
+      .json(new ApiResponse(STATUS_CODES.OK, 'Removed the like.', deletedLike));
   } else {
     const like = await Like.create({
       likedBy: req.user?._id,
@@ -107,10 +126,13 @@ const likeVideo = asyncHandler(async (req, res) => {
     });
 
     if (!like) {
-      throw new ApiError(500, 'Like failed unexpectedly.');
+      throw new ApiError(
+        STATUS_CODES.INTERNAL_SERVER_ERROR,
+        'Like failed unexpectedly.'
+      );
     }
 
-    res.status(201).json(new ApiResponse(201, 'Liked the video.', like));
+    res.status(STATUS_CODES.CREATED).json(new ApiResponse(STATUS_CODES.CREATED, 'Liked the video.', like));
   }
 });
 
@@ -122,16 +144,21 @@ const getVideo = asyncHandler(async (req, res) => {
   const videoId = req.params.videoId;
 
   if (!isValidObjectId(videoId)) {
-    throw new ApiError(400, 'Video Id absent or not valid.');
+    throw new ApiError(
+      STATUS_CODES.BAD_REQUEST,
+      'Video Id absent or not valid.'
+    );
   }
 
   const video = await Video.findById(videoId);
 
   if (!video) {
-    throw new ApiError(404, 'Video not found.');
+    throw new ApiError(STATUS_CODES.NOT_FOUND, 'Video not found.');
   }
 
-  res.status(200).json(new ApiResponse(200, 'Video retrieved.', video));
+  res
+    .status(STATUS_CODES.OK)
+    .json(new ApiResponse(STATUS_CODES.OK, 'Video retrieved.', video));
 });
 
 /**
@@ -140,44 +167,45 @@ const getVideo = asyncHandler(async (req, res) => {
  */
 const updateVideo = asyncHandler(async (req, res) => {
   if (Object.keys(req.body).length === 0) {
-    throw new ApiError(400, 'Provide fields to update');
+    throw new ApiError(STATUS_CODES.BAD_REQUEST, 'Provide fields to update');
   }
 
   const videoId = req.params.videoId;
 
   if (!isValidObjectId(videoId)) {
-    throw new ApiError(400, 'Video Id absent or not valid.');
+    throw new ApiError(
+      STATUS_CODES.BAD_REQUEST,
+      'Video Id absent or not valid.'
+    );
   }
 
   const existingVideo = await Video.findById(videoId);
 
   if (!existingVideo) {
-    throw new ApiError(404, 'Video not found.');
+    throw new ApiError(STATUS_CODES.NOT_FOUND, 'Video not found.');
   }
 
   if (!existingVideo.owner.equals(req.user?._id)) {
-    throw new ApiError(401, 'Not Authorized.');
+    throw new ApiError(STATUS_CODES.UNAUTHORIZED, 'Not Authorized.');
   }
 
   const { title, description, isPublished } = req.body;
 
-  if (req.body.title) {
-    existingVideo.title = title;
-  }
-  if (description) {
-    existingVideo.description = description;
-  }
-  if (isPublished) {
-    existingVideo.isPublished = isPublished;
-  }
-
-  const updatedVideo = await existingVideo.save();
+  const updatedVideo = await Video.findByIdAndUpdate(
+    existingVideo._id,
+    {
+      $set: { title, description, isPublished },
+    },
+    { new: true }
+  );
 
   if (!updatedVideo) {
-    throw new ApiError(500, 'Failed to update');
+    throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, 'Failed to update');
   }
 
-  res.status(200).json(new ApiResponse(200, 'Video updated.', updatedVideo));
+  res
+    .status(STATUS_CODES.OK)
+    .json(new ApiResponse(STATUS_CODES.OK, 'Video updated.', updatedVideo));
 });
 
 /**
@@ -188,26 +216,31 @@ const deleteVideo = asyncHandler(async (req, res) => {
   const videoId = req.params.videoId;
 
   if (!isValidObjectId(videoId)) {
-    throw new ApiError(400, 'Video Id absent or not valid.');
+    throw new ApiError(
+      STATUS_CODES.BAD_REQUEST,
+      'Video Id absent or not valid.'
+    );
   }
 
   const videoExists = await Video.findById(videoId);
 
   if (!videoExists) {
-    throw new ApiError(404, 'Video not found.');
+    throw new ApiError(STATUS_CODES.NOT_FOUND, 'Video not found.');
   }
 
   if (!videoExists.owner.equals(req.user?._id)) {
-    throw new ApiError(401, 'Not authorized.');
+    throw new ApiError(STATUS_CODES.UNAUTHORIZED, 'Not authorized.');
   }
 
   const deletedVideo = await Video.findByIdAndDelete(videoId);
 
   if (!deletedVideo) {
-    throw new ApiError(500, 'Failed to delete.');
+    throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, 'Failed to delete.');
   }
 
-  res.status(200).json(new ApiResponse(200, 'Deleted video.', deletedVideo));
+  res
+    .status(STATUS_CODES.OK)
+    .json(new ApiResponse(STATUS_CODES.OK, 'Deleted video.', deletedVideo));
 });
 
 /**
@@ -218,14 +251,17 @@ const getVideoComments = asyncHandler(async (req, res) => {
   const videoId = req.params.videoId;
 
   if (!isValidObjectId(videoId)) {
-    throw new ApiError(400, 'Video Id absent or not valid.');
+    throw new ApiError(
+      STATUS_CODES.BAD_REQUEST,
+      'Video Id absent or not valid.'
+    );
   }
 
-  const comments = await Comment.find({ video: videoId });
+  const comments = await Comment.find({ type: 'video', video: videoId });
 
   res
-    .status(200)
-    .json(new ApiResponse(200, 'Retrived comments.', { comments }));
+    .status(STATUS_CODES.OK)
+    .json(new ApiResponse(STATUS_CODES.OK, 'Retrived comments.', { comments }));
 });
 
 /**
@@ -251,8 +287,8 @@ const getVideos = asyncHandler(async (req, res) => {
     select: '-watchHistory',
   });
 
-  res.status(200).json(
-    new ApiResponse(200, 'Videos retrieved.', {
+  res.status(STATUS_CODES.OK).json(
+    new ApiResponse(STATUS_CODES.OK, 'Videos retrieved.', {
       ...paginationData,
       videos,
     })

@@ -9,6 +9,7 @@ import {
 } from '../utils/email';
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
+import { STATUS_CODES } from '../constants';
 
 type IUserFiles =
   | {
@@ -25,20 +26,23 @@ const createAccount = asyncHandler(async (req: Request, res: Response) => {
   const { displayName, username, email, password } = req.body;
 
   if (![displayName, username, email, password].every(Boolean)) {
-    throw new ApiError(400, 'All fields are required.');
+    throw new ApiError(STATUS_CODES.BAD_REQUEST, 'All fields are required.');
   }
 
   const userExists = await User.findOne({ $or: [{ username }, { email }] });
 
   if (userExists) {
-    throw new ApiError(409, 'username or email already exists.');
+    throw new ApiError(
+      STATUS_CODES.CONFLICT,
+      'username or email already exists.'
+    );
   }
 
   const tempAvatarPath = (<IUserFiles>req.files)?.avatar?.[0]?.path;
   const tempBannerPath = (<IUserFiles>req.files)?.banner?.[0]?.path;
 
   if (!tempAvatarPath) {
-    throw new ApiError(400, 'Avatar is required.');
+    throw new ApiError(STATUS_CODES.BAD_REQUEST, 'Avatar is required.');
   }
 
   const uploads = [uploadToCloudinary(tempAvatarPath, { folder: 'avatars' })];
@@ -50,7 +54,10 @@ const createAccount = asyncHandler(async (req: Request, res: Response) => {
     await Promise.allSettled(uploads);
 
   if (avatarUploadResponse?.status == 'rejected') {
-    throw new ApiError(500, 'Failed to upload avatar.');
+    throw new ApiError(
+      STATUS_CODES.INTERNAL_SERVER_ERROR,
+      'Failed to upload avatar.'
+    );
   }
 
   const user = await User.create({
@@ -68,10 +75,17 @@ const createAccount = asyncHandler(async (req: Request, res: Response) => {
   const createdUser = await User.findById(user._id);
 
   if (!createdUser) {
-    throw new ApiError(500, 'Failed to create account.');
+    throw new ApiError(
+      STATUS_CODES.INTERNAL_SERVER_ERROR,
+      'Failed to create account.'
+    );
   }
 
-  res.status(201).json(new ApiResponse(201, 'Account created.', createdUser));
+  res
+    .status(STATUS_CODES.CREATED)
+    .json(
+      new ApiResponse(STATUS_CODES.CREATED, 'Account created.', createdUser)
+    );
 });
 
 /**
@@ -82,18 +96,21 @@ const login = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   if (![email, password].every(Boolean)) {
-    throw new ApiError(400, 'Email or password not provided.');
+    throw new ApiError(
+      STATUS_CODES.BAD_REQUEST,
+      'Email or password not provided.'
+    );
   }
 
   const user = await User.findOne({ email }).select('+password');
 
   if (!user) {
-    throw new ApiError(404, 'Account doesn\'t exist.');
+    throw new ApiError(STATUS_CODES.NOT_FOUND, 'Account does not exist.');
   }
 
   const passwordsMatch = await user.comparePasswords(password);
   if (!passwordsMatch) {
-    throw new ApiError(401, 'Invalid credentials provided.');
+    throw new ApiError(STATUS_CODES.UNAUTHORIZED, 'Invalid credentials provided.');
   }
 
   const accessToken = user.generateAccessToken();
@@ -108,9 +125,9 @@ const login = asyncHandler(async (req: Request, res: Response) => {
       httpOnly: true,
       signed: true,
     })
-    .status(200)
+    .status(STATUS_CODES.OK)
     .json(
-      new ApiResponse(200, 'Authenticated successfully.', {
+      new ApiResponse(STATUS_CODES.OK, 'Authenticated successfully.', {
         user: { ...user.toObject(), password: undefined },
         accessToken,
         refreshToken,
@@ -123,7 +140,9 @@ const login = asyncHandler(async (req: Request, res: Response) => {
  * Controller for retrieving a user session.
  */
 const getSession = asyncHandler(async (req: Request, res: Response) => {
-  res.status(200).json(new ApiResponse(200, 'Session verified.', req.user));
+  res
+    .status(STATUS_CODES.OK)
+    .json(new ApiResponse(STATUS_CODES.OK, 'Session verified.', req.user));
 });
 
 /**
@@ -134,8 +153,8 @@ const logout = asyncHandler(async (req: Request, res: Response) => {
   res
     .clearCookie('token')
     .clearCookie('refresh-token')
-    .status(200)
-    .json(new ApiResponse(200, 'Logged out.', null));
+    .status(STATUS_CODES.OK)
+    .json(new ApiResponse(STATUS_CODES.OK, 'Logged out.', null));
 });
 
 /*
@@ -146,7 +165,7 @@ const revalidateSession = asyncHandler(async (req: Request, res: Response) => {
   const incomingToken = req.signedCookies['refresh-token'];
 
   if (!incomingToken) {
-    throw new ApiError(400, 'Refresh token not present.');
+    throw new ApiError(STATUS_CODES.BAD_REQUEST, 'Refresh token not present.');
   }
 
   const decodedToken = jwt.verify(
@@ -159,7 +178,7 @@ const revalidateSession = asyncHandler(async (req: Request, res: Response) => {
   );
 
   if (!user) {
-    throw new ApiError(404, 'User does not exist.');
+    throw new ApiError(STATUS_CODES.NOT_FOUND, 'User does not exist.');
   }
 
   const accessToken = user.generateAccessToken();
@@ -173,8 +192,8 @@ const revalidateSession = asyncHandler(async (req: Request, res: Response) => {
   res
     .cookie('token', accessToken, cookieOptions)
     .cookie('refresh-token', refreshToken, cookieOptions)
-    .status(200)
-    .json(new ApiResponse(200, 'Session revalidated.', user));
+    .status(STATUS_CODES.OK)
+    .json(new ApiResponse(STATUS_CODES.OK, 'Session revalidated.', user));
 });
 
 /**
@@ -186,13 +205,16 @@ const emailPasswordResetLink = asyncHandler(
     const { email } = req.body;
 
     if (!email) {
-      throw new ApiError(400, 'No email provided.');
+      throw new ApiError(STATUS_CODES.BAD_REQUEST, 'No email provided.');
     }
 
     const user = await User.findOne({ email });
 
     if (!user) {
-      throw new ApiError(404, 'User not found with the provided email.');
+      throw new ApiError(
+        STATUS_CODES.NOT_FOUND,
+        'User not found with the provided email.'
+      );
     }
 
     const resetToken = user.generateResetPasswordToken();
@@ -205,8 +227,8 @@ const emailPasswordResetLink = asyncHandler(
       resetLink: resetPasswordUri,
     });
 
-    res.status(200).json(
-      new ApiResponse(200, 'Password reset link sent.', {
+    res.status(STATUS_CODES.OK).json(
+      new ApiResponse(STATUS_CODES.OK, 'Password reset link sent.', {
         messageId: emailResponse.messageId,
       })
     );
@@ -221,10 +243,13 @@ const resetPassword = asyncHandler(async (req: Request, res: Response) => {
   const { token, password } = req.body;
 
   if (!token) {
-    throw new ApiError(400, 'Reset password token missing from body');
+    throw new ApiError(
+      STATUS_CODES.BAD_REQUEST,
+      'Reset password token missing from body'
+    );
   }
   if (!password) {
-    throw new ApiError(400, 'Password is missing');
+    throw new ApiError(STATUS_CODES.BAD_REQUEST, 'Password is missing');
   }
 
   const decodedToken = jwt.verify(
@@ -237,14 +262,17 @@ const resetPassword = asyncHandler(async (req: Request, res: Response) => {
   );
 
   if (!user) {
-    throw new ApiError(404, 'User not found');
+    throw new ApiError(STATUS_CODES.NOT_FOUND, 'User not found');
   }
 
   user.password = password;
   const updatedUser = await user.save();
 
   if (!updatedUser) {
-    throw new ApiError(500, 'Password reset failed.');
+    throw new ApiError(
+      STATUS_CODES.INTERNAL_SERVER_ERROR,
+      'Password reset failed.'
+    );
   }
 
   const emailResponse = await sendPasswordResetSuccessEmail(updatedUser.email, {
@@ -252,8 +280,8 @@ const resetPassword = asyncHandler(async (req: Request, res: Response) => {
     username: updatedUser.username,
   });
 
-  res.status(200).json(
-    new ApiResponse(200, 'Password reset successfull.', {
+  res.status(STATUS_CODES.OK).json(
+    new ApiResponse(STATUS_CODES.OK, 'Password reset successfull.', {
       user: { ...updatedUser.toObject(), password: undefined },
       messageId: emailResponse.messageId,
     })

@@ -1,6 +1,10 @@
 import mongoose, { Types } from 'mongoose';
 
+export const COMMENT_TYPES = ['video', 'post'] as const;
+export type COMMENT_TYPE = (typeof COMMENT_TYPES)[number];
+
 export interface IComment {
+  type: COMMENT_TYPE;
   content: string;
   video: Types.ObjectId;
   post: Types.ObjectId;
@@ -9,6 +13,10 @@ export interface IComment {
 
 const commentSchema = new mongoose.Schema<IComment>(
   {
+    type: {
+      type: String,
+      enum: COMMENT_TYPES,
+    },
     content: {
       type: String,
       required: true,

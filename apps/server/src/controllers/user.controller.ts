@@ -10,12 +10,16 @@ import { Video } from '../models/video.model';
 import ApiResponse from '../utils/api-response.js';
 import { Post } from '../models/post.model';
 import { Request, Response } from 'express';
+import { STATUS_CODES } from '../constants';
 
 const getUserVideos = asyncHandler(async (req: Request, res: Response) => {
   const { userId } = req.params;
 
   if (!isValidObjectId(userId)) {
-    throw new ApiError(400, 'User id passed is not valid.');
+    throw new ApiError(
+      STATUS_CODES.BAD_REQUEST,
+      'User id passed is not valid.'
+    );
   }
 
   const { page, limit, include_unpublished } = req.query;
@@ -53,8 +57,8 @@ const getUserVideos = asyncHandler(async (req: Request, res: Response) => {
     select: '-watchHistory',
   });
 
-  res.status(200).json(
-    new ApiResponse(200, 'User videos retrieved.', {
+  res.status(STATUS_CODES.OK).json(
+    new ApiResponse(STATUS_CODES.OK, 'User videos retrieved.', {
       ...paginationData,
       videos,
     })
@@ -65,7 +69,10 @@ const getUserPosts = asyncHandler(async (req: Request, res: Response) => {
   const { userId } = req.params;
 
   if (!isValidObjectId(userId)) {
-    throw new ApiError(400, 'User id passed is not valid.');
+    throw new ApiError(
+      STATUS_CODES.BAD_REQUEST,
+      'User id passed is not valid.'
+    );
   }
 
   const { page, limit } = req.query;
@@ -86,8 +93,8 @@ const getUserPosts = asyncHandler(async (req: Request, res: Response) => {
     select: ['-watchHistory'],
   });
 
-  res.status(200).json(
-    new ApiResponse(200, 'User posts retrieved.', {
+  res.status(STATUS_CODES.OK).json(
+    new ApiResponse(STATUS_CODES.OK, 'User posts retrieved.', {
       posts,
       ...paginationOptions,
     })
