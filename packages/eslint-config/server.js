@@ -19,7 +19,6 @@ module.exports = {
   },
   plugins: ['@typescript-eslint/eslint-plugin', 'only-warn'],
   rules: {
-    indent: ['error', 2],
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
     'no-trailing-spaces': ['error'],
@@ -51,7 +50,6 @@ module.exports = {
       },
     ],
     'dot-location': ['error', 'property'],
-    'arrow-body-style': ['error', 'as-needed'],
     'comma-style': ['error', 'last'],
     'space-in-parens': ['error', 'never'],
     'space-infix-ops': [

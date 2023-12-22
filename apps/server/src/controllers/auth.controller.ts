@@ -1,33 +1,38 @@
-import asyncHandler from '../utils/async-handler';
+import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
+import { STATUS_CODES } from '../constants';
+import { User } from '../models/user.model';
+import { validateRequest } from '../utils';
 import ApiError from '../utils/api-error';
 import ApiResponse from '../utils/api-response';
-import { User } from '../models/user.model';
+import asyncHandler from '../utils/async-handler';
 import uploadToCloudinary, { mapToFileObject } from '../utils/cloudinary';
 import {
   sendPasswordResetEmail,
   sendPasswordResetSuccessEmail,
 } from '../utils/email';
-import jwt from 'jsonwebtoken';
-import { Request, Response } from 'express';
-import { STATUS_CODES } from '../constants';
-
-type IUserFiles =
-  | {
-      avatar?: Express.Multer.File[];
-      banner?: Express.Multer.File[];
-    }
-  | undefined;
+import { createAccountValidation } from '../validations/auth.validation';
 
 /**
  * POST `/auth/create-account`
  * Controller for registering a new user.
  */
 const createAccount = asyncHandler(async (req: Request, res: Response) => {
-  const { displayName, username, email, password } = req.body;
 
-  if (![displayName, username, email, password].every(Boolean)) {
-    throw new ApiError(STATUS_CODES.BAD_REQUEST, 'All fields are required.');
+  const validation = validateRequest(req, createAccountValidation);
+
+  if (!validation.success) {
+    throw new ApiError(
+      STATUS_CODES.BAD_REQUEST,
+      'Failed to validate request.',
+      validation.errors
+    );
   }
+
+  const {
+    body: { displayName, username, email, password },
+    files: { avatar, banner },
+  } = validation.data;
 
   const userExists = await User.findOne({ $or: [{ username }, { email }] });
 
@@ -38,17 +43,19 @@ const createAccount = asyncHandler(async (req: Request, res: Response) => {
     );
   }
 
-  const tempAvatarPath = (<IUserFiles>req.files)?.avatar?.[0]?.path;
-  const tempBannerPath = (<IUserFiles>req.files)?.banner?.[0]?.path;
+  const tempAvatarPath = avatar[0]?.path;
+  const tempBannerPath = banner[0]?.path;
 
   if (!tempAvatarPath) {
     throw new ApiError(STATUS_CODES.BAD_REQUEST, 'Avatar is required.');
   }
 
-  const uploads = [uploadToCloudinary(tempAvatarPath, { folder: 'avatars' })];
-  if (tempBannerPath) {
-    uploads.push(uploadToCloudinary(tempBannerPath, { folder: 'banners' }));
-  }
+  const uploads = [
+    uploadToCloudinary(tempAvatarPath, { folder: 'avatars' }),
+    tempBannerPath
+      ? uploadToCloudinary(tempBannerPath, { folder: 'banners' })
+      : undefined,
+  ];
 
   const [avatarUploadResponse, bannerUploadResponse] =
     await Promise.allSettled(uploads);
@@ -110,7 +117,10 @@ const login = asyncHandler(async (req: Request, res: Response) => {
 
   const passwordsMatch = await user.comparePasswords(password);
   if (!passwordsMatch) {
-    throw new ApiError(STATUS_CODES.UNAUTHORIZED, 'Invalid credentials provided.');
+    throw new ApiError(
+      STATUS_CODES.UNAUTHORIZED,
+      'Invalid credentials provided.'
+    );
   }
 
   const accessToken = user.generateAccessToken();
@@ -290,10 +300,10 @@ const resetPassword = asyncHandler(async (req: Request, res: Response) => {
 
 export {
   createAccount,
-  login,
-  getSession,
-  revalidateSession,
-  logout,
   emailPasswordResetLink,
+  getSession,
+  login,
+  logout,
   resetPassword,
+  revalidateSession,
 };

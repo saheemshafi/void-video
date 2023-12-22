@@ -10,12 +10,10 @@ export const errorHandler = (
 ) => {
   if (!error) return next();
 
-  const message = error.message;
   const status =
     error instanceof ApiError
       ? error.status
       : STATUS_CODES.INTERNAL_SERVER_ERROR;
-  const apiError = new ApiError(status, message);
-
-  res.status(status).json({ ...apiError, message });
+  const message = error.message || 'Something went wrong.';
+  res.status(status).json({ ...error, message, status });
 };
