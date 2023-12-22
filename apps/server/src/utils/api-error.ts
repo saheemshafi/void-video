@@ -1,5 +1,5 @@
 import { STATUS_CODES_TYPE } from '../constants';
-import ValidationError from '../types/validation-error';
+import { ValidationError } from '../types/validation.types';
 
 class ApiError extends Error {
   constructor(

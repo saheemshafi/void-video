@@ -1,5 +1,5 @@
 import z from 'zod';
-import ValidationError from '../types/validation-error';
+import { ValidationError, ValidateRequestResult } from '../types/validation.types';
 import { Request } from 'express';
 
 export const formatZodIssue = (error: z.ZodIssue): ValidationError => {
@@ -12,14 +12,17 @@ export const formatZodIssue = (error: z.ZodIssue): ValidationError => {
 export const validateRequest = <T extends z.ZodRawShape>(
   req: Request,
   validator: z.ZodObject<T>
-) => {
+): ValidateRequestResult<z.ZodObject<T>> => {
   const parsedRequest = validator.safeParse(req);
 
-  if (!parsedRequest.success) {
+  if (parsedRequest.success) {
     return {
-      success: parsedRequest.success,
-      errors: parsedRequest.error.errors?.map((error) => formatZodIssue(error)),
+      success: true,
+      data: parsedRequest.data,
     };
   }
-  return { success: false, data: parsedRequest.data };
+  return {
+    success: false,
+    errors: parsedRequest.error.errors?.map((error) => formatZodIssue(error)),
+  };
 };
