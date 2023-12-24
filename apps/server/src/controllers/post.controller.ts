@@ -5,7 +5,7 @@ import { Post } from '../models/post.model';
 import ApiError from '../utils/api-error';
 import ApiResponse from '../utils/api-response';
 import asyncHandler from '../utils/async-handler';
-import uploadToCloudinary, { mapToFileObject } from '../utils/cloudinary';
+import { uploadFileToCloudinary, mapToFileObject } from '../utils/cloudinary';
 import { STATUS_CODES } from '../constants';
 
 const uploadPost = asyncHandler(async (req: Request, res: Response) => {
@@ -19,7 +19,7 @@ const uploadPost = asyncHandler(async (req: Request, res: Response) => {
 
   if (Array.isArray(req.files) && req.files.length > 0) {
     const uploads = req.files.map((file) =>
-      uploadToCloudinary(file.path, {
+      uploadFileToCloudinary(file.path, {
         folder: 'post-images',
       })
     );
