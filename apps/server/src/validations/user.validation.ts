@@ -1,3 +1,4 @@
+import { isValidObjectId } from 'mongoose';
 import z from 'zod';
 import fileValidation from './multer.validation';
 
@@ -30,6 +31,12 @@ export const loginValidation = z.object({
     }),
 });
 
+export const revalidateSessionValidation = z.object({
+  signedCookies: z.object({
+    'refresh-token': z.string(),
+  }),
+});
+
 export const emailPasswordResetLinkValidation = z.object({
   body: z
     .object({
@@ -39,10 +46,12 @@ export const emailPasswordResetLinkValidation = z.object({
 });
 
 export const resetPasswordValidation = z.object({
-  body: z.object({
-    token: z.string(),
-    password: z.string().min(8),
-  }),
+  body: z
+    .object({
+      token: z.string(),
+      password: z.string().min(8),
+    })
+    .strict(),
 });
 
 export const changeAvatarValidation = z.object({
@@ -51,4 +60,32 @@ export const changeAvatarValidation = z.object({
 
 export const changeBannerValidation = z.object({
   file: fileValidation,
+});
+
+export const getChannelProfileValidation = z.object({
+  params: z
+    .object({
+      username: z.string(),
+    })
+    .strict(),
+});
+
+export const changePasswordValidation = z.object({
+  body: z
+    .object({
+      oldPassword: z.string().min(8),
+      newPassword: z.string().min(8),
+    })
+    .strict(),
+});
+
+export const addVideoToWatchHistoryValidation = z.object({
+  body: z
+    .object({
+      videoId: z.string().refine((videoId) => isValidObjectId(videoId), {
+        path: ['videoId'],
+        message: 'Video id is not valid.',
+      }),
+    })
+    .strict(),
 });

@@ -30,7 +30,6 @@ const fileSchema = new Schema<IFileObject>({
   },
   duration: {
     type: Number,
-    default: 0,
   },
   url: {
     type: String,

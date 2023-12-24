@@ -5,7 +5,7 @@ import { Video } from '../models/video.model';
 import ApiError from '../utils/api-error';
 import ApiResponse from '../utils/api-response';
 import asyncHandler from '../utils/async-handler';
-import uploadFileToCloudinary, { mapToFileObject } from '../utils/cloudinary';
+import { uploadFileToCloudinary, mapToFileObject } from '../utils/cloudinary';
 import { STATUS_CODES } from '../constants';
 
 type IVideoUploadFiles =
@@ -79,7 +79,9 @@ const uploadVideo = asyncHandler(async (req, res) => {
     );
   }
 
-  res.status(STATUS_CODES.CREATED).json(new ApiResponse(STATUS_CODES.CREATED, 'Video uploaded.', video));
+  res
+    .status(STATUS_CODES.CREATED)
+    .json(new ApiResponse(STATUS_CODES.CREATED, 'Video uploaded.', video));
 });
 
 /**
@@ -132,7 +134,9 @@ const likeVideo = asyncHandler(async (req, res) => {
       );
     }
 
-    res.status(STATUS_CODES.CREATED).json(new ApiResponse(STATUS_CODES.CREATED, 'Liked the video.', like));
+    res
+      .status(STATUS_CODES.CREATED)
+      .json(new ApiResponse(STATUS_CODES.CREATED, 'Liked the video.', like));
   }
 });
 
