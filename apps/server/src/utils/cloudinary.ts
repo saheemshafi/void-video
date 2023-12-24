@@ -22,7 +22,7 @@ type Folder =
 async function uploadFileToCloudinary(
   filePath: string,
   options?: UploadApiOptions & { folder?: Folder }
-) {
+): Promise<UploadApiResponse | null> {
   if (!filePath) return null;
   console.log('Started uploading for ' + filePath);
   try {
@@ -36,6 +36,21 @@ async function uploadFileToCloudinary(
     throw error;
   } finally {
     fs.unlinkSync(filePath);
+  }
+}
+
+async function removeFileFromCloudinary(publicId: string): Promise<boolean | null> {
+  if (!publicId) return null;
+
+  try {
+    const deleteResponse = await cloudinary.uploader.destroy(publicId, {
+      invalidate: true,
+    });
+    console.log(deleteResponse);
+    return true;
+  } catch (error) {
+    console.log('CLOUDINARY: Failed to remove file. ', error);
+    throw error;
   }
 }
 
@@ -55,5 +70,4 @@ const mapToFileObject = (file: UploadApiResponse | null | undefined) => {
   };
 };
 
-export default uploadFileToCloudinary;
-export { mapToFileObject };
+export { uploadFileToCloudinary, removeFileFromCloudinary, mapToFileObject };

@@ -1,16 +1,16 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Model, Schema, Types, model } from 'mongoose';
-import { fileSchema } from './file.model';
+import { IFileObject, fileSchema } from './file.model';
 
 export interface IUser {
   _id: Types.ObjectId;
   username: string;
   email: string;
-  avatar: string;
+  avatar: IFileObject;
   password: string;
   displayName: string;
-  banner: string | null;
+  banner: IFileObject | null;
   watchHistory: Types.ObjectId[];
   refreshToken: string;
 }

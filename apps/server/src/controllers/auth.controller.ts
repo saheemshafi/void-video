@@ -6,12 +6,23 @@ import { validateRequest } from '../utils';
 import ApiError from '../utils/api-error';
 import ApiResponse from '../utils/api-response';
 import asyncHandler from '../utils/async-handler';
-import uploadToCloudinary, { mapToFileObject } from '../utils/cloudinary';
+import {
+  uploadFileToCloudinary,
+  removeFileFromCloudinary,
+  mapToFileObject,
+} from '../utils/cloudinary';
 import {
   sendPasswordResetEmail,
   sendPasswordResetSuccessEmail,
 } from '../utils/email';
-import { createAccountValidation } from '../validations/auth.validation';
+import {
+  changeAvatarValidation,
+  changeBannerValidation,
+  createAccountValidation,
+  emailPasswordResetLinkValidation,
+  loginValidation,
+  resetPasswordValidation,
+} from '../validations/auth.validation';
 
 /**
  * POST `/auth/create-account`
@@ -19,20 +30,10 @@ import { createAccountValidation } from '../validations/auth.validation';
  */
 const createAccount = asyncHandler(async (req: Request, res: Response) => {
 
-  const validation = validateRequest(req, createAccountValidation);
-
-  if (!validation.success) {
-    throw new ApiError(
-      STATUS_CODES.BAD_REQUEST,
-      'Failed to validate request.',
-      validation.errors
-    );
-  }
-
   const {
     body: { displayName, username, email, password },
     files: { avatar, banner },
-  } = validation.data;
+  } = validateRequest(req, createAccountValidation);
 
   const userExists = await User.findOne({ $or: [{ username }, { email }] });
 
@@ -51,9 +52,9 @@ const createAccount = asyncHandler(async (req: Request, res: Response) => {
   }
 
   const uploads = [
-    uploadToCloudinary(tempAvatarPath, { folder: 'avatars' }),
+    uploadFileToCloudinary(tempAvatarPath, { folder: 'avatars' }),
     tempBannerPath
-      ? uploadToCloudinary(tempBannerPath, { folder: 'banners' })
+      ? uploadFileToCloudinary(tempBannerPath, { folder: 'banners' })
       : undefined,
   ];
 
@@ -100,16 +101,13 @@ const createAccount = asyncHandler(async (req: Request, res: Response) => {
  * Controller for logging a user in.
  */
 const login = asyncHandler(async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const {
+    body: { username, email, password },
+  } = validateRequest(req, loginValidation);
 
-  if (![email, password].every(Boolean)) {
-    throw new ApiError(
-      STATUS_CODES.BAD_REQUEST,
-      'Email or password not provided.'
-    );
-  }
-
-  const user = await User.findOne({ email }).select('+password');
+  const user = await User.findOne({ $or: [{ username }, { email }] }).select(
+    '+password'
+  );
 
   if (!user) {
     throw new ApiError(STATUS_CODES.NOT_FOUND, 'Account does not exist.');
@@ -212,11 +210,9 @@ const revalidateSession = asyncHandler(async (req: Request, res: Response) => {
  */
 const emailPasswordResetLink = asyncHandler(
   async (req: Request, res: Response) => {
-    const { email } = req.body;
-
-    if (!email) {
-      throw new ApiError(STATUS_CODES.BAD_REQUEST, 'No email provided.');
-    }
+    const {
+      body: { email },
+    } = validateRequest(req, emailPasswordResetLinkValidation);
 
     const user = await User.findOne({ email });
 
@@ -250,17 +246,9 @@ const emailPasswordResetLink = asyncHandler(
  * Controller for resetting user password.
  */
 const resetPassword = asyncHandler(async (req: Request, res: Response) => {
-  const { token, password } = req.body;
-
-  if (!token) {
-    throw new ApiError(
-      STATUS_CODES.BAD_REQUEST,
-      'Reset password token missing from body'
-    );
-  }
-  if (!password) {
-    throw new ApiError(STATUS_CODES.BAD_REQUEST, 'Password is missing');
-  }
+  const {
+    body: { token, password },
+  } = validateRequest(req, resetPasswordValidation);
 
   const decodedToken = jwt.verify(
     token,
@@ -298,6 +286,72 @@ const resetPassword = asyncHandler(async (req: Request, res: Response) => {
   );
 });
 
+/**
+ * POST `/auth/change-avatar`
+ * Controller for changing user avatar.
+ */
+const changeAvatar = asyncHandler(async (req, res) => {
+  const { file: avatar } = validateRequest(req, changeAvatarValidation);
+
+  const avatarUploadResponse = await uploadFileToCloudinary(avatar.path, {
+    folder: 'avatars',
+  });
+
+  if (!avatarUploadResponse) {
+    throw new ApiError(
+      STATUS_CODES.INTERNAL_SERVER_ERROR,
+      'Failed to upload avatar.'
+    );
+  }
+
+  const user = await User.findByIdAndUpdate(
+    req.user?._id,
+    {
+      $set: { avatar: mapToFileObject(avatarUploadResponse) },
+    },
+    { new: true }
+  );
+
+  await removeFileFromCloudinary(req.user?.avatar.public_id || '');
+
+  res
+    .status(STATUS_CODES.OK)
+    .json(new ApiResponse(STATUS_CODES.OK, 'Changed avatar.', user?.avatar));
+});
+
+/**
+ * POST `/auth/change-banner`
+ * Controller for changing user banner.
+ */
+const changeBanner = asyncHandler(async (req, res) => {
+  const { file: banner } = validateRequest(req, changeBannerValidation);
+
+  const bannerUploadResponse = await uploadFileToCloudinary(banner.path, {
+    folder: 'banners',
+  });
+
+  if (!bannerUploadResponse) {
+    throw new ApiError(
+      STATUS_CODES.INTERNAL_SERVER_ERROR,
+      'Failed to upload banner.'
+    );
+  }
+
+  const user = await User.findByIdAndUpdate(
+    req.user?._id,
+    {
+      $set: { banner: mapToFileObject(bannerUploadResponse) },
+    },
+    { new: true }
+  );
+
+  await removeFileFromCloudinary(req.user?.banner?.public_id || '');
+
+  res
+    .status(STATUS_CODES.OK)
+    .json(new ApiResponse(STATUS_CODES.OK, 'Changed banner.', user?.banner));
+});
+
 export {
   createAccount,
   emailPasswordResetLink,
@@ -306,4 +360,6 @@ export {
   logout,
   resetPassword,
   revalidateSession,
+  changeAvatar,
+  changeBanner,
 };

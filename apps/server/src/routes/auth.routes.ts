@@ -7,6 +7,8 @@ import {
   emailPasswordResetLink,
   resetPassword,
   revalidateSession,
+  changeAvatar,
+  changeBanner,
 } from '../controllers/auth.controller';
 import upload from '../middlewares/multer.middleware';
 import { authorize } from '../middlewares/auth.middleware';
@@ -29,5 +31,11 @@ authRouter.route('/session/revalidate').get(revalidateSession);
 authRouter.route('/logout').get(authorize, logout);
 authRouter.route('/forget-password').post(emailPasswordResetLink);
 authRouter.route('/reset-password').post(resetPassword);
+authRouter
+  .route('/change-avatar')
+  .post(authorize, upload.single('avatar'), changeAvatar);
+authRouter
+  .route('/change-banner')
+  .post(authorize, upload.single('banner'), changeBanner);
 
 export default authRouter;

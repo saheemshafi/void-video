@@ -5,6 +5,4 @@ export interface ValidationError {
   message: string;
 }
 
-export type ValidateRequestResult<T extends z.ZodSchema> =
-  | { success: true; data: z.infer<T> }
-  | { success: false; errors: ValidationError[] };
+export type ValidateRequestResult<T extends z.ZodSchema> = z.infer<T>;
