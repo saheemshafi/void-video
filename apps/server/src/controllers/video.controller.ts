@@ -7,33 +7,34 @@ import ApiResponse from '../utils/api-response';
 import asyncHandler from '../utils/async-handler';
 import { uploadFileToCloudinary, mapToFileObject } from '../utils/cloudinary';
 import { STATUS_CODES } from '../constants';
-
-type IVideoUploadFiles =
-  | {
-      thumbnail?: Express.Multer.File[];
-      video?: Express.Multer.File[];
-    }
-  | undefined;
+import { validateRequest } from '../utils';
+import {
+  uploadVideoValidation,
+  getVideoValidation,
+  updateVideoValidation,
+  deleteVideoValidation,
+  getVideoCommentsValidation,
+  getVideosValidation,
+} from '../validations/video.validation';
 
 /**
  * POST `/videos`
  * Controller for uploading a new video.
  */
 const uploadVideo = asyncHandler(async (req, res) => {
-  const { title, description, isPublished } = req.body;
 
-  if (![title, description].every(Boolean)) {
-    throw new ApiError(STATUS_CODES.BAD_REQUEST, 'All fields are required.');
-  }
+  const {
+    body: { title, description, isPublished },
+    files,
+  } = validateRequest(req, uploadVideoValidation);
 
-  const tempThumbnailPath = (<IVideoUploadFiles>req.files)?.thumbnail?.[0]
-    ?.path;
-  const tempVideoPath = (<IVideoUploadFiles>req.files)?.video?.[0]?.path;
+  const tempThumbnailPath = files.thumbnail[0]?.path;
+  const tempVideoPath = files.video[0]?.path;
 
-  if (!tempVideoPath || !tempThumbnailPath) {
+  if (!tempThumbnailPath || !tempVideoPath) {
     throw new ApiError(
-      STATUS_CODES.BAD_REQUEST,
-      'Video or thumbnail is missing.'
+      STATUS_CODES.INTERNAL_SERVER_ERROR,
+      'Video or thumbnail failed to upload.'
     );
   }
 
@@ -145,13 +146,12 @@ const likeVideo = asyncHandler(async (req, res) => {
  * Controller for retrieving a single video.
  */
 const getVideo = asyncHandler(async (req, res) => {
-  const videoId = req.params.videoId;
+  const {
+    params: { videoId },
+  } = validateRequest(req, getVideoValidation);
 
   if (!isValidObjectId(videoId)) {
-    throw new ApiError(
-      STATUS_CODES.BAD_REQUEST,
-      'Video Id absent or not valid.'
-    );
+    throw new ApiError(STATUS_CODES.BAD_REQUEST, 'Video Id not valid.');
   }
 
   const video = await Video.findById(videoId);
@@ -170,18 +170,11 @@ const getVideo = asyncHandler(async (req, res) => {
  * Controller for updating a video.
  */
 const updateVideo = asyncHandler(async (req, res) => {
-  if (Object.keys(req.body).length === 0) {
-    throw new ApiError(STATUS_CODES.BAD_REQUEST, 'Provide fields to update');
-  }
 
-  const videoId = req.params.videoId;
-
-  if (!isValidObjectId(videoId)) {
-    throw new ApiError(
-      STATUS_CODES.BAD_REQUEST,
-      'Video Id absent or not valid.'
-    );
-  }
+  const {
+    body: { title, description, isPublished },
+    params: { videoId },
+  } = validateRequest(req, updateVideoValidation);
 
   const existingVideo = await Video.findById(videoId);
 
@@ -192,8 +185,6 @@ const updateVideo = asyncHandler(async (req, res) => {
   if (!existingVideo.owner.equals(req.user?._id)) {
     throw new ApiError(STATUS_CODES.UNAUTHORIZED, 'Not Authorized.');
   }
-
-  const { title, description, isPublished } = req.body;
 
   const updatedVideo = await Video.findByIdAndUpdate(
     existingVideo._id,
@@ -217,14 +208,10 @@ const updateVideo = asyncHandler(async (req, res) => {
  * Controller for deleting a video.
  */
 const deleteVideo = asyncHandler(async (req, res) => {
-  const videoId = req.params.videoId;
 
-  if (!isValidObjectId(videoId)) {
-    throw new ApiError(
-      STATUS_CODES.BAD_REQUEST,
-      'Video Id absent or not valid.'
-    );
-  }
+  const {
+    params: { videoId },
+  } = validateRequest(req, deleteVideoValidation);
 
   const videoExists = await Video.findById(videoId);
 
@@ -252,14 +239,9 @@ const deleteVideo = asyncHandler(async (req, res) => {
  * Controller for getting comments of a video.
  */
 const getVideoComments = asyncHandler(async (req, res) => {
-  const videoId = req.params.videoId;
-
-  if (!isValidObjectId(videoId)) {
-    throw new ApiError(
-      STATUS_CODES.BAD_REQUEST,
-      'Video Id absent or not valid.'
-    );
-  }
+  const {
+    params: { videoId },
+  } = validateRequest(req, getVideoCommentsValidation);
 
   const comments = await Comment.find({ type: 'video', video: videoId });
 
@@ -273,11 +255,13 @@ const getVideoComments = asyncHandler(async (req, res) => {
  * Controller for getting all videos.
  */
 const getVideos = asyncHandler(async (req, res) => {
-  const { page, limit } = req.query;
+  const {
+    query: { page, limit },
+  } = validateRequest(req, getVideosValidation);
 
   const options: PaginateOptions = {
-    page: Number(page) || 1,
-    limit: Number(limit) || 10,
+    page,
+    limit,
   };
 
   const aggregation = Video.aggregate([{ $match: { isPublished: true } }]);

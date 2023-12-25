@@ -1,6 +1,6 @@
-import { isValidObjectId } from 'mongoose';
 import z from 'zod';
 import fileValidation from './multer.validation';
+import { videoIdValidation } from './video.validation';
 
 export const createAccountValidation = z.object({
   body: z
@@ -82,10 +82,7 @@ export const changePasswordValidation = z.object({
 export const addVideoToWatchHistoryValidation = z.object({
   body: z
     .object({
-      videoId: z.string().refine((videoId) => isValidObjectId(videoId), {
-        path: ['videoId'],
-        message: 'Video id is not valid.',
-      }),
+      videoId: videoIdValidation,
     })
     .strict(),
 });
