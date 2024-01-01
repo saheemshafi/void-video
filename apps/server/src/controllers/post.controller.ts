@@ -9,11 +9,13 @@ import { uploadFileToCloudinary, mapToFileObject } from '../utils/cloudinary';
 import { STATUS_CODES } from '../constants';
 import { validateRequest } from '../utils';
 import {
+  addCommentToPostValidation,
   deletePostValidation,
   getPostValidation,
   getPostsValidation,
   uploadPostValidation,
 } from '../validations/post.validation';
+import { Comment } from '../models/comment.model';
 
 /**
  * POSTS `/posts`
@@ -216,9 +218,30 @@ const getPostComments = asyncHandler(async (req: Request, res: Response) => {});
  * POST `/posts/:postId/comments`
  * Controller for adding a comment to a post.
  */
-const addCommentToPost = asyncHandler(
-  async (req: Request, res: Response) => {}
-);
+const addCommentToPost = asyncHandler(async (req: Request, res: Response) => {
+
+  const {
+    params: { postId },
+    body: { content },
+  } = validateRequest(req, addCommentToPostValidation);
+
+  const comment = await Comment.create({
+    content,
+    owner: req.user?._id,
+    post: postId,
+  });
+
+  if (!comment) {
+    throw new ApiError(
+      STATUS_CODES.INTERNAL_SERVER_ERROR,
+      'Failed to comment.'
+    );
+  }
+
+  res
+    .status(STATUS_CODES.OK)
+    .json(new ApiResponse(STATUS_CODES.OK, 'Commented on the post.', comment));
+});
 
 export {
   deletePost,

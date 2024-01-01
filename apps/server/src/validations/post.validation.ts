@@ -36,3 +36,12 @@ export const deletePostValidation = z.object({
     postId: postIdValidation,
   }),
 });
+
+export const addCommentToPostValidation = z.object({
+  params: z.object({
+    postId: postIdValidation,
+  }),
+  body: z.object({
+    content: z.string().min(3),
+  }),
+});
