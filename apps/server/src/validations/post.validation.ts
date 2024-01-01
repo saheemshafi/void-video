@@ -1,6 +1,7 @@
 import z from 'zod';
 import fileValidation from './multer.validation';
 import { isValidObjectId } from 'mongoose';
+import paginationValidation from './pagination.validation';
 
 export const postIdValidation = z
   .string()
@@ -25,10 +26,7 @@ export const getPostValidation = z.object({
 });
 
 export const getPostsValidation = z.object({
-  query: z.object({
-    limit: z.coerce.number().gte(10).default(10),
-    page: z.coerce.number().gte(0).default(1),
-  }),
+  query: paginationValidation,
 });
 
 export const deletePostValidation = z.object({
@@ -50,8 +48,5 @@ export const getPostCommentsValidation = z.object({
   params: z.object({
     postId: postIdValidation,
   }),
-  query: z.object({
-    limit: z.coerce.number().gte(10).default(10),
-    page: z.coerce.number().gte(0).default(1),
-  }),
+  query: paginationValidation,
 });

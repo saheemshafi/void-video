@@ -1,6 +1,7 @@
 import z from 'zod';
 import fileValidation from './multer.validation';
 import { isValidObjectId } from 'mongoose';
+import paginationValidation from './pagination.validation';
 
 export const videoIdValidation = z
   .string()
@@ -56,17 +57,11 @@ export const getVideoCommentsValidation = z.object({
   params: z.object({
     videoId: videoIdValidation,
   }),
-  query: z.object({
-    limit: z.coerce.number().gte(10).default(10),
-    page: z.coerce.number().gte(0).default(1),
-  }),
+  query: paginationValidation,
 });
 
 export const getVideosValidation = z.object({
-  query: z.object({
-    limit: z.coerce.number().gte(10).default(10),
-    page: z.coerce.number().gte(0).default(1),
-  }),
+  query: paginationValidation,
 });
 
 export const addCommentToVideoValidation = z.object({
