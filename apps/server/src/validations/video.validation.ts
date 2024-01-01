@@ -6,7 +6,7 @@ export const videoIdValidation = z
   .string()
   .refine((videoId) => isValidObjectId(videoId), {
     path: ['videoId'],
-    message: 'Video is is not valid.',
+    message: 'Video id is not valid.',
   });
 
 export const uploadVideoValidation = z.object({

@@ -338,14 +338,17 @@ const getVideoComments = asyncHandler(async (req, res) => {
     },
   ]);
 
-  const comments = await Comment.aggregatePaginate(
+  const { docs, ...paginationData } = await Comment.aggregatePaginate(
     commentsAggregation,
     options
   );
 
-  res
-    .status(STATUS_CODES.OK)
-    .json(new ApiResponse(STATUS_CODES.OK, 'Retrived comments.', comments));
+  res.status(STATUS_CODES.OK).json(
+    new ApiResponse(STATUS_CODES.OK, 'Retrieved comments.', {
+      comments: docs,
+      ...paginationData,
+    })
+  );
 });
 
 /**
@@ -370,7 +373,7 @@ const getVideos = asyncHandler(async (req, res) => {
 
   const videos = await Video.populate(docs, {
     path: 'owner',
-    select: '-watchHistory',
+    select: ['-watchHistory', '-banner'],
   });
 
   res.status(STATUS_CODES.OK).json(
