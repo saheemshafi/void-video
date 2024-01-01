@@ -11,6 +11,7 @@ import { validateRequest } from '../utils';
 import {
   addCommentToPostValidation,
   deletePostValidation,
+  getPostCommentsValidation,
   getPostValidation,
   getPostsValidation,
   uploadPostValidation,
@@ -212,14 +213,80 @@ const likePost = asyncHandler(async (req: Request, res: Response) => {});
  * GET `/posts/:postId/comments`
  * Controller for getting comments of a post.
  */
-const getPostComments = asyncHandler(async (req: Request, res: Response) => {});
+const getPostComments = asyncHandler(async (req: Request, res: Response) => {
+  const {
+    params: { postId },
+    query: { page, limit },
+  } = validateRequest(req, getPostCommentsValidation);
+
+  const options: PaginateOptions = {
+    page,
+    limit,
+  };
+
+  const commentsAggregation = Comment.aggregate([
+    {
+      $match: {
+        post: new Types.ObjectId(postId),
+      },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'owner',
+        foreignField: '_id',
+        as: 'owner',
+      },
+    },
+    {
+      $lookup: {
+        from: 'likes',
+        localField: '_id',
+        foreignField: 'comment',
+        as: 'likes',
+      },
+    },
+    {
+      $addFields: {
+        owner: {
+          $first: '$owner',
+        },
+        likes: {
+          $size: '$likes',
+        },
+      },
+    },
+    {
+      $project: {
+        owner: {
+          username: 1,
+          avatar: 1,
+          displayName: 1,
+        },
+        content: 1,
+        likes: 1,
+      },
+    },
+  ]);
+
+  const { docs, ...paginationData } = await Comment.aggregatePaginate(
+    commentsAggregation,
+    options
+  );
+
+  res.status(STATUS_CODES.OK).json(
+    new ApiResponse(STATUS_CODES.OK, 'Retrieved comments.', {
+      comments: docs,
+      ...paginationData,
+    })
+  );
+});
 
 /**
  * POST `/posts/:postId/comments`
  * Controller for adding a comment to a post.
  */
 const addCommentToPost = asyncHandler(async (req: Request, res: Response) => {
-
   const {
     params: { postId },
     body: { content },

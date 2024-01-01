@@ -45,3 +45,13 @@ export const addCommentToPostValidation = z.object({
     content: z.string().min(3),
   }),
 });
+
+export const getPostCommentsValidation = z.object({
+  params: z.object({
+    postId: postIdValidation,
+  }),
+  query: z.object({
+    limit: z.coerce.number().gte(10).default(10),
+    page: z.coerce.number().gte(0).default(1),
+  }),
+});
