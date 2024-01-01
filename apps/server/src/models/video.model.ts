@@ -12,7 +12,9 @@ export interface IVideo {
   isPublished: boolean;
 }
 
-const videoSchema = new Schema<IVideo, AggregatePaginateModel<IVideo>>(
+type IVideoModel = AggregatePaginateModel<IVideo>;
+
+const videoSchema = new Schema<IVideo, IVideoModel>(
   {
     owner: {
       type: Schema.Types.ObjectId,
@@ -43,7 +45,4 @@ const videoSchema = new Schema<IVideo, AggregatePaginateModel<IVideo>>(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 videoSchema.plugin(mongooseAggregatePaginate as any);
 
-export const Video = model(
-  'Video',
-  videoSchema
-) as AggregatePaginateModel<IVideo>;
+export const Video = model('Video', videoSchema) as IVideoModel;
