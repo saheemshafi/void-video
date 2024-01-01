@@ -30,3 +30,9 @@ export const getPostsValidation = z.object({
     page: z.coerce.number().gte(0).default(1),
   }),
 });
+
+export const deletePostValidation = z.object({
+  params: z.object({
+    postId: postIdValidation,
+  }),
+});

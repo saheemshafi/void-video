@@ -9,6 +9,7 @@ import { uploadFileToCloudinary, mapToFileObject } from '../utils/cloudinary';
 import { STATUS_CODES } from '../constants';
 import { validateRequest } from '../utils';
 import {
+  deletePostValidation,
   getPostValidation,
   getPostsValidation,
   uploadPostValidation,
@@ -170,7 +171,34 @@ const updatePost = asyncHandler(async (req: Request, res: Response) => {});
  * DELETE `/posts/:postId`
  * Controller for deleting a post.
  */
-const deletePost = asyncHandler(async (req: Request, res: Response) => {});
+const deletePost = asyncHandler(async (req: Request, res: Response) => {
+  const {
+    params: { postId },
+  } = validateRequest(req, deletePostValidation);
+
+  const postExists = await Post.findById(postId);
+
+  if (!postExists) {
+    throw new ApiError(STATUS_CODES.NOT_FOUND, 'Post not found.');
+  }
+
+  if (!postExists.owner.equals(req.user?._id)) {
+    throw new ApiError(STATUS_CODES.UNAUTHORIZED, 'Not authorized.');
+  }
+
+  const deletedPost = await Post.findByIdAndDelete(postExists._id);
+
+  if (!deletedPost) {
+    throw new ApiError(
+      STATUS_CODES.INTERNAL_SERVER_ERROR,
+      'Failed to delete post.'
+    );
+  }
+
+  res
+    .status(STATUS_CODES.OK)
+    .json(new ApiResponse(STATUS_CODES.OK, 'Deleted post.', deletedPost));
+});
 
 /**
  * GET `/posts/:postId/like`
