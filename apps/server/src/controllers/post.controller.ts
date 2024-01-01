@@ -1,28 +1,33 @@
 import { UploadApiResponse } from 'cloudinary';
 import { Request, Response } from 'express';
-import { isValidObjectId } from 'mongoose';
+import { PaginateOptions, Types, isValidObjectId } from 'mongoose';
 import { Post } from '../models/post.model';
 import ApiError from '../utils/api-error';
 import ApiResponse from '../utils/api-response';
 import asyncHandler from '../utils/async-handler';
 import { uploadFileToCloudinary, mapToFileObject } from '../utils/cloudinary';
 import { STATUS_CODES } from '../constants';
+import { validateRequest } from '../utils';
+import {
+  getPostValidation,
+  getPostsValidation,
+  uploadPostValidation,
+} from '../validations/post.validation';
 
 /**
  * POSTS `/posts`
  * Controller uploading a post.
  */
 const uploadPost = asyncHandler(async (req: Request, res: Response) => {
-  const { content } = req.body;
-
-  if (!content) {
-    throw new ApiError(STATUS_CODES.BAD_REQUEST, 'Content is required.');
-  }
+  const {
+    body: { content },
+    files,
+  } = validateRequest(req, uploadPostValidation);
 
   const images: (UploadApiResponse | null)[] = [];
 
-  if (Array.isArray(req.files) && req.files.length > 0) {
-    const uploads = req.files.map((file) =>
+  if (files.length > 0) {
+    const uploads = files.map((file) =>
       uploadFileToCloudinary(file.path, {
         folder: 'post-images',
       })
@@ -60,25 +65,99 @@ const uploadPost = asyncHandler(async (req: Request, res: Response) => {
 });
 
 /**
+ * GET `/posts`
+ * Controller getting all posts.
+ */
+const getPosts = asyncHandler(async (req, res) => {
+  const {
+    query: { page, limit },
+  } = validateRequest(req, getPostsValidation);
+
+  const options: PaginateOptions = { page, limit };
+
+  const aggregation = Post.aggregate();
+  const { docs, ...paginationData } = await Post.aggregatePaginate(
+    aggregation,
+    options
+  );
+
+  const posts = await Post.populate(docs, {
+    path: 'owner',
+    select: ['-watchHistory', '-banner'],
+  });
+
+  res.status(STATUS_CODES.OK).json(
+    new ApiResponse(STATUS_CODES.OK, 'Retrieved posts.', {
+      ...paginationData,
+      posts,
+    })
+  );
+});
+
+/**
  * GET `/posts/:postId`
  * Controller for getting a post.
  */
 const getPost = asyncHandler(async (req: Request, res: Response) => {
-  const { postId } = req.params;
+  const {
+    params: { postId },
+  } = validateRequest(req, getPostValidation);
 
-  if (!isValidObjectId(postId)) {
-    throw new ApiError(STATUS_CODES.BAD_REQUEST, 'Post id not valid.');
-  }
+  const post = await Post.aggregate([
+    {
+      $match: {
+        _id: new Types.ObjectId(postId),
+      },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'owner',
+        foreignField: '_id',
+        as: 'owner',
+      },
+    },
+    {
+      $lookup: {
+        from: 'likes',
+        localField: '_id',
+        foreignField: 'post',
+        as: 'likes',
+      },
+    },
+    {
+      $addFields: {
+        owner: {
+          $first: '$owner',
+        },
+        likes: {
+          $size: '$likes',
+        },
+      },
+    },
+    {
+      $project: {
+        owner: {
+          username: 1,
+          avatar: 1,
+          displayName: 1,
+        },
+        content: 1,
+        likes: 1,
+        images: 1,
+        createdAt: 1,
+        updatedAt: 1,
+      },
+    },
+  ]);
 
-  const post = await Post.findById(postId).populate('owner', '-watchHistory');
-
-  if (!post) {
+  if (post.length == 0) {
     throw new ApiError(STATUS_CODES.NOT_FOUND, 'Post not found.');
   }
 
   res
     .status(STATUS_CODES.OK)
-    .json(new ApiResponse(STATUS_CODES.OK, 'Retrieved post.', post));
+    .json(new ApiResponse(STATUS_CODES.OK, 'Retrieved post.', post[0]));
 });
 
 /**
@@ -117,6 +196,7 @@ export {
   deletePost,
   getPost,
   getPostComments,
+  getPosts,
   likePost,
   updatePost,
   uploadPost,

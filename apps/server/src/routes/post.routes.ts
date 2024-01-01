@@ -6,6 +6,7 @@ import {
   deletePost,
   getPost,
   getPostComments,
+  getPosts,
   likePost,
   updatePost,
   uploadPost,
@@ -14,6 +15,7 @@ import {
 const postRouter = Router();
 
 postRouter.route('/').post(authorize, upload.array('images', 4), uploadPost);
+postRouter.route('/').get(getPosts);
 postRouter.route('/:postId').get(getPost);
 postRouter.route('/:postId/like').get(authorize, likePost);
 postRouter.route('/:postId').patch(authorize, updatePost);
