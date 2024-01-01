@@ -1,22 +1,17 @@
-import mongoose, { Types } from 'mongoose';
-
-export const COMMENT_TYPES = ['video', 'post'] as const;
-export type COMMENT_TYPE = (typeof COMMENT_TYPES)[number];
+import mongoose, { AggregatePaginateModel, Types } from 'mongoose';
+import mongooseAggregatePaginate from 'mongoose-aggregate-paginate-v2';
 
 export interface IComment {
-  type: COMMENT_TYPE;
   content: string;
   video: Types.ObjectId;
   post: Types.ObjectId;
   owner: Types.ObjectId;
 }
 
-const commentSchema = new mongoose.Schema<IComment>(
+type ICommentModel = AggregatePaginateModel<IComment>;
+
+const commentSchema = new mongoose.Schema<IComment, ICommentModel>(
   {
-    type: {
-      type: String,
-      enum: COMMENT_TYPES,
-    },
     content: {
       type: String,
       required: true,
@@ -37,4 +32,10 @@ const commentSchema = new mongoose.Schema<IComment>(
   { timestamps: true }
 );
 
-export const Comment = mongoose.model('Comment', commentSchema);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+commentSchema.plugin(mongooseAggregatePaginate as any);
+
+export const Comment = mongoose.model(
+  'Comment',
+  commentSchema
+) as ICommentModel;
