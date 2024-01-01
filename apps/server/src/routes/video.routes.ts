@@ -7,6 +7,7 @@ import {
   deleteVideo,
   getVideoComments,
   getVideos,
+  addCommentToVideo,
 } from '../controllers/video.controller';
 import { authorize } from '../middlewares/auth.middleware';
 import upload from '../middlewares/multer.middleware';
@@ -28,8 +29,9 @@ videoRouter.route('/').post(
 videoRouter.route('/').get(getVideos);
 videoRouter.route('/:videoId').get(getVideo);
 videoRouter.route('/:videoId/like').get(authorize, likeVideo);
-videoRouter.route('/:videoId').put(authorize, updateVideo);
+videoRouter.route('/:videoId').patch(authorize, updateVideo);
 videoRouter.route('/:videoId').delete(authorize, deleteVideo);
 videoRouter.route('/:videoId/comments').get(getVideoComments);
+videoRouter.route('/:videoId/comments').post(authorize, addCommentToVideo);
 
 export default videoRouter;

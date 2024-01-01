@@ -1,4 +1,4 @@
-import { PaginateOptions, isValidObjectId } from 'mongoose';
+import { PaginateOptions, Types, isValidObjectId } from 'mongoose';
 import { Comment } from '../models/comment.model';
 import { Like } from '../models/like.model';
 import { Video } from '../models/video.model';
@@ -15,6 +15,7 @@ import {
   deleteVideoValidation,
   getVideoCommentsValidation,
   getVideosValidation,
+  addCommentToVideoValidation,
 } from '../validations/video.validation';
 
 /**
@@ -22,7 +23,6 @@ import {
  * Controller for uploading a new video.
  */
 const uploadVideo = asyncHandler(async (req, res) => {
-
   const {
     body: { title, description, isPublished },
     files,
@@ -124,7 +124,6 @@ const likeVideo = asyncHandler(async (req, res) => {
   } else {
     const like = await Like.create({
       likedBy: req.user?._id,
-      type: 'video',
       video: videoId,
     });
 
@@ -150,19 +149,65 @@ const getVideo = asyncHandler(async (req, res) => {
     params: { videoId },
   } = validateRequest(req, getVideoValidation);
 
-  if (!isValidObjectId(videoId)) {
-    throw new ApiError(STATUS_CODES.BAD_REQUEST, 'Video Id not valid.');
-  }
+  const video = await Video.aggregate([
+    {
+      $match: {
+        _id: new Types.ObjectId(videoId),
+      },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'owner',
+        foreignField: '_id',
+        as: 'owner',
+      },
+    },
+    {
+      $lookup: {
+        from: 'likes',
+        localField: '_id',
+        foreignField: 'video',
+        as: 'likes',
+      },
+    },
+    {
+      $addFields: {
+        owner: {
+          $first: '$owner',
+        },
+        likes: {
+          $size: '$likes',
+        },
+      },
+    },
+    {
+      $project: {
+        owner: {
+          username: 1,
+          avatar: 1,
+          displayName: 1,
+        },
+        source: 1,
+        thumbnail: 1,
+        title: 1,
+        description: 1,
+        likes: 1,
+        isPublished: 1,
+        views: 1,
+        createdAt: 1,
+        updatedAt: 1,
+      },
+    },
+  ]);
 
-  const video = await Video.findById(videoId);
-
-  if (!video) {
+  if (video.length == 0) {
     throw new ApiError(STATUS_CODES.NOT_FOUND, 'Video not found.');
   }
 
   res
     .status(STATUS_CODES.OK)
-    .json(new ApiResponse(STATUS_CODES.OK, 'Video retrieved.', video));
+    .json(new ApiResponse(STATUS_CODES.OK, 'Video retrieved.', video[0]));
 });
 
 /**
@@ -170,7 +215,6 @@ const getVideo = asyncHandler(async (req, res) => {
  * Controller for updating a video.
  */
 const updateVideo = asyncHandler(async (req, res) => {
-
   const {
     body: { title, description, isPublished },
     params: { videoId },
@@ -208,7 +252,6 @@ const updateVideo = asyncHandler(async (req, res) => {
  * Controller for deleting a video.
  */
 const deleteVideo = asyncHandler(async (req, res) => {
-
   const {
     params: { videoId },
   } = validateRequest(req, deleteVideoValidation);
@@ -241,13 +284,68 @@ const deleteVideo = asyncHandler(async (req, res) => {
 const getVideoComments = asyncHandler(async (req, res) => {
   const {
     params: { videoId },
+    query: { limit, page },
   } = validateRequest(req, getVideoCommentsValidation);
 
-  const comments = await Comment.find({ type: 'video', video: videoId });
+  const options: PaginateOptions = {
+    page,
+    limit,
+  };
+
+  const commentsAggregation = Comment.aggregate([
+    {
+      $match: {
+        type: 'video',
+        video: new Types.ObjectId(videoId),
+      },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'owner',
+        foreignField: '_id',
+        as: 'owner',
+      },
+    },
+    {
+      $lookup: {
+        from: 'likes',
+        localField: '_id',
+        foreignField: 'comment',
+        as: 'likes',
+      },
+    },
+    {
+      $addFields: {
+        owner: {
+          $first: '$owner',
+        },
+        likes: {
+          $size: '$likes',
+        },
+      },
+    },
+    {
+      $project: {
+        owner: {
+          username: 1,
+          avatar: 1,
+          displayName: 1,
+        },
+        content: 1,
+        likes: 1,
+      },
+    },
+  ]);
+
+  const comments = await Comment.aggregatePaginate(
+    commentsAggregation,
+    options
+  );
 
   res
     .status(STATUS_CODES.OK)
-    .json(new ApiResponse(STATUS_CODES.OK, 'Retrived comments.', { comments }));
+    .json(new ApiResponse(STATUS_CODES.OK, 'Retrived comments.', comments));
 });
 
 /**
@@ -283,6 +381,34 @@ const getVideos = asyncHandler(async (req, res) => {
   );
 });
 
+/**
+ * GET `/videos/:videoId/comments`
+ * Controller for adding a comment to video.
+ */
+const addCommentToVideo = asyncHandler(async (req, res) => {
+  const {
+    params: { videoId },
+    body: { content },
+  } = validateRequest(req, addCommentToVideoValidation);
+
+  const comment = await Comment.create({
+    content,
+    owner: req.user?._id,
+    video: videoId,
+  });
+
+  if (!comment) {
+    throw new ApiError(
+      STATUS_CODES.INTERNAL_SERVER_ERROR,
+      'Failed to comment.'
+    );
+  }
+
+  res
+    .status(STATUS_CODES.OK)
+    .json(new ApiResponse(STATUS_CODES.OK, 'Commented on the video.', comment));
+});
+
 export {
   deleteVideo,
   getVideo,
@@ -291,4 +417,5 @@ export {
   likeVideo,
   updateVideo,
   uploadVideo,
+  addCommentToVideo,
 };
