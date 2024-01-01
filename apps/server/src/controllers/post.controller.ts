@@ -8,6 +8,10 @@ import asyncHandler from '../utils/async-handler';
 import { uploadFileToCloudinary, mapToFileObject } from '../utils/cloudinary';
 import { STATUS_CODES } from '../constants';
 
+/**
+ * POSTS `/posts`
+ * Controller uploading a post.
+ */
 const uploadPost = asyncHandler(async (req: Request, res: Response) => {
   const { content } = req.body;
 
@@ -55,6 +59,10 @@ const uploadPost = asyncHandler(async (req: Request, res: Response) => {
     .json(new ApiResponse(STATUS_CODES.OK, 'Created a post.', post));
 });
 
+/**
+ * GET `/posts/:postId`
+ * Controller for getting a post.
+ */
 const getPost = asyncHandler(async (req: Request, res: Response) => {
   const { postId } = req.params;
 
@@ -73,11 +81,37 @@ const getPost = asyncHandler(async (req: Request, res: Response) => {
     .json(new ApiResponse(STATUS_CODES.OK, 'Retrieved post.', post));
 });
 
+/**
+ * PATCH `/posts/:postId`
+ * Controller for updating a post.
+ */
 const updatePost = asyncHandler(async (req: Request, res: Response) => {});
+
+/**
+ * DELETE `/posts/:postId`
+ * Controller for deleting a post.
+ */
 const deletePost = asyncHandler(async (req: Request, res: Response) => {});
 
+/**
+ * GET `/posts/:postId/like`
+ * Controller for liking a post.
+ */
 const likePost = asyncHandler(async (req: Request, res: Response) => {});
+
+/**
+ * GET `/posts/:postId/comments`
+ * Controller for getting comments of a post.
+ */
 const getPostComments = asyncHandler(async (req: Request, res: Response) => {});
+
+/**
+ * POST `/posts/:postId/comments`
+ * Controller for adding a comment to a post.
+ */
+const addCommentToPost = asyncHandler(
+  async (req: Request, res: Response) => {}
+);
 
 export {
   deletePost,
@@ -86,4 +120,5 @@ export {
   likePost,
   updatePost,
   uploadPost,
+  addCommentToPost,
 };
