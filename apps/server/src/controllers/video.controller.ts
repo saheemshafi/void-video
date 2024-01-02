@@ -16,6 +16,7 @@ import {
   getVideoCommentsValidation,
   getVideosValidation,
   addCommentToVideoValidation,
+  likeVideoValidation,
 } from '../validations/video.validation';
 
 /**
@@ -90,14 +91,10 @@ const uploadVideo = asyncHandler(async (req, res) => {
  * Controller for adding or toggling a like.
  */
 const likeVideo = asyncHandler(async (req, res) => {
-  const videoId = req.params.videoId;
 
-  if (!isValidObjectId(videoId)) {
-    throw new ApiError(
-      STATUS_CODES.BAD_REQUEST,
-      'Video id is absent or not valid.'
-    );
-  }
+  const {
+    params: { videoId },
+  } = validateRequest(req, likeVideoValidation);
 
   const likeExists = await Like.findOne({
     $or: [

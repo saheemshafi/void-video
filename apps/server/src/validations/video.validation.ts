@@ -72,3 +72,9 @@ export const addCommentToVideoValidation = z.object({
     content: z.string().min(3),
   }),
 });
+
+export const likeVideoValidation = z.object({
+  params: z.object({
+    videoId: videoIdValidation,
+  }),
+});
