@@ -50,3 +50,9 @@ export const getPostCommentsValidation = z.object({
   }),
   query: paginationValidation,
 });
+
+export const likePostValidation = z.object({
+  params: z.object({
+    postId: postIdValidation,
+  }),
+});

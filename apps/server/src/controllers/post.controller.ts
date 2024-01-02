@@ -14,9 +14,11 @@ import {
   getPostCommentsValidation,
   getPostValidation,
   getPostsValidation,
+  likePostValidation,
   uploadPostValidation,
 } from '../validations/post.validation';
 import { Comment } from '../models/comment.model';
+import { Like } from '../models/like.model';
 
 /**
  * POSTS `/posts`
@@ -207,7 +209,52 @@ const deletePost = asyncHandler(async (req: Request, res: Response) => {
  * GET `/posts/:postId/like`
  * Controller for liking a post.
  */
-const likePost = asyncHandler(async (req: Request, res: Response) => {});
+const likePost = asyncHandler(async (req: Request, res: Response) => {
+
+  const {
+    params: { postId },
+  } = validateRequest(req, likePostValidation);
+
+  const likeExists = await Like.findOne({
+    $or: [
+      {
+        post: postId,
+        likedBy: req.user?._id,
+      },
+    ],
+  });
+
+  if (likeExists) {
+    const deletedLike = await Like.findByIdAndDelete(likeExists.id);
+
+    if (!deletedLike) {
+      throw new ApiError(
+        STATUS_CODES.INTERNAL_SERVER_ERROR,
+        'Failed to remove like.'
+      );
+    }
+
+    res
+      .status(STATUS_CODES.OK)
+      .json(new ApiResponse(STATUS_CODES.OK, 'Removed the like.', deletedLike));
+  } else {
+    const like = await Like.create({
+      likedBy: req.user?._id,
+      post: postId,
+    });
+
+    if (!like) {
+      throw new ApiError(
+        STATUS_CODES.INTERNAL_SERVER_ERROR,
+        'Like failed unexpectedly.'
+      );
+    }
+
+    res
+      .status(STATUS_CODES.CREATED)
+      .json(new ApiResponse(STATUS_CODES.CREATED, 'Liked the post.', like));
+  }
+});
 
 /**
  * GET `/posts/:postId/comments`
