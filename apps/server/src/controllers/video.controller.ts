@@ -1,22 +1,22 @@
-import { PaginateOptions, Types, isValidObjectId } from 'mongoose';
+import { PaginateOptions, Types } from 'mongoose';
+import { STATUS_CODES } from '../constants';
 import { Comment } from '../models/comment.model';
 import { Like } from '../models/like.model';
 import { Video } from '../models/video.model';
+import { validateRequest } from '../utils';
 import ApiError from '../utils/api-error';
 import ApiResponse from '../utils/api-response';
 import asyncHandler from '../utils/async-handler';
-import { uploadFileToCloudinary, mapToFileObject } from '../utils/cloudinary';
-import { STATUS_CODES } from '../constants';
-import { validateRequest } from '../utils';
+import { mapToFileObject, uploadFileToCloudinary } from '../utils/cloudinary';
 import {
-  uploadVideoValidation,
-  getVideoValidation,
-  updateVideoValidation,
+  addCommentToVideoValidation,
   deleteVideoValidation,
   getVideoCommentsValidation,
+  getVideoValidation,
   getVideosValidation,
-  addCommentToVideoValidation,
   likeVideoValidation,
+  updateVideoValidation,
+  uploadVideoValidation,
 } from '../validations/video.validation';
 
 /**
@@ -409,12 +409,12 @@ const addCommentToVideo = asyncHandler(async (req, res) => {
 });
 
 export {
-  deleteVideo,
+  addCommentToVideo, deleteVideo,
   getVideo,
   getVideoComments,
   getVideos,
   likeVideo,
   updateVideo,
-  uploadVideo,
-  addCommentToVideo,
+  uploadVideo
 };
+
