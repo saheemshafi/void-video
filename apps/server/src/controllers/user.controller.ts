@@ -229,7 +229,7 @@ const emailPasswordResetLink = asyncHandler(async (req, res) => {
 
   const resetToken = user.generateResetPasswordToken();
 
-  const resetPasswordUri = `${process.env.FRONTEND_URI}/users/reset-password?resetToken=${resetToken}`;
+  const resetPasswordUri = `${process.env.FRONTEND_URI}/auth/reset-password?token=${resetToken}`;
 
   await sendPasswordResetEmail(user.email, {
     username: user.username,
