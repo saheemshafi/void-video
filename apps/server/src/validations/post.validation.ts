@@ -56,3 +56,14 @@ export const likePostValidation = z.object({
     postId: postIdValidation,
   }),
 });
+
+export const updatePostValidation = z.object({
+  body: z
+    .object({
+      content: z.string().min(10),
+    })
+    .strict(),
+  params: z.object({
+    postId: postIdValidation,
+  }),
+});

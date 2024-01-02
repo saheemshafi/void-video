@@ -1,13 +1,15 @@
 import { UploadApiResponse } from 'cloudinary';
 import { Request, Response } from 'express';
-import { PaginateOptions, Types, isValidObjectId } from 'mongoose';
+import { PaginateOptions, Types } from 'mongoose';
+import { STATUS_CODES } from '../constants';
+import { Comment } from '../models/comment.model';
+import { Like } from '../models/like.model';
 import { Post } from '../models/post.model';
+import { validateRequest } from '../utils';
 import ApiError from '../utils/api-error';
 import ApiResponse from '../utils/api-response';
 import asyncHandler from '../utils/async-handler';
-import { uploadFileToCloudinary, mapToFileObject } from '../utils/cloudinary';
-import { STATUS_CODES } from '../constants';
-import { validateRequest } from '../utils';
+import { mapToFileObject, uploadFileToCloudinary } from '../utils/cloudinary';
 import {
   addCommentToPostValidation,
   deletePostValidation,
@@ -15,10 +17,9 @@ import {
   getPostValidation,
   getPostsValidation,
   likePostValidation,
+  updatePostValidation,
   uploadPostValidation,
 } from '../validations/post.validation';
-import { Comment } from '../models/comment.model';
-import { Like } from '../models/like.model';
 
 /**
  * POSTS `/posts`
@@ -170,7 +171,34 @@ const getPost = asyncHandler(async (req: Request, res: Response) => {
  * PATCH `/posts/:postId`
  * Controller for updating a post.
  */
-const updatePost = asyncHandler(async (req: Request, res: Response) => {});
+const updatePost = asyncHandler(async (req: Request, res: Response) => {
+  const {
+    body: { content },
+    params: { postId },
+  } = validateRequest(req, updatePostValidation);
+
+  const post = await Post.findById(postId);
+
+  if (!post) {
+    throw new ApiError(STATUS_CODES.NOT_FOUND, 'Post not found.');
+  }
+
+  const updatedPost = await Post.findByIdAndUpdate(
+    postId,
+    {
+      $set: { content },
+    },
+    { new: true }
+  );
+
+  if (!updatedPost) {
+    throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, 'Failed to update.');
+  }
+
+  res
+    .status(STATUS_CODES.OK)
+    .json(new ApiResponse(STATUS_CODES.OK, 'Updated post.', updatedPost));
+});
 
 /**
  * DELETE `/posts/:postId`
@@ -210,7 +238,6 @@ const deletePost = asyncHandler(async (req: Request, res: Response) => {
  * Controller for liking a post.
  */
 const likePost = asyncHandler(async (req: Request, res: Response) => {
-
   const {
     params: { postId },
   } = validateRequest(req, likePostValidation);
@@ -358,6 +385,7 @@ const addCommentToPost = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export {
+  addCommentToPost,
   deletePost,
   getPost,
   getPostComments,
@@ -365,5 +393,4 @@ export {
   likePost,
   updatePost,
   uploadPost,
-  addCommentToPost,
 };
