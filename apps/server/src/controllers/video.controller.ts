@@ -91,7 +91,6 @@ const uploadVideo = asyncHandler(async (req, res) => {
  * Controller for adding or toggling a like.
  */
 const likeVideo = asyncHandler(async (req, res) => {
-
   const {
     params: { videoId },
   } = validateRequest(req, likeVideoValidation);
@@ -208,7 +207,7 @@ const getVideo = asyncHandler(async (req, res) => {
 });
 
 /**
- * PUT `/videos/:videoId`
+ * PATCH `/videos/:videoId`
  * Controller for updating a video.
  */
 const updateVideo = asyncHandler(async (req, res) => {
@@ -243,6 +242,12 @@ const updateVideo = asyncHandler(async (req, res) => {
     .status(STATUS_CODES.OK)
     .json(new ApiResponse(STATUS_CODES.OK, 'Video updated.', updatedVideo));
 });
+
+/**
+ * PATCH `/videos/:videoId/change-thumbnail`
+ * Controller for changing video thumbnail.
+ */
+const changeVideoThumbnail = asyncHandler(async (req, res) => {});
 
 /**
  * DELETE `/videos/:videoId`
@@ -409,12 +414,13 @@ const addCommentToVideo = asyncHandler(async (req, res) => {
 });
 
 export {
-  addCommentToVideo, deleteVideo,
+  addCommentToVideo,
+  deleteVideo,
   getVideo,
   getVideoComments,
   getVideos,
   likeVideo,
   updateVideo,
-  uploadVideo
+  uploadVideo,
+  changeVideoThumbnail,
 };
-
