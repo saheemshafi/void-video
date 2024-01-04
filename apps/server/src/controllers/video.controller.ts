@@ -10,6 +10,7 @@ import asyncHandler from '../utils/async-handler';
 import { mapToFileObject, uploadFileToCloudinary } from '../utils/cloudinary';
 import {
   addCommentToVideoValidation,
+  changeVideoThumbnailValidation,
   deleteVideoValidation,
   getVideoCommentsValidation,
   getVideoValidation,
@@ -18,11 +19,8 @@ import {
   updateVideoValidation,
   uploadVideoValidation,
 } from '../validations/video.validation';
+import { IFileObject } from '../models/file.model';
 
-/**
- * POST `/videos`
- * Controller for uploading a new video.
- */
 const uploadVideo = asyncHandler(async (req, res) => {
   const {
     body: { title, description, isPublished },
@@ -51,17 +49,13 @@ const uploadVideo = asyncHandler(async (req, res) => {
   const [videoUploadResponse, thumbnailUploadResponse] =
     await Promise.allSettled(uploads);
 
-  if (videoUploadResponse?.status == 'rejected') {
+  if (
+    videoUploadResponse?.status == 'rejected' ||
+    thumbnailUploadResponse?.status == 'rejected'
+  ) {
     throw new ApiError(
       STATUS_CODES.INTERNAL_SERVER_ERROR,
-      'Video failed to upload.'
-    );
-  }
-
-  if (thumbnailUploadResponse?.status == 'rejected') {
-    throw new ApiError(
-      STATUS_CODES.INTERNAL_SERVER_ERROR,
-      'Thumbnail failed to upload.'
+      'Failed to upload video.'
     );
   }
 
@@ -86,10 +80,6 @@ const uploadVideo = asyncHandler(async (req, res) => {
     .json(new ApiResponse(STATUS_CODES.CREATED, 'Video uploaded.', video));
 });
 
-/**
- * GET `/videos/:videoId/like`
- * Controller for adding or toggling a like.
- */
 const likeVideo = asyncHandler(async (req, res) => {
   const {
     params: { videoId },
@@ -136,10 +126,6 @@ const likeVideo = asyncHandler(async (req, res) => {
   }
 });
 
-/**
- * GET `/videos/:videoId`
- * Controller for retrieving a single video.
- */
 const getVideo = asyncHandler(async (req, res) => {
   const {
     params: { videoId },
@@ -206,10 +192,6 @@ const getVideo = asyncHandler(async (req, res) => {
     .json(new ApiResponse(STATUS_CODES.OK, 'Video retrieved.', video[0]));
 });
 
-/**
- * PATCH `/videos/:videoId`
- * Controller for updating a video.
- */
 const updateVideo = asyncHandler(async (req, res) => {
   const {
     body: { title, description, isPublished },
@@ -243,16 +225,35 @@ const updateVideo = asyncHandler(async (req, res) => {
     .json(new ApiResponse(STATUS_CODES.OK, 'Video updated.', updatedVideo));
 });
 
-/**
- * PATCH `/videos/:videoId/change-thumbnail`
- * Controller for changing video thumbnail.
- */
-const changeVideoThumbnail = asyncHandler(async (req, res) => {});
+const changeVideoThumbnail = asyncHandler(async (req, res) => {
+  const {
+    file: thumbnail,
+    params: { videoId },
+  } = validateRequest(req, changeVideoThumbnailValidation);
 
-/**
- * DELETE `/videos/:videoId`
- * Controller for deleting a video.
- */
+  const videoExists = await Video.findById(videoId);
+
+  if (!videoExists) {
+    throw new ApiError(STATUS_CODES.NOT_FOUND, 'Video not found.');
+  }
+
+  const thumbnailUploadResponse = await uploadFileToCloudinary(thumbnail.path, {
+    folder: 'thumbnails',
+  });
+
+  if (!thumbnailUploadResponse) {
+    throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, 'Failed to upload.');
+  }
+
+  videoExists.thumbnail = <IFileObject>mapToFileObject(thumbnailUploadResponse);
+
+  const video = await videoExists.save();
+
+  res
+    .status(STATUS_CODES.OK)
+    .json(new ApiResponse(STATUS_CODES.OK, 'Changed thumbnail.', video));
+});
+
 const deleteVideo = asyncHandler(async (req, res) => {
   const {
     params: { videoId },
@@ -279,10 +280,6 @@ const deleteVideo = asyncHandler(async (req, res) => {
     .json(new ApiResponse(STATUS_CODES.OK, 'Deleted video.', deletedVideo));
 });
 
-/**
- * GET `/videos/:videoId/comments`
- * Controller for getting comments of a video.
- */
 const getVideoComments = asyncHandler(async (req, res) => {
   const {
     params: { videoId },
@@ -352,10 +349,6 @@ const getVideoComments = asyncHandler(async (req, res) => {
   );
 });
 
-/**
- * GET `/videos`
- * Controller for getting all videos.
- */
 const getVideos = asyncHandler(async (req, res) => {
   const {
     query: { page, limit },
@@ -385,10 +378,6 @@ const getVideos = asyncHandler(async (req, res) => {
   );
 });
 
-/**
- * GET `/videos/:videoId/comments`
- * Controller for adding a comment to video.
- */
 const addCommentToVideo = asyncHandler(async (req, res) => {
   const {
     params: { videoId },

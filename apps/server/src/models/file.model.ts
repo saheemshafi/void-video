@@ -40,4 +40,3 @@ const fileSchema = new Schema<IFileObject>({
 });
 
 export { fileSchema };
-

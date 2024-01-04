@@ -78,3 +78,10 @@ export const likeVideoValidation = z.object({
     videoId: videoIdValidation,
   }),
 });
+
+export const changeVideoThumbnailValidation = z.object({
+  params: z.object({
+    videoId: videoIdValidation,
+  }),
+  file: fileValidation,
+});

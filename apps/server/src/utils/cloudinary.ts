@@ -39,7 +39,9 @@ async function uploadFileToCloudinary(
   }
 }
 
-async function removeFileFromCloudinary(publicId: string): Promise<boolean | null> {
+async function removeFileFromCloudinary(
+  publicId: string
+): Promise<boolean | null> {
   if (!publicId) return null;
 
   try {
@@ -70,4 +72,4 @@ const mapToFileObject = (file: UploadApiResponse | null | undefined) => {
   };
 };
 
-export { uploadFileToCloudinary, removeFileFromCloudinary, mapToFileObject };
+export { mapToFileObject, removeFileFromCloudinary, uploadFileToCloudinary };

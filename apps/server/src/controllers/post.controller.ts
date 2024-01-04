@@ -21,10 +21,6 @@ import {
   uploadPostValidation,
 } from '../validations/post.validation';
 
-/**
- * POSTS `/posts`
- * Controller uploading a post.
- */
 const uploadPost = asyncHandler(async (req: Request, res: Response) => {
   const {
     body: { content },
@@ -71,10 +67,6 @@ const uploadPost = asyncHandler(async (req: Request, res: Response) => {
     .json(new ApiResponse(STATUS_CODES.OK, 'Created a post.', post));
 });
 
-/**
- * GET `/posts`
- * Controller getting all posts.
- */
 const getPosts = asyncHandler(async (req, res) => {
   const {
     query: { page, limit },
@@ -101,10 +93,6 @@ const getPosts = asyncHandler(async (req, res) => {
   );
 });
 
-/**
- * GET `/posts/:postId`
- * Controller for getting a post.
- */
 const getPost = asyncHandler(async (req: Request, res: Response) => {
   const {
     params: { postId },
@@ -167,10 +155,6 @@ const getPost = asyncHandler(async (req: Request, res: Response) => {
     .json(new ApiResponse(STATUS_CODES.OK, 'Retrieved post.', post[0]));
 });
 
-/**
- * PATCH `/posts/:postId`
- * Controller for updating a post.
- */
 const updatePost = asyncHandler(async (req: Request, res: Response) => {
   const {
     body: { content },
@@ -200,10 +184,6 @@ const updatePost = asyncHandler(async (req: Request, res: Response) => {
     .json(new ApiResponse(STATUS_CODES.OK, 'Updated post.', updatedPost));
 });
 
-/**
- * DELETE `/posts/:postId`
- * Controller for deleting a post.
- */
 const deletePost = asyncHandler(async (req: Request, res: Response) => {
   const {
     params: { postId },
@@ -233,10 +213,6 @@ const deletePost = asyncHandler(async (req: Request, res: Response) => {
     .json(new ApiResponse(STATUS_CODES.OK, 'Deleted post.', deletedPost));
 });
 
-/**
- * GET `/posts/:postId/like`
- * Controller for liking a post.
- */
 const likePost = asyncHandler(async (req: Request, res: Response) => {
   const {
     params: { postId },
@@ -283,10 +259,6 @@ const likePost = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-/**
- * GET `/posts/:postId/comments`
- * Controller for getting comments of a post.
- */
 const getPostComments = asyncHandler(async (req: Request, res: Response) => {
   const {
     params: { postId },
@@ -356,10 +328,6 @@ const getPostComments = asyncHandler(async (req: Request, res: Response) => {
   );
 });
 
-/**
- * POST `/posts/:postId/comments`
- * Controller for adding a comment to a post.
- */
 const addCommentToPost = asyncHandler(async (req: Request, res: Response) => {
   const {
     params: { postId },

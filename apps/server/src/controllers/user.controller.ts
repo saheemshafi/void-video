@@ -29,10 +29,6 @@ import {
 } from '../validations/user.validation';
 import { Types } from 'mongoose';
 
-/**
- * POST `/users/create-account`
- * Controller for registering a new user.
- */
 const createAccount = asyncHandler(async (req: Request, res: Response) => {
   const {
     body: { displayName, username, email, password },
@@ -100,10 +96,6 @@ const createAccount = asyncHandler(async (req: Request, res: Response) => {
     );
 });
 
-/**
- * POST `/users/login`
- * Controller for logging a user in.
- */
 const login = asyncHandler(async (req: Request, res: Response) => {
   const {
     body: { username, email, password },
@@ -146,20 +138,12 @@ const login = asyncHandler(async (req: Request, res: Response) => {
     );
 });
 
-/**
- * GET `/users/session`
- * Controller for retrieving a user session.
- */
 const getSession = asyncHandler(async (req: Request, res: Response) => {
   res
     .status(STATUS_CODES.OK)
     .json(new ApiResponse(STATUS_CODES.OK, 'Session verified.', req.user));
 });
 
-/**
- * GET `/users/logout`
- * Controller for logging a user out.
- */
 const logout = asyncHandler(async (req: Request, res: Response) => {
   res
     .clearCookie('token')
@@ -209,10 +193,6 @@ const revalidateSession = asyncHandler(async (req, res) => {
     .json(new ApiResponse(STATUS_CODES.OK, 'Session revalidated.', user));
 });
 
-/**
- * POST `/users/forget-password`
- * Controller for sending an password reset email to user.
- */
 const emailPasswordResetLink = asyncHandler(async (req, res) => {
   const {
     body: { email },
@@ -242,10 +222,6 @@ const emailPasswordResetLink = asyncHandler(async (req, res) => {
     .json(new ApiResponse(STATUS_CODES.OK, 'Password reset link sent.'));
 });
 
-/**
- * PATCH `/users/reset-password`
- * Controller for resetting user password.
- */
 const resetPassword = asyncHandler(async (req, res) => {
   const {
     body: { token, password },
@@ -284,10 +260,6 @@ const resetPassword = asyncHandler(async (req, res) => {
     .json(new ApiResponse(STATUS_CODES.OK, 'Password reset successfull.'));
 });
 
-/**
- * PATCH `/users/change-avatar`
- * Controller for changing user avatar.
- */
 const changeAvatar = asyncHandler(async (req, res) => {
   const { file: avatar } = validateRequest(req, changeAvatarValidation);
 
@@ -317,10 +289,6 @@ const changeAvatar = asyncHandler(async (req, res) => {
     .json(new ApiResponse(STATUS_CODES.OK, 'Changed avatar.', user?.avatar));
 });
 
-/**
- * PATCH `/users/change-banner`
- * Controller for changing user banner.
- */
 const changeBanner = asyncHandler(async (req, res) => {
   const { file: banner } = validateRequest(req, changeBannerValidation);
 
@@ -350,10 +318,6 @@ const changeBanner = asyncHandler(async (req, res) => {
     .json(new ApiResponse(STATUS_CODES.OK, 'Changed banner.', user?.banner));
 });
 
-/**
- * POST `/users/change-banner`
- * Controller for getting user's channel.
- */
 const getChannelProfile = asyncHandler(async (req, res) => {
   const {
     params: { username },
@@ -422,10 +386,6 @@ const getChannelProfile = asyncHandler(async (req, res) => {
     );
 });
 
-/**
- * PATCH `/users/change-password`
- * Controller for changing password.
- */
 const changePassword = asyncHandler(async (req, res) => {
   const {
     body: { oldPassword, newPassword },
@@ -452,10 +412,6 @@ const changePassword = asyncHandler(async (req, res) => {
     .json(new ApiResponse(STATUS_CODES.OK, 'Changed password.'));
 });
 
-/**
- * GET `/users/watch-history`
- * Controller for getting watch history of loggedin user.
- */
 const getUserWatchHistory = asyncHandler(async (req, res) => {
   const user = await User.aggregate([
     {
@@ -510,10 +466,6 @@ const getUserWatchHistory = asyncHandler(async (req, res) => {
     );
 });
 
-/**
- * POST `/users/watch-history`
- * Controller for adding video to watch history.
- */
 const addVideoToWatchHistory = asyncHandler(async (req, res) => {
   const {
     body: { videoId },
