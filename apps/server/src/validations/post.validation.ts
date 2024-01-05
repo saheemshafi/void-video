@@ -67,3 +67,20 @@ export const updatePostValidation = z.object({
     postId: postIdValidation,
   }),
 });
+
+export const changePostImagesValidation = z
+  .object({
+    files: z.array(fileValidation).min(1).max(4),
+    body: z
+      .object({
+        replaceWithIds: z.array(z.string()),
+      })
+      .strict(),
+    params: z.object({
+      postId: postIdValidation,
+    }),
+  })
+  .refine(({ files, body }) => body.replaceWithIds.length == files.length, {
+    path: ['body'],
+    message: 'files and replaceWith should be of equal size.',
+  });

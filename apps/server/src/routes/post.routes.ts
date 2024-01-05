@@ -3,6 +3,7 @@ import upload from '../middlewares/multer.middleware';
 import { authorize } from '../middlewares/auth.middleware';
 import {
   addCommentToPost,
+  changePostImages,
   deletePost,
   getPost,
   getPostComments,
@@ -22,5 +23,8 @@ postRouter.route('/:postId').patch(authorize, updatePost);
 postRouter.route('/:postId').delete(authorize, deletePost);
 postRouter.route('/:postId/comments').get(getPostComments);
 postRouter.route('/:postId/comments').post(authorize, addCommentToPost);
+postRouter
+  .route('/:postId/change-images')
+  .patch(authorize, upload.array('images', 4), changePostImages);
 
 export default postRouter;

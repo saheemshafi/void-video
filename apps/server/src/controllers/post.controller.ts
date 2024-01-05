@@ -12,6 +12,7 @@ import asyncHandler from '../utils/async-handler';
 import { mapToFileObject, uploadFileToCloudinary } from '../utils/cloudinary';
 import {
   addCommentToPostValidation,
+  changePostImagesValidation,
   deletePostValidation,
   getPostCommentsValidation,
   getPostValidation,
@@ -259,6 +260,14 @@ const likePost = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
+const changePostImages = asyncHandler(async (req, res) => {
+  const {
+    params: { postId },
+    files,
+    body: { replaceWithIds },
+  } = validateRequest(req, changePostImagesValidation);
+});
+
 const getPostComments = asyncHandler(async (req: Request, res: Response) => {
   const {
     params: { postId },
@@ -361,4 +370,5 @@ export {
   likePost,
   updatePost,
   uploadPost,
+  changePostImages,
 };
