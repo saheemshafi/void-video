@@ -7,7 +7,11 @@ import { validateRequest } from '../utils';
 import ApiError from '../utils/api-error';
 import ApiResponse from '../utils/api-response';
 import asyncHandler from '../utils/async-handler';
-import { mapToFileObject, uploadFileToCloudinary } from '../utils/cloudinary';
+import {
+  mapToFileObject,
+  removeFileFromCloudinary,
+  uploadFileToCloudinary,
+} from '../utils/cloudinary';
 import {
   addCommentToVideoValidation,
   changeVideoThumbnailValidation,
@@ -245,13 +249,21 @@ const changeVideoThumbnail = asyncHandler(async (req, res) => {
     throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, 'Failed to upload.');
   }
 
-  videoExists.thumbnail = <IFileObject>mapToFileObject(thumbnailUploadResponse);
+  const videoWithUpdatedThumbnail = await Video.findByIdAndUpdate(videoId, {
+    $set: { thumbnail: mapToFileObject(thumbnailUploadResponse) },
+  });
 
-  const video = await videoExists.save();
+  await removeFileFromCloudinary(videoExists.thumbnail.public_id);
 
   res
     .status(STATUS_CODES.OK)
-    .json(new ApiResponse(STATUS_CODES.OK, 'Changed thumbnail.', video));
+    .json(
+      new ApiResponse(
+        STATUS_CODES.OK,
+        'Changed thumbnail.',
+        videoWithUpdatedThumbnail
+      )
+    );
 });
 
 const deleteVideo = asyncHandler(async (req, res) => {
