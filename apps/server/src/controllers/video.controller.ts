@@ -23,7 +23,6 @@ import {
   updateVideoValidation,
   uploadVideoValidation,
 } from '../validations/video.validation';
-import { IFileObject } from '../models/file.model';
 
 const uploadVideo = asyncHandler(async (req, res) => {
   const {
@@ -415,13 +414,12 @@ const addCommentToVideo = asyncHandler(async (req, res) => {
 });
 
 export {
-  addCommentToVideo,
-  deleteVideo,
+  addCommentToVideo, changeVideoThumbnail, deleteVideo,
   getVideo,
   getVideoComments,
   getVideos,
   likeVideo,
   updateVideo,
-  uploadVideo,
-  changeVideoThumbnail,
+  uploadVideo
 };
+
