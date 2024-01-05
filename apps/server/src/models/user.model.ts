@@ -12,7 +12,6 @@ export interface IUser {
   displayName: string;
   banner: IFileObject | null;
   watchHistory: Types.ObjectId[];
-  refreshToken: string;
 }
 
 interface IUserInstanceMethods {
