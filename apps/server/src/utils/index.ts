@@ -14,9 +14,13 @@ export const formatZodIssue = (error: z.ZodIssue): ValidationError => {
   };
 };
 
+type Validator<T extends z.ZodRawShape> =
+  | z.ZodObject<T>
+  | z.ZodEffects<z.ZodObject<T>>;
+
 export const validateRequest = <T extends z.ZodRawShape>(
   req: Request,
-  validator: z.ZodObject<T>
+  validator: Validator<T>
 ): ValidateRequestResult<z.ZodObject<T>> => {
   const parsedRequest = validator.safeParse(req);
 
