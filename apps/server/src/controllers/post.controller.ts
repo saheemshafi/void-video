@@ -266,6 +266,50 @@ const changePostImages = asyncHandler(async (req, res) => {
     files,
     body: { replaceWithIds },
   } = validateRequest(req, changePostImagesValidation);
+
+  const post = await Post.findById(postId);
+
+  if (!post) {
+    throw new ApiError(STATUS_CODES.NOT_FOUND, 'Post not found');
+  }
+
+  let updatedPost;
+  for (let i = 0; i < replaceWithIds.length; i++) {
+    const imageId = replaceWithIds[i];
+    const file = files[i];
+
+    if (!file || !imageId) return;
+    const uploadedImage = await uploadFileToCloudinary(file.path, {
+      folder: 'post-images',
+    });
+
+    if (!uploadedImage) {
+      throw new ApiError(
+        STATUS_CODES.INTERNAL_SERVER_ERROR,
+        'Failed to upload images.'
+      );
+    }
+
+    updatedPost = await Post.findOneAndUpdate(
+      {
+        images: {
+          $elemMatch: {
+            public_id: {
+              $eq: imageId,
+            },
+          },
+        },
+      },
+      { $set: { 'images.$': mapToFileObject(uploadedImage) } },
+      { new: true }
+    );
+  }
+
+  res
+    .status(STATUS_CODES.OK)
+    .json(
+      new ApiResponse(STATUS_CODES.OK, 'Changed post images.', updatedPost)
+    );
 });
 
 const getPostComments = asyncHandler(async (req: Request, res: Response) => {

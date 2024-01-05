@@ -68,7 +68,7 @@ const mapToFileObject = (file: UploadApiResponse | null | undefined) => {
     height: file?.height,
     public_id: file?.public_id,
     resource_type: file?.resource_type,
-    duration: file?.duration ?? undefined,
+    duration: file?.duration,
   };
 };
 
