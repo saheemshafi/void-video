@@ -9,8 +9,8 @@ import ApiResponse from '../utils/api-response';
 import asyncHandler from '../utils/async-handler';
 import {
   mapToFileObject,
-  removeFileFromCloudinary,
-  uploadFileToCloudinary,
+  removeFilesFromCloudinary,
+  uploadFileToCloudinary
 } from '../utils/cloudinary';
 import {
   addCommentToVideoValidation,
@@ -252,7 +252,7 @@ const changeVideoThumbnail = asyncHandler(async (req, res) => {
     $set: { thumbnail: mapToFileObject(thumbnailUploadResponse) },
   });
 
-  await removeFileFromCloudinary(videoExists.thumbnail.public_id);
+  await removeFilesFromCloudinary(videoExists.thumbnail.public_id);
 
   res
     .status(STATUS_CODES.OK)
@@ -281,6 +281,10 @@ const deleteVideo = asyncHandler(async (req, res) => {
   }
 
   const deletedVideo = await Video.findByIdAndDelete(videoId);
+  await removeFilesFromCloudinary(
+    videoExists.thumbnail.public_id,
+    videoExists.source.public_id
+  );
 
   if (!deletedVideo) {
     throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, 'Failed to delete.');
@@ -414,7 +418,9 @@ const addCommentToVideo = asyncHandler(async (req, res) => {
 });
 
 export {
-  addCommentToVideo, changeVideoThumbnail, deleteVideo,
+  addCommentToVideo,
+  changeVideoThumbnail,
+  deleteVideo,
   getVideo,
   getVideoComments,
   getVideos,

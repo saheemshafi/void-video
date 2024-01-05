@@ -1,5 +1,6 @@
 import { CookieOptions, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import { Types } from 'mongoose';
 import { STATUS_CODES } from '../constants';
 import { User } from '../models/user.model';
 import { validateRequest } from '../utils';
@@ -8,8 +9,8 @@ import ApiResponse from '../utils/api-response';
 import asyncHandler from '../utils/async-handler';
 import {
   mapToFileObject,
-  removeFileFromCloudinary,
-  uploadFileToCloudinary,
+  removeFilesFromCloudinary,
+  uploadFileToCloudinary
 } from '../utils/cloudinary';
 import {
   sendPasswordResetEmail,
@@ -27,7 +28,6 @@ import {
   resetPasswordValidation,
   revalidateSessionValidation,
 } from '../validations/user.validation';
-import { Types } from 'mongoose';
 
 const createAccount = asyncHandler(async (req: Request, res: Response) => {
   const {
@@ -282,7 +282,7 @@ const changeAvatar = asyncHandler(async (req, res) => {
     { new: true }
   );
 
-  await removeFileFromCloudinary(req.user?.avatar.public_id || '');
+  await removeFilesFromCloudinary(req.user?.avatar.public_id || '');
 
   res
     .status(STATUS_CODES.OK)
@@ -311,7 +311,7 @@ const changeBanner = asyncHandler(async (req, res) => {
     { new: true }
   );
 
-  await removeFileFromCloudinary(req.user?.banner?.public_id || '');
+  await removeFilesFromCloudinary(req.user?.banner?.public_id || '');
 
   res
     .status(STATUS_CODES.OK)
@@ -513,5 +513,6 @@ export {
   login,
   logout,
   resetPassword,
-  revalidateSession,
+  revalidateSession
 };
+

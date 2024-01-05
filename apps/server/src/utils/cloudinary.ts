@@ -39,23 +39,17 @@ async function uploadFileToCloudinary(
   }
 }
 
-async function removeFileFromCloudinary(
-  publicId: string
-): Promise<boolean | null> {
-  if (!publicId) return null;
-
+async function removeFilesFromCloudinary(...publicIds: string[]) {
   try {
-    const deleteResponse = await cloudinary.uploader.destroy(publicId, {
-      invalidate: true,
-    });
-    console.log(deleteResponse);
-    return true;
+    if (publicIds.length == 0) return;
+
+    const response = await cloudinary.api.delete_resources(publicIds);
+    return response;
   } catch (error) {
     console.log('CLOUDINARY: Failed to remove file. ', error);
     throw error;
   }
 }
-
 const mapToFileObject = (file: UploadApiResponse | null | undefined) => {
   if (!file) {
     return null;
@@ -72,4 +66,4 @@ const mapToFileObject = (file: UploadApiResponse | null | undefined) => {
   };
 };
 
-export { mapToFileObject, removeFileFromCloudinary, uploadFileToCloudinary };
+export { mapToFileObject, uploadFileToCloudinary, removeFilesFromCloudinary };

@@ -9,7 +9,11 @@ import { validateRequest } from '../utils';
 import ApiError from '../utils/api-error';
 import ApiResponse from '../utils/api-response';
 import asyncHandler from '../utils/async-handler';
-import { mapToFileObject, uploadFileToCloudinary } from '../utils/cloudinary';
+import {
+  mapToFileObject,
+  removeFilesFromCloudinary,
+  uploadFileToCloudinary,
+} from '../utils/cloudinary';
 import {
   addCommentToPostValidation,
   changePostImagesValidation,
@@ -208,6 +212,9 @@ const deletePost = asyncHandler(async (req: Request, res: Response) => {
       'Failed to delete post.'
     );
   }
+  await removeFilesFromCloudinary(
+    ...postExists.images.map((image) => image.public_id)
+  );
 
   res
     .status(STATUS_CODES.OK)
@@ -304,6 +311,8 @@ const changePostImages = asyncHandler(async (req, res) => {
       { new: true }
     );
   }
+
+  await removeFilesFromCloudinary(...replaceWithIds);
 
   res
     .status(STATUS_CODES.OK)
