@@ -10,7 +10,6 @@ This Monorepo includes the following packages/apps:
 
 - `web`: an [Angular](https://angular.dev/) app for the main application where people can watch, go live and explore.
 - `studio`: another [Angular](https://angular.dev/) app for managing the channel and displaying analytics.
-- `@repo/ui`: an ui library build with [Angular](https://angular.dev/) shared between `web` and `studio` applications
 - `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-prettier`)
 - `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
 
