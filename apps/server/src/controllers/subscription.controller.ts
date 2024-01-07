@@ -60,7 +60,14 @@ const removeSubscription = asyncHandler(async (req, res) => {
     throw new ApiError(STATUS_CODES.NOT_FOUND, 'Subscription not found.');
   }
 
-  await subscription.deleteOne();
+  const deleteStatus = await subscription.deleteOne();
+
+  if (!deleteStatus.acknowledged) {
+    throw new ApiError(
+      STATUS_CODES.INTERNAL_SERVER_ERROR,
+      'Failed to remove subscription.'
+    );
+  }
 
   res
     .status(STATUS_CODES.OK)
