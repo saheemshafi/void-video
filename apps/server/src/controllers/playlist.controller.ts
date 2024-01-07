@@ -1,16 +1,20 @@
-import { UploadApiResponse } from 'cloudinary';
+import { STATUS_CODES } from '../constants';
 import { Playlist } from '../models/playlist.model';
 import { validateRequest } from '../utils';
+import ApiError from '../utils/api-error';
+import ApiResponse from '../utils/api-response';
 import asyncHandler from '../utils/async-handler';
-import { mapToFileObject, uploadFileToCloudinary } from '../utils/cloudinary';
 import {
+  mapToFileObject,
+  removeFilesFromCloudinary,
+  uploadFileToCloudinary,
+} from '../utils/cloudinary';
+import {
+  changePlaylistThumbnailValidation,
   createPlaylistValidation,
   deletePlaylistValidation,
   updatePlaylistValidation,
 } from '../validations/playlist.validation';
-import ApiError from '../utils/api-error';
-import { STATUS_CODES } from '../constants';
-import ApiResponse from '../utils/api-response';
 
 const createPlaylist = asyncHandler(async (req, res) => {
   const {
@@ -115,4 +119,66 @@ const deletePlaylist = asyncHandler(async (req, res) => {
     );
 });
 
-export { createPlaylist, updatePlaylist, deletePlaylist };
+const changePlaylistThumbnail = asyncHandler(async (req, res) => {
+  const {
+    params: { playlistId },
+    file: thumbnail,
+  } = validateRequest(req, changePlaylistThumbnailValidation);
+
+  const playlistExists = await Playlist.findById(playlistId);
+
+  if (!playlistExists) {
+    throw new ApiError(STATUS_CODES.NOT_FOUND, 'Playlist not found.');
+  }
+
+  if (!playlistExists.owner.equals(req.user?._id)) {
+    throw new ApiError(STATUS_CODES.UNAUTHORIZED, 'Not authorized.');
+  }
+
+  const thumbnailResponse = await uploadFileToCloudinary(thumbnail.path, {
+    folder: 'thumbnails',
+  });
+
+  if (!thumbnailResponse) {
+    throw new ApiError(
+      STATUS_CODES.INTERNAL_SERVER_ERROR,
+      'Failed to upload thumbnail.'
+    );
+  }
+
+  const playlistWithUpdatedThumbnail = await Playlist.findByIdAndUpdate(
+    playlistExists._id,
+    {
+      $set: {
+        thumbnail: mapToFileObject(thumbnailResponse),
+      },
+    },
+    { new: true }
+  );
+
+  if (!playlistWithUpdatedThumbnail) {
+    throw new ApiError(
+      STATUS_CODES.INTERNAL_SERVER_ERROR,
+      'Failed to change thumbnail.'
+    );
+  }
+
+  await removeFilesFromCloudinary(playlistExists.thumbnail.public_id);
+
+  res
+    .status(STATUS_CODES.OK)
+    .json(
+      new ApiResponse(
+        STATUS_CODES.OK,
+        'Changed playlist thumbnail.',
+        playlistWithUpdatedThumbnail
+      )
+    );
+});
+
+export {
+  createPlaylist,
+  deletePlaylist,
+  updatePlaylist,
+  changePlaylistThumbnail,
+};

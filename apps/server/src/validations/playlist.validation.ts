@@ -39,3 +39,12 @@ export const deletePlaylistValidation = z.object({
     })
     .strict(),
 });
+
+export const changePlaylistThumbnailValidation = z.object({
+  params: z
+    .object({
+      playlistId: objectIdValidation('Playlist'),
+    })
+    .strict(),
+  file: fileValidation,
+});
