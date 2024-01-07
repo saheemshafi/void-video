@@ -5,6 +5,7 @@ import {
   createPlaylist,
   deletePlaylist,
   getPlaylist,
+  getPlaylists,
   updatePlaylist,
 } from '../controllers/playlist.controller';
 import { authorize } from '../middlewares/auth.middleware';
@@ -17,12 +18,15 @@ playlistRouter
   .post(authorize, upload.single('thumbnail'), createPlaylist);
 playlistRouter.route('/:playlistId').patch(authorize, updatePlaylist);
 playlistRouter.route('/:playlistId').delete(authorize, deletePlaylist);
+
+playlistRouter.route('/').get(getPlaylists);
+playlistRouter.route('/:playlistId').get(getPlaylist);
+
 playlistRouter
   .route('/:playlistId/change-thumbnail')
   .patch(authorize, upload.single('thumbnail'), changePlaylistThumbnail);
 playlistRouter
   .route('/:playlistId/add-video')
   .post(authorize, addVideoToPlaylist);
-playlistRouter.route('/:playlistId').get(getPlaylist);
 
 export default playlistRouter;

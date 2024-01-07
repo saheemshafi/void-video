@@ -1,6 +1,6 @@
 import z from 'zod';
 import fileValidation from './multer.validation';
-import { objectIdValidation } from './utils.validation';
+import { objectIdValidation, paginationValidation } from './utils.validation';
 
 export const createPlaylistValidation = z.object({
   body: z
@@ -66,4 +66,11 @@ export const getPlaylistValidation = z.object({
   params: z.object({
     playlistId: objectIdValidation('Playlist'),
   }),
+});
+
+export const getPlaylistsValidation = z.object({
+  params: z.object({
+    username: z.string().optional(),
+  }),
+  query: paginationValidation,
 });

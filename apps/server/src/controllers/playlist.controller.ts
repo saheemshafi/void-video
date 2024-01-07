@@ -17,6 +17,7 @@ import {
   createPlaylistValidation,
   deletePlaylistValidation,
   getPlaylistValidation,
+  getPlaylistsValidation,
   updatePlaylistValidation,
 } from '../validations/playlist.validation';
 
@@ -302,6 +303,7 @@ const getPlaylist = asyncHandler(async (req, res) => {
         owner: projectOwner,
         title: 1,
         videos: 1,
+        totalVideos: 1,
         description: 1,
         private: 1,
         createdAt: 1,
@@ -319,6 +321,54 @@ const getPlaylist = asyncHandler(async (req, res) => {
     .json(new ApiResponse(STATUS_CODES.OK, 'Playlist retrieved.', playlist[0]));
 });
 
+const getPlaylists = asyncHandler(async (req, res) => {
+  const { body, params } = validateRequest(req, getPlaylistsValidation);
+
+  const playlists = await Playlist.aggregate([
+    {
+      $match: {
+        private: false,
+      },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'owner',
+        foreignField: '_id',
+        as: 'owner',
+      },
+    },
+    {
+      $addFields: {
+        owner: {
+          $first: '$owner',
+        },
+        totalVideos: {
+          $size: '$videos',
+        },
+      },
+    },
+    {
+      $project: {
+        owner: {
+          username: 1,
+          displayName: 1,
+          avatar: 1,
+        },
+        totalVideos: 1,
+        title: 1,
+        description: 1,
+        createdAt: 1,
+        updatedAt: 1,
+      },
+    },
+  ]);
+
+  res
+    .status(STATUS_CODES.OK)
+    .json(new ApiResponse(STATUS_CODES.OK, 'Playlists retrieved.', playlists));
+});
+
 export {
   createPlaylist,
   deletePlaylist,
@@ -326,4 +376,5 @@ export {
   changePlaylistThumbnail,
   addVideoToPlaylist,
   getPlaylist,
+  getPlaylists,
 };
