@@ -48,3 +48,16 @@ export const changePlaylistThumbnailValidation = z.object({
     .strict(),
   file: fileValidation,
 });
+
+export const addVideoToPlaylistValidation = z.object({
+  params: z
+    .object({
+      playlistId: objectIdValidation('Playlist'),
+    })
+    .strict(),
+  body: z
+    .object({
+      videoId: objectIdValidation('Video'),
+    })
+    .strict(),
+});

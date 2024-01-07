@@ -1,9 +1,10 @@
 import { Router } from 'express';
 import {
+  addVideoToPlaylist,
   changePlaylistThumbnail,
   createPlaylist,
   deletePlaylist,
-  updatePlaylist,
+  updatePlaylist
 } from '../controllers/playlist.controller';
 import { authorize } from '../middlewares/auth.middleware';
 import upload from '../middlewares/multer.middleware';
@@ -18,5 +19,8 @@ playlistRouter.route('/:playlistId').delete(authorize, deletePlaylist);
 playlistRouter
   .route('/:playlistId/change-thumbnail')
   .patch(authorize, upload.single('thumbnail'), changePlaylistThumbnail);
+playlistRouter
+  .route('/:playlistId/add-video')
+  .post(authorize, addVideoToPlaylist);
 
 export default playlistRouter;
