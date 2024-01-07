@@ -95,6 +95,10 @@ const deletePlaylist = asyncHandler(async (req, res) => {
     throw new ApiError(STATUS_CODES.NOT_FOUND, 'Playlist not found.');
   }
 
+  if (!playlistExists.owner.equals(req.user?._id)) {
+    throw new ApiError(STATUS_CODES.UNAUTHORIZED, 'Not Authorized.');
+  }
+
   const deleteStatus = await playlistExists.deleteOne();
 
   if (!deleteStatus.acknowledged) {
