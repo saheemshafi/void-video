@@ -61,3 +61,9 @@ export const addVideoToPlaylistValidation = z.object({
     })
     .strict(),
 });
+
+export const getPlaylistValidation = z.object({
+  params: z.object({
+    playlistId: objectIdValidation('Playlist'),
+  }),
+});

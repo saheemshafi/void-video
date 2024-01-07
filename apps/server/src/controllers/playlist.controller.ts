@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { STATUS_CODES } from '../constants';
 import { Playlist } from '../models/playlist.model';
 import { Video } from '../models/video.model';
@@ -15,6 +16,7 @@ import {
   changePlaylistThumbnailValidation,
   createPlaylistValidation,
   deletePlaylistValidation,
+  getPlaylistValidation,
   updatePlaylistValidation,
 } from '../validations/playlist.validation';
 
@@ -225,10 +227,100 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
     .json(new ApiResponse(STATUS_CODES.OK, 'Video added to playlist.', video));
 });
 
+const getPlaylist = asyncHandler(async (req, res) => {
+  const {
+    params: { playlistId },
+  } = validateRequest(req, getPlaylistValidation);
+
+  const projectOwner = {
+    username: 1,
+    displayName: 1,
+    avatar: 1,
+  };
+
+  const playlist = await Playlist.aggregate([
+    {
+      $match: {
+        _id: new Types.ObjectId(playlistId),
+      },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'owner',
+        foreignField: '_id',
+        as: 'owner',
+      },
+    },
+    {
+      $lookup: {
+        from: 'videos',
+        localField: 'videos',
+        foreignField: '_id',
+        as: 'videos',
+        pipeline: [
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'owner',
+              foreignField: '_id',
+              as: 'owner',
+            },
+          },
+          {
+            $addFields: {
+              owner: {
+                $first: '$owner',
+              },
+            },
+          },
+          {
+            $project: {
+              owner: projectOwner,
+              title: 1,
+              thumbnail: 1,
+              views: 1,
+              createdAt: 1,
+              updatedAt: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $addFields: {
+        owner: {
+          $first: '$owner',
+        },
+      },
+    },
+    {
+      $project: {
+        owner: projectOwner,
+        title: 1,
+        videos: 1,
+        description: 1,
+        private: 1,
+        createdAt: 1,
+        updatedAt: 1,
+      },
+    },
+  ]);
+
+  if (playlist.length == 0) {
+    throw new ApiError(STATUS_CODES.NOT_FOUND, 'Playlist not found.');
+  }
+
+  res
+    .status(STATUS_CODES.OK)
+    .json(new ApiResponse(STATUS_CODES.OK, 'Playlist retrieved.', playlist[0]));
+});
+
 export {
   createPlaylist,
   deletePlaylist,
   updatePlaylist,
   changePlaylistThumbnail,
   addVideoToPlaylist,
+  getPlaylist,
 };

@@ -4,7 +4,8 @@ import {
   changePlaylistThumbnail,
   createPlaylist,
   deletePlaylist,
-  updatePlaylist
+  getPlaylist,
+  updatePlaylist,
 } from '../controllers/playlist.controller';
 import { authorize } from '../middlewares/auth.middleware';
 import upload from '../middlewares/multer.middleware';
@@ -22,5 +23,6 @@ playlistRouter
 playlistRouter
   .route('/:playlistId/add-video')
   .post(authorize, addVideoToPlaylist);
+playlistRouter.route('/:playlistId').get(getPlaylist);
 
 export default playlistRouter;
