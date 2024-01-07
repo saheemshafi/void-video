@@ -292,6 +292,9 @@ const getPlaylist = asyncHandler(async (req, res) => {
         owner: {
           $first: '$owner',
         },
+        totalVideos: {
+          $size: '$videos',
+        },
       },
     },
     {
