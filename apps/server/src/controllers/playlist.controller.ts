@@ -1,4 +1,4 @@
-import { PaginateOptions, PipelineStage, Types } from 'mongoose';
+import { PaginateOptions, Types } from 'mongoose';
 import { STATUS_CODES } from '../constants';
 import { Playlist } from '../models/playlist.model';
 import { Video } from '../models/video.model';
@@ -393,5 +393,6 @@ export {
   deletePlaylist,
   getPlaylist,
   getPlaylists,
-  updatePlaylist,
+  updatePlaylist
 };
+
