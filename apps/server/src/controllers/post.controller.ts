@@ -204,9 +204,9 @@ const deletePost = asyncHandler(async (req: Request, res: Response) => {
     throw new ApiError(STATUS_CODES.UNAUTHORIZED, 'Not authorized.');
   }
 
-  const deletedPost = await Post.findByIdAndDelete(postExists._id);
+  const deleteStatus = await postExists.deleteOne();
 
-  if (!deletedPost) {
+  if (!deleteStatus.acknowledged) {
     throw new ApiError(
       STATUS_CODES.INTERNAL_SERVER_ERROR,
       'Failed to delete post.'
@@ -218,7 +218,7 @@ const deletePost = asyncHandler(async (req: Request, res: Response) => {
 
   res
     .status(STATUS_CODES.OK)
-    .json(new ApiResponse(STATUS_CODES.OK, 'Deleted post.', deletedPost));
+    .json(new ApiResponse(STATUS_CODES.OK, 'Deleted post.', postExists));
 });
 
 const likePost = asyncHandler(async (req: Request, res: Response) => {
