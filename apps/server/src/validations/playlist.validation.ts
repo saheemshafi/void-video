@@ -69,8 +69,5 @@ export const getPlaylistValidation = z.object({
 });
 
 export const getPlaylistsValidation = z.object({
-  params: z.object({
-    username: z.string().optional(),
-  }),
   query: paginationValidation,
 });
