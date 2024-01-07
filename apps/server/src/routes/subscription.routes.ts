@@ -8,6 +8,6 @@ import {
 const subscriptionRouter = Router();
 
 subscriptionRouter.route('/').post(authorize, createSubscription);
-subscriptionRouter.route('/').delete(removeSubscription);
+subscriptionRouter.route('/').delete(authorize, removeSubscription);
 
 export default subscriptionRouter;
