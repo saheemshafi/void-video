@@ -1,5 +1,6 @@
-import { Schema, Types, model } from 'mongoose';
+import { AggregatePaginateModel, Schema, Types, model } from 'mongoose';
 import { IFileObject, fileSchema } from './file.model';
+import mongooseAggregatePaginate from 'mongoose-aggregate-paginate-v2';
 
 export interface IPlaylist {
   title: string;
@@ -10,7 +11,9 @@ export interface IPlaylist {
   thumbnail: IFileObject;
 }
 
-const playlistSchema = new Schema<IPlaylist>(
+type IPlaylistModel = AggregatePaginateModel<IPlaylist>;
+
+const playlistSchema = new Schema<IPlaylist, IPlaylistModel>(
   {
     title: {
       type: String,
@@ -41,4 +44,10 @@ const playlistSchema = new Schema<IPlaylist>(
   { timestamps: true }
 );
 
-export const Playlist = model('Playlist', playlistSchema);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+playlistSchema.plugin(mongooseAggregatePaginate as any);
+
+export const Playlist = model<IPlaylist, IPlaylistModel>(
+  'Playlist',
+  playlistSchema
+);

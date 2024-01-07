@@ -1,4 +1,4 @@
-import { Types } from 'mongoose';
+import { PaginateOptions, PipelineStage, Types } from 'mongoose';
 import { STATUS_CODES } from '../constants';
 import { Playlist } from '../models/playlist.model';
 import { Video } from '../models/video.model';
@@ -322,9 +322,16 @@ const getPlaylist = asyncHandler(async (req, res) => {
 });
 
 const getPlaylists = asyncHandler(async (req, res) => {
-  const { body, params } = validateRequest(req, getPlaylistsValidation);
+  const {
+    query: { page, limit },
+  } = validateRequest(req, getPlaylistsValidation);
 
-  const playlists = await Playlist.aggregate([
+  const options: PaginateOptions = {
+    page,
+    limit,
+  };
+
+  const playlistsAggregation = Playlist.aggregate([
     {
       $match: {
         private: false,
@@ -364,17 +371,27 @@ const getPlaylists = asyncHandler(async (req, res) => {
     },
   ]);
 
+  const { docs, ...paginationData } = await Playlist.aggregatePaginate(
+    playlistsAggregation,
+    options
+  );
+
   res
     .status(STATUS_CODES.OK)
-    .json(new ApiResponse(STATUS_CODES.OK, 'Playlists retrieved.', playlists));
+    .json(
+      new ApiResponse(STATUS_CODES.OK, 'Playlists retrieved.', {
+        playlists: docs,
+        ...paginationData,
+      })
+    );
 });
 
 export {
+  addVideoToPlaylist,
+  changePlaylistThumbnail,
   createPlaylist,
   deletePlaylist,
-  updatePlaylist,
-  changePlaylistThumbnail,
-  addVideoToPlaylist,
   getPlaylist,
   getPlaylists,
+  updatePlaylist,
 };
