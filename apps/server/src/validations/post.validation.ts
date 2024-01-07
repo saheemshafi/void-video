@@ -1,14 +1,6 @@
 import z from 'zod';
 import fileValidation from './multer.validation';
-import { isValidObjectId } from 'mongoose';
-import paginationValidation from './pagination.validation';
-
-export const postIdValidation = z
-  .string()
-  .refine((postId) => isValidObjectId(postId), {
-    path: ['postId'],
-    message: 'Post id is not valid.',
-  });
+import { objectIdValidation, paginationValidation } from './utils.validation';
 
 export const uploadPostValidation = z.object({
   body: z
@@ -21,7 +13,7 @@ export const uploadPostValidation = z.object({
 
 export const getPostValidation = z.object({
   params: z.object({
-    postId: postIdValidation,
+    postId: objectIdValidation('Post'),
   }),
 });
 
@@ -31,13 +23,13 @@ export const getPostsValidation = z.object({
 
 export const deletePostValidation = z.object({
   params: z.object({
-    postId: postIdValidation,
+    postId: objectIdValidation('Post'),
   }),
 });
 
 export const addCommentToPostValidation = z.object({
   params: z.object({
-    postId: postIdValidation,
+    postId: objectIdValidation('Post'),
   }),
   body: z.object({
     content: z.string().min(3),
@@ -46,14 +38,14 @@ export const addCommentToPostValidation = z.object({
 
 export const getPostCommentsValidation = z.object({
   params: z.object({
-    postId: postIdValidation,
+    postId: objectIdValidation('Post'),
   }),
   query: paginationValidation,
 });
 
 export const likePostValidation = z.object({
   params: z.object({
-    postId: postIdValidation,
+    postId: objectIdValidation('Post'),
   }),
 });
 
@@ -64,7 +56,7 @@ export const updatePostValidation = z.object({
     })
     .strict(),
   params: z.object({
-    postId: postIdValidation,
+    postId: objectIdValidation('Post'),
   }),
 });
 
@@ -77,7 +69,7 @@ export const changePostImagesValidation = z
       })
       .strict(),
     params: z.object({
-      postId: postIdValidation,
+      postId: objectIdValidation('Post'),
     }),
   })
   .refine(({ files, body }) => body.replaceWithIds.length == files.length, {

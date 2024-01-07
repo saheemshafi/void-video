@@ -1,14 +1,14 @@
 import z from 'zod';
-import { userIdValidation } from './user.validation';
+import { objectIdValidation } from './utils.validation';
 
 export const createSubscriptionValidation = z.object({
   body: z.object({
-    channelId: userIdValidation,
+    channelId: objectIdValidation('User'),
   }),
 });
 
 export const removeSubscriptionValidation = z.object({
   body: z.object({
-    channelId: userIdValidation,
+    channelId: objectIdValidation('User'),
   }),
 });

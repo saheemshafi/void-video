@@ -1,14 +1,6 @@
 import z from 'zod';
 import fileValidation from './multer.validation';
-import { videoIdValidation } from './video.validation';
-import { isValidObjectId } from 'mongoose';
-
-export const userIdValidation = z
-  .string()
-  .refine((userId) => isValidObjectId(userId), {
-    path: ['userId'],
-    message: 'User id is not valid.',
-  });
+import { objectIdValidation } from './utils.validation';
 
 export const createAccountValidation = z.object({
   body: z
@@ -90,7 +82,7 @@ export const changePasswordValidation = z.object({
 export const addVideoToWatchHistoryValidation = z.object({
   body: z
     .object({
-      videoId: videoIdValidation,
+      videoId: objectIdValidation('Video'),
     })
     .strict(),
 });

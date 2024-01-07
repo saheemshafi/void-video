@@ -5,4 +5,5 @@ export interface ValidationError {
   message: string;
 }
 
+export type Models = 'Video' | 'Playlist' | 'Post' | 'User' | 'Subscription';
 export type ValidateRequestResult<T extends z.ZodSchema> = z.infer<T>;

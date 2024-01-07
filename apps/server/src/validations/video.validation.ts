@@ -1,14 +1,6 @@
 import z from 'zod';
 import fileValidation from './multer.validation';
-import { isValidObjectId } from 'mongoose';
-import paginationValidation from './pagination.validation';
-
-export const videoIdValidation = z
-  .string()
-  .refine((videoId) => isValidObjectId(videoId), {
-    path: ['videoId'],
-    message: 'Video id is not valid.',
-  });
+import { objectIdValidation, paginationValidation } from './utils.validation';
 
 export const uploadVideoValidation = z.object({
   body: z
@@ -26,7 +18,7 @@ export const uploadVideoValidation = z.object({
 
 export const getVideoValidation = z.object({
   params: z.object({
-    videoId: videoIdValidation,
+    videoId: objectIdValidation('Video'),
   }),
 });
 
@@ -43,19 +35,19 @@ export const updateVideoValidation = z.object({
       message: 'Request body is empty.',
     }),
   params: z.object({
-    videoId: videoIdValidation,
+    videoId: objectIdValidation('Video'),
   }),
 });
 
 export const deleteVideoValidation = z.object({
   params: z.object({
-    videoId: videoIdValidation,
+    videoId: objectIdValidation('Video'),
   }),
 });
 
 export const getVideoCommentsValidation = z.object({
   params: z.object({
-    videoId: videoIdValidation,
+    videoId: objectIdValidation('Video'),
   }),
   query: paginationValidation,
 });
@@ -66,7 +58,7 @@ export const getVideosValidation = z.object({
 
 export const addCommentToVideoValidation = z.object({
   params: z.object({
-    videoId: videoIdValidation,
+    videoId: objectIdValidation('Video'),
   }),
   body: z.object({
     content: z.string().min(3),
@@ -75,13 +67,13 @@ export const addCommentToVideoValidation = z.object({
 
 export const likeVideoValidation = z.object({
   params: z.object({
-    videoId: videoIdValidation,
+    videoId: objectIdValidation('Video'),
   }),
 });
 
 export const changeVideoThumbnailValidation = z.object({
   params: z.object({
-    videoId: videoIdValidation,
+    videoId: objectIdValidation('Video'),
   }),
   file: fileValidation,
 });

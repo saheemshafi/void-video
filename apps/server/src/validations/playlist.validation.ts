@@ -1,13 +1,6 @@
 import z from 'zod';
 import fileValidation from './multer.validation';
-import { isValidObjectId } from 'mongoose';
-
-export const playlistIdValidation = z
-  .string()
-  .refine((playlistId) => isValidObjectId(playlistId), {
-    path: ['playlistId'],
-    message: 'Playlist id is not valid.',
-  });
+import { objectIdValidation } from './utils.validation';
 
 export const createPlaylistValidation = z.object({
   body: z
@@ -34,7 +27,7 @@ export const updatePlaylistValidation = z.object({
     }),
   params: z
     .object({
-      playlistId: playlistIdValidation,
+      playlistId: objectIdValidation('Playlist'),
     })
     .strict(),
 });
@@ -42,7 +35,7 @@ export const updatePlaylistValidation = z.object({
 export const deletePlaylistValidation = z.object({
   params: z
     .object({
-      playlistId: playlistIdValidation,
+      playlistId: objectIdValidation('Playlist'),
     })
     .strict(),
 });
