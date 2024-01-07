@@ -10,7 +10,7 @@ import asyncHandler from '../utils/async-handler';
 import {
   mapToFileObject,
   removeFilesFromCloudinary,
-  uploadFileToCloudinary
+  uploadFileToCloudinary,
 } from '../utils/cloudinary';
 import {
   addCommentToVideoValidation,
@@ -280,19 +280,23 @@ const deleteVideo = asyncHandler(async (req, res) => {
     throw new ApiError(STATUS_CODES.UNAUTHORIZED, 'Not authorized.');
   }
 
-  const deletedVideo = await Video.findByIdAndDelete(videoId);
+  const deleteStatus = await videoExists.deleteOne();
+
+  if (!deleteStatus.acknowledged) {
+    throw new ApiError(
+      STATUS_CODES.INTERNAL_SERVER_ERROR,
+      'Failed to delete video.'
+    );
+  }
+
   await removeFilesFromCloudinary(
     videoExists.thumbnail.public_id,
     videoExists.source.public_id
   );
 
-  if (!deletedVideo) {
-    throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, 'Failed to delete.');
-  }
-
   res
     .status(STATUS_CODES.OK)
-    .json(new ApiResponse(STATUS_CODES.OK, 'Deleted video.', deletedVideo));
+    .json(new ApiResponse(STATUS_CODES.OK, 'Deleted video.', videoExists));
 });
 
 const getVideoComments = asyncHandler(async (req, res) => {
@@ -426,6 +430,5 @@ export {
   getVideos,
   likeVideo,
   updateVideo,
-  uploadVideo
+  uploadVideo,
 };
-
