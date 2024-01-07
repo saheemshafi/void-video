@@ -3,7 +3,10 @@ import { Playlist } from '../models/playlist.model';
 import { validateRequest } from '../utils';
 import asyncHandler from '../utils/async-handler';
 import { mapToFileObject, uploadFileToCloudinary } from '../utils/cloudinary';
-import { createPlaylistValidation } from '../validations/playlist.validation';
+import {
+  createPlaylistValidation,
+  updatePlaylistValidation,
+} from '../validations/playlist.validation';
 import ApiError from '../utils/api-error';
 import { STATUS_CODES } from '../constants';
 import ApiResponse from '../utils/api-response';
@@ -53,4 +56,31 @@ const createPlaylist = asyncHandler(async (req, res) => {
     );
 });
 
-export { createPlaylist };
+const updatePlaylist = asyncHandler(async (req, res) => {
+  const {
+    body: playlistDetails,
+    params: { playlistId },
+  } = validateRequest(req, updatePlaylistValidation);
+
+  const playlistExists = await Playlist.findById(playlistId);
+
+  if (!playlistExists) {
+    throw new ApiError(STATUS_CODES.NOT_FOUND, 'Playlist not found.');
+  }
+
+  const updatedPlaylist = await Playlist.findByIdAndUpdate(
+    playlistExists._id,
+    {
+      $set: playlistDetails,
+    },
+    { new: true }
+  );
+
+  res
+    .status(STATUS_CODES.OK)
+    .json(
+      new ApiResponse(STATUS_CODES.OK, 'Playlist updated.', updatedPlaylist)
+    );
+});
+
+export { createPlaylist, updatePlaylist };
