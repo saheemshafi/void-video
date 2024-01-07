@@ -1,15 +1,18 @@
 import { Schema, Types, model } from 'mongoose';
+import { IFileObject, fileSchema } from './file.model';
 
 export interface IPlaylist {
-  name: string;
-  description: string;
+  title: string;
+  description?: string;
   owner: Types.ObjectId;
   videos: Types.ObjectId[];
+  private: boolean;
+  thumbnail: IFileObject;
 }
 
 const playlistSchema = new Schema<IPlaylist>(
   {
-    name: {
+    title: {
       type: String,
       trim: true,
       index: true,
@@ -18,12 +21,16 @@ const playlistSchema = new Schema<IPlaylist>(
     description: {
       type: String,
       trim: true,
-      required: true,
     },
     owner: {
       type: Schema.Types.ObjectId,
       ref: 'User',
     },
+    private: {
+      type: Boolean,
+      default: false,
+    },
+    thumbnail: fileSchema,
     videos: [
       {
         type: Schema.Types.ObjectId,
