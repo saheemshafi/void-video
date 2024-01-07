@@ -45,4 +45,4 @@ const videoSchema = new Schema<IVideo, IVideoModel>(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 videoSchema.plugin(mongooseAggregatePaginate as any);
 
-export const Video = model('Video', videoSchema) as IVideoModel;
+export const Video = model<IVideo, IVideoModel>('Video', videoSchema);
