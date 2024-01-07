@@ -5,6 +5,7 @@ import asyncHandler from '../utils/async-handler';
 import { mapToFileObject, uploadFileToCloudinary } from '../utils/cloudinary';
 import {
   createPlaylistValidation,
+  deletePlaylistValidation,
   updatePlaylistValidation,
 } from '../validations/playlist.validation';
 import ApiError from '../utils/api-error';
@@ -83,4 +84,31 @@ const updatePlaylist = asyncHandler(async (req, res) => {
     );
 });
 
-export { createPlaylist, updatePlaylist };
+const deletePlaylist = asyncHandler(async (req, res) => {
+  const {
+    params: { playlistId },
+  } = validateRequest(req, deletePlaylistValidation);
+
+  const playlistExists = await Playlist.findById(playlistId);
+
+  if (!playlistExists) {
+    throw new ApiError(STATUS_CODES.NOT_FOUND, 'Playlist not found.');
+  }
+
+  const deleteStatus = await playlistExists.deleteOne();
+
+  if (!deleteStatus.acknowledged) {
+    throw new ApiError(
+      STATUS_CODES.INTERNAL_SERVER_ERROR,
+      'Failed to delete playlist.'
+    );
+  }
+
+  res
+    .status(STATUS_CODES.OK)
+    .json(
+      new ApiResponse(STATUS_CODES.OK, 'Playlist deleted.', playlistExists)
+    );
+});
+
+export { createPlaylist, updatePlaylist, deletePlaylist };

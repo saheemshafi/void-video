@@ -27,11 +27,22 @@ export const updatePlaylistValidation = z.object({
       description: z.string().min(15).optional(),
       private: z.coerce.boolean().optional(),
     })
+    .strict()
     .refine((body) => Object.keys(body).length == 0, {
       path: ['body'],
       message: 'Provide fields to update.',
     }),
-  params: z.object({
-    playlistId: playlistIdValidation,
-  }),
+  params: z
+    .object({
+      playlistId: playlistIdValidation,
+    })
+    .strict(),
+});
+
+export const deletePlaylistValidation = z.object({
+  params: z
+    .object({
+      playlistId: playlistIdValidation,
+    })
+    .strict(),
 });
