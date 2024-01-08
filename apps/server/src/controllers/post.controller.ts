@@ -236,9 +236,9 @@ const togglePostLike = asyncHandler(async (req: Request, res: Response) => {
   });
 
   if (likeExists) {
-    const deletedLike = await Like.findByIdAndDelete(likeExists.id);
+    const deletedStatus = await likeExists.deleteOne();
 
-    if (!deletedLike) {
+    if (!deletedStatus.acknowledged) {
       throw new ApiError(
         STATUS_CODES.INTERNAL_SERVER_ERROR,
         'Failed to remove like.'
@@ -247,7 +247,7 @@ const togglePostLike = asyncHandler(async (req: Request, res: Response) => {
 
     res
       .status(STATUS_CODES.OK)
-      .json(new ApiResponse(STATUS_CODES.OK, 'Removed the like.', deletedLike));
+      .json(new ApiResponse(STATUS_CODES.OK, 'Removed the like.', likeExists));
   } else {
     const like = await Like.create({
       likedBy: req.user?._id,
@@ -257,7 +257,7 @@ const togglePostLike = asyncHandler(async (req: Request, res: Response) => {
     if (!like) {
       throw new ApiError(
         STATUS_CODES.INTERNAL_SERVER_ERROR,
-        'Like failed unexpectedly.'
+        'Failed to like.'
       );
     }
 
