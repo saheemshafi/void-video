@@ -15,27 +15,36 @@ import upload from '../middlewares/multer.middleware';
 
 const videoRouter = Router();
 
-videoRouter.route('/').post(
-  authorize,
-  upload.fields([
-    {
-      name: 'thumbnail',
-      maxCount: 1,
-    },
-    { name: 'video', maxCount: 1 },
-  ]),
-  uploadVideo
-);
+videoRouter
+  .route('/')
+  .post(
+    authorize,
+    upload.fields([
+      {
+        name: 'thumbnail',
+        maxCount: 1,
+      },
+      { name: 'video', maxCount: 1 },
+    ]),
+    uploadVideo
+  )
+  .get(getVideos);
 
-videoRouter.route('/').get(getVideos);
-videoRouter.route('/:videoId').get(getVideo);
-videoRouter.route('/:videoId').patch(authorize, updateVideo);
-videoRouter.route('/:videoId').delete(authorize, deleteVideo);
+videoRouter
+  .route('/:videoId')
+  .get(getVideo)
+  .patch(authorize, updateVideo)
+  .delete(authorize, deleteVideo);
+
 videoRouter
   .route('/:videoId/change-thumbnail')
   .patch(authorize, changeVideoThumbnail);
+
+videoRouter
+  .route('/:videoId/comments')
+  .get(getVideoComments)
+  .post(authorize, addCommentToVideo);
+
 videoRouter.route('/:videoId/like').get(authorize, likeVideo);
-videoRouter.route('/:videoId/comments').get(getVideoComments);
-videoRouter.route('/:videoId/comments').post(authorize, addCommentToVideo);
 
 export default videoRouter;
