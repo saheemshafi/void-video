@@ -45,7 +45,10 @@ userRouter
   .patch(authorize, upload.single('banner'), changeBanner);
 
 userRouter.route('/c/:username').get(authorize, getChannelProfile);
-userRouter.route('/watch-history').get(authorize, getUserWatchHistory);
-userRouter.route('/watch-history').post(authorize, addVideoToWatchHistory);
+
+userRouter
+  .route('/watch-history')
+  .get(authorize, getUserWatchHistory)
+  .post(authorize, addVideoToWatchHistory);
 
 export default userRouter;
