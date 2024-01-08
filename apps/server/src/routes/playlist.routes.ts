@@ -16,19 +16,23 @@ const playlistRouter = Router();
 
 playlistRouter
   .route('/')
-  .post(authorize, upload.single('thumbnail'), createPlaylist);
-playlistRouter.route('/:playlistId').patch(authorize, updatePlaylist);
-playlistRouter.route('/:playlistId').delete(authorize, deletePlaylist);
+  .post(authorize, upload.single('thumbnail'), createPlaylist)
+  .get(getPlaylists);
 
-playlistRouter.route('/').get(getPlaylists);
-playlistRouter.route('/:playlistId').get(getPlaylist);
+playlistRouter
+  .route('/:playlistId')
+  .get(getPlaylist)
+  .patch(authorize, updatePlaylist)
+  .delete(authorize, deletePlaylist);
 
 playlistRouter
   .route('/:playlistId/change-thumbnail')
   .patch(authorize, upload.single('thumbnail'), changePlaylistThumbnail);
+
 playlistRouter
   .route('/:playlistId/add-video')
   .post(authorize, addVideoToPlaylist);
+
 playlistRouter
   .route('/:playlistId/remove-video')
   .delete(authorize, removeVideoFromPlaylist);
