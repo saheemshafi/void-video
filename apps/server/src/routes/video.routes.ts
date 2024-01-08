@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import {
   getVideo,
-  likeVideo,
+  toggleVideoLike,
   uploadVideo,
   updateVideo,
   deleteVideo,
@@ -45,6 +45,6 @@ videoRouter
   .get(getVideoComments)
   .post(authorize, addCommentToVideo);
 
-videoRouter.route('/:videoId/like').get(authorize, likeVideo);
+videoRouter.route('/:videoId/toggle-like').get(authorize, toggleVideoLike);
 
 export default videoRouter;

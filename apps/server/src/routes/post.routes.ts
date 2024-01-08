@@ -8,7 +8,7 @@ import {
   getPost,
   getPostComments,
   getPosts,
-  likePost,
+  togglePostLike,
   updatePost,
   uploadPost,
 } from '../controllers/post.controller';
@@ -26,7 +26,7 @@ postRouter
   .patch(authorize, updatePost)
   .delete(authorize, deletePost);
 
-postRouter.route('/:postId/like').get(authorize, likePost);
+postRouter.route('/:postId/toggle-like').get(authorize, togglePostLike);
 
 postRouter
   .route('/:postId/comments')

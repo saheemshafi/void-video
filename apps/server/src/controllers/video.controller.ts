@@ -19,7 +19,7 @@ import {
   getVideoCommentsValidation,
   getVideoValidation,
   getVideosValidation,
-  likeVideoValidation,
+  toggleVideoLikeValidation,
   updateVideoValidation,
   uploadVideoValidation,
 } from '../validations/video.validation';
@@ -83,10 +83,10 @@ const uploadVideo = asyncHandler(async (req, res) => {
     .json(new ApiResponse(STATUS_CODES.CREATED, 'Video uploaded.', video));
 });
 
-const likeVideo = asyncHandler(async (req, res) => {
+const toggleVideoLike = asyncHandler(async (req, res) => {
   const {
     params: { videoId },
-  } = validateRequest(req, likeVideoValidation);
+  } = validateRequest(req, toggleVideoLikeValidation);
 
   const likeExists = await Like.findOne({
     $or: [
@@ -428,7 +428,7 @@ export {
   getVideo,
   getVideoComments,
   getVideos,
-  likeVideo,
+  toggleVideoLike,
   updateVideo,
   uploadVideo,
 };

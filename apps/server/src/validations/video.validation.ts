@@ -65,7 +65,7 @@ export const addCommentToVideoValidation = z.object({
   }),
 });
 
-export const likeVideoValidation = z.object({
+export const toggleVideoLikeValidation = z.object({
   params: z.object({
     videoId: objectIdValidation('Video'),
   }),

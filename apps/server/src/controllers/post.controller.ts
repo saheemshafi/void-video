@@ -21,7 +21,7 @@ import {
   getPostCommentsValidation,
   getPostValidation,
   getPostsValidation,
-  likePostValidation,
+  togglePostLikeValidation,
   updatePostValidation,
   uploadPostValidation,
 } from '../validations/post.validation';
@@ -221,10 +221,10 @@ const deletePost = asyncHandler(async (req: Request, res: Response) => {
     .json(new ApiResponse(STATUS_CODES.OK, 'Deleted post.', postExists));
 });
 
-const likePost = asyncHandler(async (req: Request, res: Response) => {
+const togglePostLike = asyncHandler(async (req: Request, res: Response) => {
   const {
     params: { postId },
-  } = validateRequest(req, likePostValidation);
+  } = validateRequest(req, togglePostLikeValidation);
 
   const likeExists = await Like.findOne({
     $or: [
@@ -420,7 +420,7 @@ export {
   getPost,
   getPostComments,
   getPosts,
-  likePost,
+  togglePostLike,
   updatePost,
   uploadPost,
   changePostImages,

@@ -43,7 +43,7 @@ export const getPostCommentsValidation = z.object({
   query: paginationValidation,
 });
 
-export const likePostValidation = z.object({
+export const togglePostLikeValidation = z.object({
   params: z.object({
     postId: objectIdValidation('Post'),
   }),
