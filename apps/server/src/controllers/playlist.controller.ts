@@ -18,6 +18,7 @@ import {
   deletePlaylistValidation,
   getPlaylistValidation,
   getPlaylistsValidation,
+  removeVideoFromPlaylistValidation,
   updatePlaylistValidation,
 } from '../validations/playlist.validation';
 
@@ -213,7 +214,8 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
       $push: {
         videos: video._id,
       },
-    }
+    },
+    { new: true }
   );
 
   if (!playlistWithAddedVideo) {
@@ -226,6 +228,46 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
   res
     .status(STATUS_CODES.OK)
     .json(new ApiResponse(STATUS_CODES.OK, 'Video added to playlist.', video));
+});
+
+const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
+  const {
+    params: { playlistId },
+    body: { videoId },
+  } = validateRequest(req, removeVideoFromPlaylistValidation);
+
+  const playlist = await Playlist.findById(playlistId);
+
+  if (!playlist) {
+    throw new ApiError(STATUS_CODES.NOT_FOUND, 'Playlist not found.');
+  }
+
+  const playlistWithRemovedVideo = await Playlist.findByIdAndUpdate(
+    playlist._id,
+    {
+      $pull: {
+        videos: videoId,
+      },
+    },
+    { new: true }
+  );
+
+  if (!playlistWithRemovedVideo) {
+    throw new ApiError(
+      STATUS_CODES.INTERNAL_SERVER_ERROR,
+      'Failed to remove video from playlist.'
+    );
+  }
+
+  res
+    .status(STATUS_CODES.OK)
+    .json(
+      new ApiResponse(
+        STATUS_CODES.OK,
+        'Video removed from playlist.',
+        playlistWithRemovedVideo
+      )
+    );
 });
 
 const getPlaylist = asyncHandler(async (req, res) => {
@@ -376,14 +418,12 @@ const getPlaylists = asyncHandler(async (req, res) => {
     options
   );
 
-  res
-    .status(STATUS_CODES.OK)
-    .json(
-      new ApiResponse(STATUS_CODES.OK, 'Playlists retrieved.', {
-        playlists: docs,
-        ...paginationData,
-      })
-    );
+  res.status(STATUS_CODES.OK).json(
+    new ApiResponse(STATUS_CODES.OK, 'Playlists retrieved.', {
+      playlists: docs,
+      ...paginationData,
+    })
+  );
 });
 
 export {
@@ -393,6 +433,6 @@ export {
   deletePlaylist,
   getPlaylist,
   getPlaylists,
-  updatePlaylist
+  updatePlaylist,
+  removeVideoFromPlaylist,
 };
-
