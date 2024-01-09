@@ -197,6 +197,10 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
     throw new ApiError(STATUS_CODES.NOT_FOUND, 'Playlist not found.');
   }
 
+  if (playlist.videos.includes(new Types.ObjectId(videoId))) {
+    throw new ApiError(STATUS_CODES.CONFLICT, 'Video is already in playlist.');
+  }
+
   const video = await Video.findById(videoId).populate('owner', [
     '-watchHistory',
     '-banner',
@@ -233,7 +237,6 @@ const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
   const {
     params: { playlistId, videoId },
   } = validateRequest(req, removeVideoFromPlaylistValidation);
-  console.log(req.params);
 
   const playlist = await Playlist.findById(playlistId);
 
