@@ -188,8 +188,7 @@ const changePlaylistThumbnail = asyncHandler(async (req, res) => {
 
 const addVideoToPlaylist = asyncHandler(async (req, res) => {
   const {
-    params: { playlistId },
-    body: { videoId },
+    params: { playlistId, videoId },
   } = validateRequest(req, addVideoToPlaylistValidation);
 
   const playlist = await Playlist.findById(playlistId);
@@ -232,14 +231,18 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
 
 const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
   const {
-    params: { playlistId },
-    body: { videoId },
+    params: { playlistId, videoId },
   } = validateRequest(req, removeVideoFromPlaylistValidation);
+  console.log(req.params);
 
   const playlist = await Playlist.findById(playlistId);
 
   if (!playlist) {
     throw new ApiError(STATUS_CODES.NOT_FOUND, 'Playlist not found.');
+  }
+
+  if (!playlist.videos.includes(new Types.ObjectId(videoId))) {
+    throw new ApiError(STATUS_CODES.NOT_FOUND, 'Video is not in playlist.');
   }
 
   const playlistWithRemovedVideo = await Playlist.findByIdAndUpdate(

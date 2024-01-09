@@ -53,10 +53,6 @@ export const addVideoToPlaylistValidation = z.object({
   params: z
     .object({
       playlistId: objectIdValidation('Playlist'),
-    })
-    .strict(),
-  body: z
-    .object({
       videoId: objectIdValidation('Video'),
     })
     .strict(),
@@ -66,10 +62,6 @@ export const removeVideoFromPlaylistValidation = z.object({
   params: z
     .object({
       playlistId: objectIdValidation('Playlist'),
-    })
-    .strict(),
-  body: z
-    .object({
       videoId: objectIdValidation('Video'),
     })
     .strict(),

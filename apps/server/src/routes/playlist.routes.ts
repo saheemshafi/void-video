@@ -30,11 +30,8 @@ playlistRouter
   .patch(authorize, upload.single('thumbnail'), changePlaylistThumbnail);
 
 playlistRouter
-  .route('/:playlistId/add-video')
-  .post(authorize, addVideoToPlaylist);
-
-playlistRouter
-  .route('/:playlistId/remove-video')
+  .route('/:playlistId/:videoId')
+  .post(authorize, addVideoToPlaylist)
   .delete(authorize, removeVideoFromPlaylist);
 
 export default playlistRouter;
