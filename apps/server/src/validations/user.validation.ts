@@ -86,3 +86,4 @@ export const addVideoToWatchHistoryValidation = z.object({
     })
     .strict(),
 });
+

@@ -2,6 +2,7 @@ import { CookieOptions, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { Types } from 'mongoose';
 import { STATUS_CODES } from '../constants';
+import { Subscription } from '../models/subscription.model';
 import { User } from '../models/user.model';
 import { validateRequest } from '../utils';
 import ApiError from '../utils/api-error';
@@ -10,7 +11,7 @@ import asyncHandler from '../utils/async-handler';
 import {
   mapToFileObject,
   removeFilesFromCloudinary,
-  uploadFileToCloudinary
+  uploadFileToCloudinary,
 } from '../utils/cloudinary';
 import {
   sendPasswordResetEmail,
@@ -152,10 +153,6 @@ const logout = asyncHandler(async (req: Request, res: Response) => {
     .json(new ApiResponse(STATUS_CODES.OK, 'Logged out.'));
 });
 
-/*
- * GET auth/session/revalidate
- * Controller to revalidate a user session.
- **/
 const revalidateSession = asyncHandler(async (req, res) => {
   const { signedCookies } = validateRequest(req, revalidateSessionValidation);
 
@@ -500,6 +497,66 @@ const addVideoToWatchHistory = asyncHandler(async (req, res) => {
     );
 });
 
+const getSubscribedChannels = asyncHandler(async (req, res) => {
+  const subscribedChannels = await Subscription.aggregate([
+    {
+      $match: {
+        subscriber: new Types.ObjectId(req.user?._id),
+      },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'channel',
+        foreignField: '_id',
+        as: 'channel',
+      },
+    },
+    {
+      $replaceRoot: {
+        newRoot: {
+          $mergeObjects: '$channel',
+        },
+      },
+    },
+    {
+      $lookup: {
+        from: 'subscriptions',
+        localField: '_id',
+        foreignField: 'channel',
+        as: 'subscribers',
+      },
+    },
+    {
+      $addFields: {
+        totalSubscribers: {
+          $size: '$subscribers',
+        },
+      },
+    },
+    {
+      $project: {
+        username: 1,
+        displayName: 1,
+        avatar: 1,
+        createdAt: 1,
+        updatedAt: 1,
+        totalSubscribers: 1,
+      },
+    },
+  ]);
+
+  res
+    .status(STATUS_CODES.OK)
+    .json(
+      new ApiResponse(
+        STATUS_CODES.OK,
+        'Retrieved subscribed channels.',
+        subscribedChannels
+      )
+    );
+});
+
 export {
   addVideoToWatchHistory,
   changeAvatar,
@@ -509,10 +566,10 @@ export {
   emailPasswordResetLink,
   getChannelProfile,
   getSession,
+  getSubscribedChannels,
   getUserWatchHistory,
   login,
   logout,
   resetPassword,
-  revalidateSession
+  revalidateSession,
 };
-
