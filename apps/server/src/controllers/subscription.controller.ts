@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { STATUS_CODES } from '../constants';
 import { Subscription } from '../models/subscription.model';
 import { User } from '../models/user.model';
@@ -12,13 +13,26 @@ import {
 
 const createSubscription = asyncHandler(async (req, res) => {
   const {
-    body: { channelId },
+    params: { channelId },
   } = validateRequest(req, createSubscriptionValidation);
+
+  if (req.user?._id.equals(new Types.ObjectId(channelId))) {
+    throw new ApiError(STATUS_CODES.CONFLICT, 'Cannot subscribe to yourself.');
+  }
 
   const channel = await User.findById(channelId);
 
   if (!channel) {
     throw new ApiError(STATUS_CODES.NOT_FOUND, 'Channel not found.');
+  }
+
+  const subscriptionExists = await Subscription.findOne({
+    subscriber: req.user?._id,
+    channel: channelId,
+  });
+
+  if (subscriptionExists) {
+    throw new ApiError(STATUS_CODES.CONFLICT, 'Already subscribed.');
   }
 
   const subscription = await Subscription.create({
@@ -42,7 +56,7 @@ const createSubscription = asyncHandler(async (req, res) => {
 
 const removeSubscription = asyncHandler(async (req, res) => {
   const {
-    body: { channelId },
+    params: { channelId },
   } = validateRequest(req, removeSubscriptionValidation);
 
   const channel = await User.findById(channelId);

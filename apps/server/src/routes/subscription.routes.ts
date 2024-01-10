@@ -8,7 +8,7 @@ import {
 const subscriptionRouter = Router();
 
 subscriptionRouter
-  .route('/')
+  .route('/channels/:channelId')
   .post(authorize, createSubscription)
   .delete(removeSubscription);
 
