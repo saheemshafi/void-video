@@ -14,6 +14,7 @@ import {
   getUserWatchHistory,
   addVideoToWatchHistory,
   getSubscribedChannels,
+  getLikedVideos,
 } from '../controllers/user.controller';
 import upload from '../middlewares/multer.middleware';
 import { authorize } from '../middlewares/auth.middleware';
@@ -53,5 +54,6 @@ userRouter
   .post(authorize, addVideoToWatchHistory);
 
 userRouter.route('/channels-subscribed').get(authorize, getSubscribedChannels);
+userRouter.route('/liked-videos').get(authorize, getLikedVideos);
 
 export default userRouter;

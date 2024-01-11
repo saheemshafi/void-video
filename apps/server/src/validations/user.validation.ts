@@ -1,6 +1,6 @@
 import z from 'zod';
 import fileValidation from './multer.validation';
-import { objectIdValidation } from './utils.validation';
+import { objectIdValidation, paginationValidation } from './utils.validation';
 
 export const createAccountValidation = z.object({
   body: z
@@ -87,3 +87,6 @@ export const addVideoToWatchHistoryValidation = z.object({
     .strict(),
 });
 
+export const getLikedVideosValidation = z.object({
+  query: paginationValidation,
+});

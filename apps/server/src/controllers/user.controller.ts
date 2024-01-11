@@ -2,6 +2,7 @@ import { CookieOptions, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { Types } from 'mongoose';
 import { STATUS_CODES } from '../constants';
+import { Like } from '../models/like.model';
 import { Subscription } from '../models/subscription.model';
 import { User } from '../models/user.model';
 import { validateRequest } from '../utils';
@@ -25,6 +26,7 @@ import {
   createAccountValidation,
   emailPasswordResetLinkValidation,
   getChannelProfileValidation,
+  getLikedVideosValidation,
   loginValidation,
   resetPasswordValidation,
   revalidateSessionValidation,
@@ -557,6 +559,72 @@ const getSubscribedChannels = asyncHandler(async (req, res) => {
     );
 });
 
+const getLikedVideos = asyncHandler(async (req, res) => {
+  const {
+    query: { page, limit },
+  } = validateRequest(req, getLikedVideosValidation);
+
+  // TODO: pagination
+
+  const likedVideos = await Like.aggregate([
+    {
+      $match: {
+        likedBy: new Types.ObjectId(req.user?._id),
+      },
+    },
+    {
+      $lookup: {
+        from: 'videos',
+        localField: 'video',
+        foreignField: '_id',
+        as: 'video',
+      },
+    },
+    {
+      $replaceRoot: {
+        newRoot: {
+          $mergeObjects: '$video',
+        },
+      },
+    },
+    {
+      $match: {
+        isPublished: true,
+      },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'owner',
+        foreignField: '_id',
+        as: 'owner',
+        pipeline: [
+          {
+            $project: {
+              username: 1,
+              displayName: 1,
+              avatar: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $addFields: {
+        owner: {
+          $first: '$owner',
+        },
+      },
+    },
+  ]);
+
+  res
+    .status(STATUS_CODES.OK)
+    .json(
+      new ApiResponse(STATUS_CODES.OK, 'Liked videos retrieved.', likedVideos)
+    );
+});
+
 export {
   addVideoToWatchHistory,
   changeAvatar,
@@ -564,12 +632,12 @@ export {
   changePassword,
   createAccount,
   emailPasswordResetLink,
-  getChannelProfile,
-  getSession,
+  getChannelProfile, getLikedVideos, getSession,
   getSubscribedChannels,
   getUserWatchHistory,
   login,
   logout,
   resetPassword,
-  revalidateSession,
+  revalidateSession
 };
+
