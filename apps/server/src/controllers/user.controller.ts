@@ -1,10 +1,10 @@
 import { CookieOptions, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { Types } from 'mongoose';
+import { PaginateOptions, Types } from 'mongoose';
 import { STATUS_CODES } from '../constants';
-import { Like } from '../models/like.model';
 import { Subscription } from '../models/subscription.model';
 import { User } from '../models/user.model';
+import { Video } from '../models/video.model';
 import { validateRequest } from '../utils';
 import ApiError from '../utils/api-error';
 import ApiResponse from '../utils/api-response';
@@ -564,9 +564,22 @@ const getLikedVideos = asyncHandler(async (req, res) => {
     query: { page, limit },
   } = validateRequest(req, getLikedVideosValidation);
 
-  // TODO: pagination
-
-  const likedVideos = await Like.aggregate([
+  const videosAggregation = Video.aggregate([
+    {
+      $lookup: {
+        from: 'likes',
+        localField: '_id',
+        foreignField: 'video',
+        as: 'likes',
+      },
+    },
+    {
+      $replaceRoot: {
+        newRoot: {
+          $mergeObjects: '$likes',
+        },
+      },
+    },
     {
       $match: {
         likedBy: new Types.ObjectId(req.user?._id),
@@ -583,7 +596,7 @@ const getLikedVideos = asyncHandler(async (req, res) => {
     {
       $replaceRoot: {
         newRoot: {
-          $mergeObjects: '$video',
+          $first: '$video',
         },
       },
     },
@@ -592,37 +605,21 @@ const getLikedVideos = asyncHandler(async (req, res) => {
         isPublished: true,
       },
     },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'owner',
-        foreignField: '_id',
-        as: 'owner',
-        pipeline: [
-          {
-            $project: {
-              username: 1,
-              displayName: 1,
-              avatar: 1,
-            },
-          },
-        ],
-      },
-    },
-    {
-      $addFields: {
-        owner: {
-          $first: '$owner',
-        },
-      },
-    },
   ]);
 
-  res
-    .status(STATUS_CODES.OK)
-    .json(
-      new ApiResponse(STATUS_CODES.OK, 'Liked videos retrieved.', likedVideos)
-    );
+  const options: PaginateOptions = { page, limit };
+
+  const { docs, ...paginationData } = await Video.aggregatePaginate(
+    videosAggregation,
+    options
+  );
+
+  res.status(STATUS_CODES.OK).json(
+    new ApiResponse(STATUS_CODES.OK, 'Liked videos retrieved.', {
+      videos: docs,
+      ...paginationData,
+    })
+  );
 });
 
 export {
@@ -632,7 +629,9 @@ export {
   changePassword,
   createAccount,
   emailPasswordResetLink,
-  getChannelProfile, getLikedVideos, getSession,
+  getChannelProfile,
+  getLikedVideos,
+  getSession,
   getSubscribedChannels,
   getUserWatchHistory,
   login,

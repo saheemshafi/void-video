@@ -7,7 +7,7 @@ export const uploadVideoValidation = z.object({
     .object({
       title: z.string().min(10),
       description: z.string().min(25),
-      isPublished: z.boolean().optional().default(false),
+      isPublished: z.coerce.boolean().optional().default(false),
     })
     .strict(),
   files: z.object({
@@ -30,7 +30,7 @@ export const updateVideoValidation = z.object({
       isPublished: z.boolean().optional(),
     })
     .strict()
-    .refine((body) => Object.keys(body).length === 0, {
+    .refine((body) => Object.keys(body).length !== 0, {
       path: ['body'],
       message: 'Request body is empty.',
     }),
