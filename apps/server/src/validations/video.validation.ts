@@ -57,7 +57,10 @@ export const videoSortOptions = z
   .default('title.asc');
 
 export const getVideosValidation = z.object({
-  query: paginationValidation.extend({ sort: videoSortOptions }),
+  query: paginationValidation.extend({
+    sort: videoSortOptions,
+    query: z.string().default(''),
+  }),
 });
 
 export const addCommentToVideoValidation = z.object({

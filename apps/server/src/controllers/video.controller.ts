@@ -369,7 +369,7 @@ const getVideoComments = asyncHandler(async (req, res) => {
 
 const getVideos = asyncHandler(async (req, res) => {
   const {
-    query: { page, limit, sort },
+    query: { page, limit, sort, query },
   } = validateRequest(req, getVideosValidation);
 
   const options: PaginateOptions = {
@@ -380,7 +380,17 @@ const getVideos = asyncHandler(async (req, res) => {
   const [sortByKey, sortType] = <Split<VideoSortOptions>>sort.split('.');
 
   const aggregation = Video.aggregate([
-    { $match: { isPublished: true } },
+    {
+      $match: { isPublished: true },
+    },
+    {
+      $match: {
+        title: {
+          $regex: query,
+          $options: 'i',
+        },
+      },
+    },
     {
       $sort: {
         [sortByKey]: sortType == 'asc' ? 1 : -1,
