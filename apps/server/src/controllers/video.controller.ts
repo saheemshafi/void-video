@@ -23,6 +23,8 @@ import {
   updateVideoValidation,
   uploadVideoValidation,
 } from '../validations/video.validation';
+import { Split } from '../types/utils.types';
+import { VideoSortOptions } from '../types/validation.types';
 
 const uploadVideo = asyncHandler(async (req, res) => {
   const {
@@ -117,10 +119,7 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
     });
 
     if (!like) {
-      throw new ApiError(
-        STATUS_CODES.INTERNAL_SERVER_ERROR,
-        'Failed to like.'
-      );
+      throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, 'Failed to like.');
     }
 
     res
@@ -370,7 +369,7 @@ const getVideoComments = asyncHandler(async (req, res) => {
 
 const getVideos = asyncHandler(async (req, res) => {
   const {
-    query: { page, limit },
+    query: { page, limit, sort },
   } = validateRequest(req, getVideosValidation);
 
   const options: PaginateOptions = {
@@ -378,7 +377,16 @@ const getVideos = asyncHandler(async (req, res) => {
     limit,
   };
 
-  const aggregation = Video.aggregate([{ $match: { isPublished: true } }]);
+  const [sortByKey, sortType] = <Split<VideoSortOptions>>sort.split('.');
+
+  const aggregation = Video.aggregate([
+    { $match: { isPublished: true } },
+    {
+      $sort: {
+        [sortByKey]: sortType == 'asc' ? 1 : -1,
+      },
+    },
+  ]);
   const { docs, ...paginationData } = await Video.aggregatePaginate(
     aggregation,
     options

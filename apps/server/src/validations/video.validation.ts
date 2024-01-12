@@ -52,8 +52,12 @@ export const getVideoCommentsValidation = z.object({
   query: paginationValidation,
 });
 
+export const videoSortOptions = z
+  .enum(['views.asc', 'views.desc', 'title.asc', 'title.desc'])
+  .default('title.asc');
+
 export const getVideosValidation = z.object({
-  query: paginationValidation,
+  query: paginationValidation.extend({ sort: videoSortOptions }),
 });
 
 export const addCommentToVideoValidation = z.object({
