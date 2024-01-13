@@ -1,0 +1,6 @@
+@use '../../../../styles/variables';
+
+:host > p {
+  font-size: variables.$fs-lg;
+  margin-bottom: variables.$spacing-lg;
+}

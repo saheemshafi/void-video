@@ -1,3 +1,5 @@
+@use './variables';
+
 @mixin flex-cvh {
   display: flex;
   justify-content: center;
@@ -17,4 +19,14 @@
 @mixin even-columns($count) {
   display: grid;
   grid-template-columns: repeat($count, 1fr);
+}
+
+@mixin input-light {
+  background-color: variables.$clr-gray-smooth;
+  box-shadow: variables.$shadow-smooth;
+}
+
+@mixin input-dark {
+  background-color: variables.$clr-slate-gray;
+  box-shadow: variables.$shadow-smooth-dark;
 }

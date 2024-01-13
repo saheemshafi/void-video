@@ -3,8 +3,8 @@
 
 :host {
   --back-button-hover-clr: #{variables.$clr-dark-void};
-  --form-container-clr: #{variables.$clr-gray-smooth};
-  --background-clr: #{variables.$clr-snow};
+  --form-container-clr: #{variables.$clr-snow};
+  --background-clr: #{variables.$clr-gray-smooth};
 }
 
 .dark {
