@@ -6,6 +6,16 @@
   box-sizing: border-box;
 }
 
+:root {
+  color-scheme: light;
+  color: variables.$clr-dark-void;
+  
+  &.dark {
+    color-scheme: dark;
+    color: variables.$clr-snow;
+  }
+}
+
 html {
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;
