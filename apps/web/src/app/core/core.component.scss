@@ -1,0 +1,33 @@
+@use '../../styles/variables';
+@use '../../styles/mixins';
+
+:host {
+  display: flex;
+  min-height: 100dvh;
+  gap: variables.$spacing-sm;
+
+  > div {
+    flex-grow: 1;
+    @include mixins.flex-column;
+    gap: variables.$spacing-sm;
+
+    > app-header {
+      position: sticky;
+      top: 0;
+    }
+
+    > main {
+      flex-grow: 1;
+    }
+  }
+
+  app-sidebar {
+    width: variables.$sidebar-width;
+    flex-shrink: 0;
+    flex-grow: 0;
+    align-self: flex-start;
+    height: 100dvh;
+    position: sticky;
+    top: 0;
+  }
+}
