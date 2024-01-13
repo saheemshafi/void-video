@@ -25,6 +25,7 @@ import {
 } from '../validations/video.validation';
 import { Split } from '../types/utils.types';
 import { VideoSortOptions } from '../types/validation.types';
+import { $lookupLikes, $lookupUserDetails } from '../db/aggregations';
 
 const uploadVideo = asyncHandler(async (req, res) => {
   const {
@@ -139,22 +140,8 @@ const getVideo = asyncHandler(async (req, res) => {
         _id: new Types.ObjectId(videoId),
       },
     },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'owner',
-        foreignField: '_id',
-        as: 'owner',
-      },
-    },
-    {
-      $lookup: {
-        from: 'likes',
-        localField: '_id',
-        foreignField: 'video',
-        as: 'likes',
-      },
-    },
+    $lookupUserDetails(),
+    $lookupLikes(),
     {
       $addFields: {
         owner: {
@@ -167,11 +154,7 @@ const getVideo = asyncHandler(async (req, res) => {
     },
     {
       $project: {
-        owner: {
-          username: 1,
-          avatar: 1,
-          displayName: 1,
-        },
+        owner: 1,
         source: 1,
         thumbnail: 1,
         title: 1,
@@ -315,22 +298,8 @@ const getVideoComments = asyncHandler(async (req, res) => {
         video: new Types.ObjectId(videoId),
       },
     },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'owner',
-        foreignField: '_id',
-        as: 'owner',
-      },
-    },
-    {
-      $lookup: {
-        from: 'likes',
-        localField: '_id',
-        foreignField: 'comment',
-        as: 'likes',
-      },
-    },
+    $lookupUserDetails(),
+    $lookupLikes({ foreignField: 'comment' }),
     {
       $addFields: {
         owner: {
@@ -343,11 +312,7 @@ const getVideoComments = asyncHandler(async (req, res) => {
     },
     {
       $project: {
-        owner: {
-          username: 1,
-          avatar: 1,
-          displayName: 1,
-        },
+        owner: 1,
         content: 1,
         likes: 1,
       },
@@ -385,10 +350,14 @@ const getVideos = asyncHandler(async (req, res) => {
     },
     {
       $match: {
-        title: {
-          $regex: query,
-          $options: 'i',
-        },
+        $or: [
+          {
+            title: {
+              $regex: query,
+              $options: 'i',
+            },
+          },
+        ],
       },
     },
     {
@@ -396,21 +365,17 @@ const getVideos = asyncHandler(async (req, res) => {
         [sortByKey]: sortType == 'asc' ? 1 : -1,
       },
     },
+    $lookupUserDetails(),
   ]);
   const { docs, ...paginationData } = await Video.aggregatePaginate(
     aggregation,
     options
   );
 
-  const videos = await Video.populate(docs, {
-    path: 'owner',
-    select: ['-watchHistory', '-banner'],
-  });
-
   res.status(STATUS_CODES.OK).json(
     new ApiResponse(STATUS_CODES.OK, 'Videos retrieved.', {
+      videos: docs,
       ...paginationData,
-      videos,
     })
   );
 });

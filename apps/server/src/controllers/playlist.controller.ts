@@ -21,6 +21,7 @@ import {
   removeVideoFromPlaylistValidation,
   updatePlaylistValidation,
 } from '../validations/playlist.validation';
+import { $lookupUserDetails, $lookupVideoDetails } from '../db/aggregations';
 
 const createPlaylist = asyncHandler(async (req, res) => {
   const {
@@ -281,61 +282,14 @@ const getPlaylist = asyncHandler(async (req, res) => {
     params: { playlistId },
   } = validateRequest(req, getPlaylistValidation);
 
-  const projectOwner = {
-    username: 1,
-    displayName: 1,
-    avatar: 1,
-  };
-
   const playlist = await Playlist.aggregate([
     {
       $match: {
         _id: new Types.ObjectId(playlistId),
       },
     },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'owner',
-        foreignField: '_id',
-        as: 'owner',
-      },
-    },
-    {
-      $lookup: {
-        from: 'videos',
-        localField: 'videos',
-        foreignField: '_id',
-        as: 'videos',
-        pipeline: [
-          {
-            $lookup: {
-              from: 'users',
-              localField: 'owner',
-              foreignField: '_id',
-              as: 'owner',
-            },
-          },
-          {
-            $addFields: {
-              owner: {
-                $first: '$owner',
-              },
-            },
-          },
-          {
-            $project: {
-              owner: projectOwner,
-              title: 1,
-              thumbnail: 1,
-              views: 1,
-              createdAt: 1,
-              updatedAt: 1,
-            },
-          },
-        ],
-      },
-    },
+    $lookupUserDetails(),
+    $lookupVideoDetails(),
     {
       $addFields: {
         owner: {
@@ -348,7 +302,7 @@ const getPlaylist = asyncHandler(async (req, res) => {
     },
     {
       $project: {
-        owner: projectOwner,
+        owner: 1,
         title: 1,
         videos: 1,
         totalVideos: 1,
@@ -385,14 +339,7 @@ const getPlaylists = asyncHandler(async (req, res) => {
         private: false,
       },
     },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'owner',
-        foreignField: '_id',
-        as: 'owner',
-      },
-    },
+    $lookupUserDetails(),
     {
       $addFields: {
         owner: {
@@ -405,11 +352,7 @@ const getPlaylists = asyncHandler(async (req, res) => {
     },
     {
       $project: {
-        owner: {
-          username: 1,
-          displayName: 1,
-          avatar: 1,
-        },
+        owner: 1,
         totalVideos: 1,
         title: 1,
         description: 1,

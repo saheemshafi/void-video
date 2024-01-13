@@ -2,6 +2,12 @@ import { CookieOptions, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { PaginateOptions, Types } from 'mongoose';
 import { STATUS_CODES } from '../constants';
+import {
+  $lookupLikes,
+  $lookupSubscriptions,
+  $lookupUserDetails,
+  $lookupVideoDetails,
+} from '../db/aggregations';
 import { Subscription } from '../models/subscription.model';
 import { User } from '../models/user.model';
 import { Video } from '../models/video.model';
@@ -328,22 +334,8 @@ const getChannelProfile = asyncHandler(async (req, res) => {
         username,
       },
     },
-    {
-      $lookup: {
-        from: 'subscriptions',
-        localField: '_id',
-        foreignField: 'channel',
-        as: 'subscribers',
-      },
-    },
-    {
-      $lookup: {
-        from: 'subscriptions',
-        localField: '_id',
-        foreignField: 'subscriber',
-        as: 'subscriptions',
-      },
-    },
+    $lookupSubscriptions(),
+    $lookupSubscriptions({ foreignField: 'subscriber', as: 'subscriptions' }),
     {
       $addFields: {
         totalSubscribers: {
@@ -370,8 +362,6 @@ const getChannelProfile = asyncHandler(async (req, res) => {
         avatar: 1,
         banner: 1,
         isSubscribed: 1,
-        subscribers: 1,
-        subscriptions: 1,
         totalSubscribers: 1,
         totalSubscriptions: 1,
       },
@@ -418,40 +408,7 @@ const getUserWatchHistory = asyncHandler(async (req, res) => {
         _id: req.user?._id,
       },
     },
-    {
-      $lookup: {
-        from: 'videos',
-        localField: 'watchHistory',
-        foreignField: '_id',
-        as: 'watchHistory',
-        pipeline: [
-          {
-            $lookup: {
-              from: 'users',
-              localField: 'owner',
-              foreignField: '_id',
-              as: 'owner',
-              pipeline: [
-                {
-                  $project: {
-                    fullName: 1,
-                    username: 1,
-                    avatar: 1,
-                  },
-                },
-              ],
-            },
-          },
-          {
-            $addFields: {
-              owner: {
-                $first: '$owner',
-              },
-            },
-          },
-        ],
-      },
-    },
+    $lookupVideoDetails({ localField: 'watchHistory', as: 'watchHistory' }),
   ]);
 
   res
@@ -506,14 +463,7 @@ const getSubscribedChannels = asyncHandler(async (req, res) => {
         subscriber: new Types.ObjectId(req.user?._id),
       },
     },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'channel',
-        foreignField: '_id',
-        as: 'channel',
-      },
-    },
+    $lookupUserDetails({ localField: 'channel', as: 'channel' }),
     {
       $replaceRoot: {
         newRoot: {
@@ -521,14 +471,7 @@ const getSubscribedChannels = asyncHandler(async (req, res) => {
         },
       },
     },
-    {
-      $lookup: {
-        from: 'subscriptions',
-        localField: '_id',
-        foreignField: 'channel',
-        as: 'subscribers',
-      },
-    },
+    $lookupSubscriptions(),
     {
       $addFields: {
         totalSubscribers: {
@@ -566,13 +509,11 @@ const getLikedVideos = asyncHandler(async (req, res) => {
 
   const videosAggregation = Video.aggregate([
     {
-      $lookup: {
-        from: 'likes',
-        localField: '_id',
-        foreignField: 'video',
-        as: 'likes',
+      $match: {
+        isPublished: true,
       },
     },
+    $lookupLikes(),
     {
       $replaceRoot: {
         newRoot: {
@@ -585,24 +526,12 @@ const getLikedVideos = asyncHandler(async (req, res) => {
         likedBy: new Types.ObjectId(req.user?._id),
       },
     },
-    {
-      $lookup: {
-        from: 'videos',
-        localField: 'video',
-        foreignField: '_id',
-        as: 'video',
-      },
-    },
+    $lookupVideoDetails({ localField: 'video', as: 'video' }),
     {
       $replaceRoot: {
         newRoot: {
           $first: '$video',
         },
-      },
-    },
-    {
-      $match: {
-        isPublished: true,
       },
     },
   ]);
@@ -637,6 +566,5 @@ export {
   login,
   logout,
   resetPassword,
-  revalidateSession
+  revalidateSession,
 };
-
