@@ -9,6 +9,10 @@ $clr-gray-smooth: #f4f4f4;
 $shadow-smooth: box-shadow(0px 4px 2px 0px rgba(0, 0, 0, 0.02));
 $shadow-smooth-dark: box-shadow(0px 4px 4px 0px rgba(0, 0, 0, 0.02));
 
+$spacing-sm: 0.5rem;
+$spacing-normal: 1rem;
+$spacing-lg: 2.46rem;
+
 $font-body:
   aileron,
   system-ui,
@@ -22,3 +26,21 @@ $font-body:
   'Open Sans',
   'Helvetica Neue',
   sans-serif;
+
+$sidebar-width: 250px;
+
+$fw-regular: 400;
+$fw-semibold: 600;
+$fw-bold: 700;
+
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+
+$fs-xs: 0.8rem;
+$fs-normal: 1rem;
+
+$fs-icon: 1.75rem;
+
+$radius-rounded: 1000px;

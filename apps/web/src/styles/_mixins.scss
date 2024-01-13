@@ -3,3 +3,13 @@
   justify-content: center;
   align-items: center;
 }
+
+@mixin flex-cv {
+  display: flex;
+  align-items: center;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}

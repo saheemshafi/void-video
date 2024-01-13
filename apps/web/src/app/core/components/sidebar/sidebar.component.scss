@@ -1,0 +1,92 @@
+@use '../../../../styles/variables';
+@use '../../../../styles/mixins';
+
+aside {
+  background-color: variables.$clr-gray-smooth !important;
+  height: 100%;
+
+  > div {
+    padding: variables.$spacing-normal;
+
+    > .brand {
+      @include mixins.flex-cv;
+      gap: variables.$spacing-sm;
+      font-size: 1.3rem;
+      font-weight: variables.$fw-bold;
+      text-decoration: none;
+      color: variables.$clr-dark-void;
+
+      > svg {
+        width: 2.5rem;
+      }
+    }
+
+    &.menu-group {
+      color: variables.$clr-dusty-gray;
+
+      > .menu-title {
+        text-transform: uppercase;
+        font-weight: variables.$fw-semibold;
+        margin-top: 0;
+        font-size: variables.$fs-xs;
+      }
+
+      > ul {
+        font-weight: variables.$fw-bold;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: variables.$spacing-sm;
+
+        .menu-button {
+          @include mixins.flex-cv;
+          border-radius: 0.25rem;
+          text-decoration: none;
+          gap: variables.$spacing-sm;
+          color: inherit;
+          padding: calc(variables.$spacing-sm / 2);
+          transition: 150ms ease-in;
+
+          > i {
+            font-size: variables.$fs-icon;
+            flex-shrink: 0;
+          }
+
+          &:hover {
+            color: variables.$clr-dark-void;
+          }
+
+          &.active {
+            color: variables.$clr-dark-void;
+
+            > i {
+              color: variables.$clr-liquid-lava;
+            }
+          }
+        }
+      }
+
+      &.avatars {
+        > ul {
+          font-weight: variables.$fw-semibold;
+
+          > li {
+            color: variables.$clr-dark-void;
+            font-size: variables.$fs-xs;
+            > a {
+              padding: calc(variables.$spacing-sm / 3);
+            }
+          }
+        }
+
+        .avatar {
+          width: variables.$fs-icon;
+          aspect-ratio: 1;
+          object-fit: cover;
+          border-radius: variables.$radius-rounded;
+        }
+      }
+    }
+  }
+}

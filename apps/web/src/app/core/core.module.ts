@@ -1,17 +1,13 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 
 import { CoreRoutingModule } from './core-routing.module';
 import { CoreComponent } from './core.component';
-
+import { HeaderComponent } from './components/header/header.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @NgModule({
-  declarations: [
-    CoreComponent
-  ],
-  imports: [
-    CommonModule,
-    CoreRoutingModule
-  ]
+  declarations: [CoreComponent, HeaderComponent, SidebarComponent],
+  imports: [CommonModule, CoreRoutingModule, NgOptimizedImage],
 })
-export class CoreModule { }
+export class CoreModule {}
