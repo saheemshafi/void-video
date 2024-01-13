@@ -1,0 +1,92 @@
+@use './variables';
+@use './mixins';
+
+form {
+  @include mixins.flex-column;
+  gap: variables.$spacing-normal;
+
+  > div:last-child {
+    @include mixins.flex-column;
+    gap: variables.$spacing-sm;
+    margin-top: variables.$spacing-normal;
+
+    button {
+      width: 100%;
+    }
+
+    p {
+      text-align: center;
+      font-size: variables.$fs-xs;
+      font-weight: variables.$fw-semibold;
+      color: variables.$clr-dusty-gray;
+
+      a {
+        color: variables.$clr-liquid-lava;
+      }
+    }
+  }
+}
+
+input,
+select,
+textarea {
+  @include mixins.input-light;
+  border-radius: 0.4rem;
+  height: 2.5rem;
+  display: block;
+  width: 100%;
+  padding: variables.$spacing-sm variables.$spacing-normal;
+  font-size: 0.85rem;
+  font-weight: variables.$fw-semibold;
+  outline: none;
+  border: 1px solid transparent;
+}
+
+.dark {
+  input,
+  select,
+  text-area {
+    @include mixins.input-dark;
+  }
+}
+
+:is(input, select, textarea):is(:active, :focus) {
+  outline: 2px solid rgba(variables.$clr-liquid-lava, 0.2);
+  border-color: variables.$clr-liquid-lava;
+}
+
+button {
+  background-color: variables.$clr-snow;
+  border-radius: 0.4rem;
+  box-shadow: variables.$shadow-smooth-dark;
+  height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  color: variables.$clr-dark-void;
+  padding: variables.$spacing-sm variables.$spacing-normal;
+  font-size: 0.85rem;
+  font-weight: variables.$fw-semibold;
+  cursor: pointer;
+  outline: none;
+  border: 1px solid transparent;
+}
+
+button:is(:focus, :active) {
+  outline: 2px solid rgba(variables.$clr-snow, 0.2);
+  outline-offset: 1px;
+  border-color: variables.$clr-snow;
+}
+
+button.primary {
+  color: variables.$clr-snow;
+  background-color: variables.$clr-liquid-lava;
+  border: 1px solid rgba(variables.$clr-dusty-gray, 0.2);
+}
+
+button.primary:is(:focus, :active) {
+  outline: 2px solid rgba(variables.$clr-liquid-lava, 0.2);
+  outline-offset: 1px;
+  border-color: variables.$clr-liquid-lava;
+}

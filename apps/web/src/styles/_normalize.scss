@@ -6,11 +6,22 @@
   box-sizing: border-box;
 }
 
+:root {
+  color-scheme: light;
+  color: variables.$clr-dark-void;
+
+  &.dark {
+    color-scheme: dark;
+    color: variables.$clr-snow;
+  }
+}
+
 html {
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -68,6 +79,11 @@ textarea {
   font-size: 100%;
   line-height: 1.15;
   margin: 0;
+}
+
+:is(input, select, textarea)::placeholder {
+  color: variables.$clr-dusty-gray;
+  font-family: inherit;
 }
 
 button,
