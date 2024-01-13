@@ -28,4 +28,4 @@ const postSchema = new Schema<IPost, IPostModel>(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 postSchema.plugin(mongooseAggregatePaginate as any);
 
-export const Post = model('Post', postSchema) as IPostModel;
+export const Post = model<IPost, IPostModel>('Post', postSchema);

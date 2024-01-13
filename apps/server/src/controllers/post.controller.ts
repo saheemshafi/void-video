@@ -21,10 +21,11 @@ import {
   getPostCommentsValidation,
   getPostValidation,
   getPostsValidation,
-  likePostValidation,
+  togglePostLikeValidation,
   updatePostValidation,
   uploadPostValidation,
 } from '../validations/post.validation';
+import { $lookupLikes, $lookupUserDetails } from '../db/aggregations';
 
 const uploadPost = asyncHandler(async (req: Request, res: Response) => {
   const {
@@ -79,21 +80,16 @@ const getPosts = asyncHandler(async (req, res) => {
 
   const options: PaginateOptions = { page, limit };
 
-  const aggregation = Post.aggregate();
+  const aggregation = Post.aggregate([$lookupUserDetails()]);
   const { docs, ...paginationData } = await Post.aggregatePaginate(
     aggregation,
     options
   );
 
-  const posts = await Post.populate(docs, {
-    path: 'owner',
-    select: ['-watchHistory', '-banner'],
-  });
-
   res.status(STATUS_CODES.OK).json(
     new ApiResponse(STATUS_CODES.OK, 'Retrieved posts.', {
+      posts: docs,
       ...paginationData,
-      posts,
     })
   );
 });
@@ -109,22 +105,8 @@ const getPost = asyncHandler(async (req: Request, res: Response) => {
         _id: new Types.ObjectId(postId),
       },
     },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'owner',
-        foreignField: '_id',
-        as: 'owner',
-      },
-    },
-    {
-      $lookup: {
-        from: 'likes',
-        localField: '_id',
-        foreignField: 'post',
-        as: 'likes',
-      },
-    },
+    $lookupUserDetails(),
+    $lookupLikes({ foreignField: 'post' }),
     {
       $addFields: {
         owner: {
@@ -137,11 +119,7 @@ const getPost = asyncHandler(async (req: Request, res: Response) => {
     },
     {
       $project: {
-        owner: {
-          username: 1,
-          avatar: 1,
-          displayName: 1,
-        },
+        owner: 1,
         content: 1,
         likes: 1,
         images: 1,
@@ -204,9 +182,9 @@ const deletePost = asyncHandler(async (req: Request, res: Response) => {
     throw new ApiError(STATUS_CODES.UNAUTHORIZED, 'Not authorized.');
   }
 
-  const deletedPost = await Post.findByIdAndDelete(postExists._id);
+  const deleteStatus = await postExists.deleteOne();
 
-  if (!deletedPost) {
+  if (!deleteStatus.acknowledged) {
     throw new ApiError(
       STATUS_CODES.INTERNAL_SERVER_ERROR,
       'Failed to delete post.'
@@ -218,13 +196,13 @@ const deletePost = asyncHandler(async (req: Request, res: Response) => {
 
   res
     .status(STATUS_CODES.OK)
-    .json(new ApiResponse(STATUS_CODES.OK, 'Deleted post.', deletedPost));
+    .json(new ApiResponse(STATUS_CODES.OK, 'Deleted post.', postExists));
 });
 
-const likePost = asyncHandler(async (req: Request, res: Response) => {
+const togglePostLike = asyncHandler(async (req: Request, res: Response) => {
   const {
     params: { postId },
-  } = validateRequest(req, likePostValidation);
+  } = validateRequest(req, togglePostLikeValidation);
 
   const likeExists = await Like.findOne({
     $or: [
@@ -236,9 +214,9 @@ const likePost = asyncHandler(async (req: Request, res: Response) => {
   });
 
   if (likeExists) {
-    const deletedLike = await Like.findByIdAndDelete(likeExists.id);
+    const deletedStatus = await likeExists.deleteOne();
 
-    if (!deletedLike) {
+    if (!deletedStatus.acknowledged) {
       throw new ApiError(
         STATUS_CODES.INTERNAL_SERVER_ERROR,
         'Failed to remove like.'
@@ -247,7 +225,7 @@ const likePost = asyncHandler(async (req: Request, res: Response) => {
 
     res
       .status(STATUS_CODES.OK)
-      .json(new ApiResponse(STATUS_CODES.OK, 'Removed the like.', deletedLike));
+      .json(new ApiResponse(STATUS_CODES.OK, 'Removed the like.', likeExists));
   } else {
     const like = await Like.create({
       likedBy: req.user?._id,
@@ -255,10 +233,7 @@ const likePost = asyncHandler(async (req: Request, res: Response) => {
     });
 
     if (!like) {
-      throw new ApiError(
-        STATUS_CODES.INTERNAL_SERVER_ERROR,
-        'Like failed unexpectedly.'
-      );
+      throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, 'Failed to like.');
     }
 
     res
@@ -338,22 +313,8 @@ const getPostComments = asyncHandler(async (req: Request, res: Response) => {
         post: new Types.ObjectId(postId),
       },
     },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'owner',
-        foreignField: '_id',
-        as: 'owner',
-      },
-    },
-    {
-      $lookup: {
-        from: 'likes',
-        localField: '_id',
-        foreignField: 'comment',
-        as: 'likes',
-      },
-    },
+    $lookupUserDetails(),
+    $lookupLikes({ foreignField: 'comment' }),
     {
       $addFields: {
         owner: {
@@ -366,13 +327,11 @@ const getPostComments = asyncHandler(async (req: Request, res: Response) => {
     },
     {
       $project: {
-        owner: {
-          username: 1,
-          avatar: 1,
-          displayName: 1,
-        },
+        owner: 1,
         content: 1,
         likes: 1,
+        createdAt: 1,
+        updatedAt: 1,
       },
     },
   ]);
@@ -420,7 +379,7 @@ export {
   getPost,
   getPostComments,
   getPosts,
-  likePost,
+  togglePostLike,
   updatePost,
   uploadPost,
   changePostImages,

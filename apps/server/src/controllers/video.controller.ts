@@ -10,7 +10,7 @@ import asyncHandler from '../utils/async-handler';
 import {
   mapToFileObject,
   removeFilesFromCloudinary,
-  uploadFileToCloudinary
+  uploadFileToCloudinary,
 } from '../utils/cloudinary';
 import {
   addCommentToVideoValidation,
@@ -19,10 +19,13 @@ import {
   getVideoCommentsValidation,
   getVideoValidation,
   getVideosValidation,
-  likeVideoValidation,
+  toggleVideoLikeValidation,
   updateVideoValidation,
   uploadVideoValidation,
 } from '../validations/video.validation';
+import { Split } from '../types/utils.types';
+import { VideoSortOptions } from '../types/validation.types';
+import { $lookupLikes, $lookupUserDetails } from '../db/aggregations';
 
 const uploadVideo = asyncHandler(async (req, res) => {
   const {
@@ -83,10 +86,10 @@ const uploadVideo = asyncHandler(async (req, res) => {
     .json(new ApiResponse(STATUS_CODES.CREATED, 'Video uploaded.', video));
 });
 
-const likeVideo = asyncHandler(async (req, res) => {
+const toggleVideoLike = asyncHandler(async (req, res) => {
   const {
     params: { videoId },
-  } = validateRequest(req, likeVideoValidation);
+  } = validateRequest(req, toggleVideoLikeValidation);
 
   const likeExists = await Like.findOne({
     $or: [
@@ -98,9 +101,9 @@ const likeVideo = asyncHandler(async (req, res) => {
   });
 
   if (likeExists) {
-    const deletedLike = await Like.findByIdAndDelete(likeExists.id);
+    const deleteStatus = await likeExists.deleteOne();
 
-    if (!deletedLike) {
+    if (!deleteStatus.acknowledged) {
       throw new ApiError(
         STATUS_CODES.INTERNAL_SERVER_ERROR,
         'Failed to remove like.'
@@ -109,7 +112,7 @@ const likeVideo = asyncHandler(async (req, res) => {
 
     res
       .status(STATUS_CODES.OK)
-      .json(new ApiResponse(STATUS_CODES.OK, 'Removed the like.', deletedLike));
+      .json(new ApiResponse(STATUS_CODES.OK, 'Removed the like.', likeExists));
   } else {
     const like = await Like.create({
       likedBy: req.user?._id,
@@ -117,10 +120,7 @@ const likeVideo = asyncHandler(async (req, res) => {
     });
 
     if (!like) {
-      throw new ApiError(
-        STATUS_CODES.INTERNAL_SERVER_ERROR,
-        'Like failed unexpectedly.'
-      );
+      throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, 'Failed to like.');
     }
 
     res
@@ -140,22 +140,8 @@ const getVideo = asyncHandler(async (req, res) => {
         _id: new Types.ObjectId(videoId),
       },
     },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'owner',
-        foreignField: '_id',
-        as: 'owner',
-      },
-    },
-    {
-      $lookup: {
-        from: 'likes',
-        localField: '_id',
-        foreignField: 'video',
-        as: 'likes',
-      },
-    },
+    $lookupUserDetails(),
+    $lookupLikes(),
     {
       $addFields: {
         owner: {
@@ -168,11 +154,7 @@ const getVideo = asyncHandler(async (req, res) => {
     },
     {
       $project: {
-        owner: {
-          username: 1,
-          avatar: 1,
-          displayName: 1,
-        },
+        owner: 1,
         source: 1,
         thumbnail: 1,
         title: 1,
@@ -280,19 +262,23 @@ const deleteVideo = asyncHandler(async (req, res) => {
     throw new ApiError(STATUS_CODES.UNAUTHORIZED, 'Not authorized.');
   }
 
-  const deletedVideo = await Video.findByIdAndDelete(videoId);
+  const deleteStatus = await videoExists.deleteOne();
+
+  if (!deleteStatus.acknowledged) {
+    throw new ApiError(
+      STATUS_CODES.INTERNAL_SERVER_ERROR,
+      'Failed to delete video.'
+    );
+  }
+
   await removeFilesFromCloudinary(
     videoExists.thumbnail.public_id,
     videoExists.source.public_id
   );
 
-  if (!deletedVideo) {
-    throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, 'Failed to delete.');
-  }
-
   res
     .status(STATUS_CODES.OK)
-    .json(new ApiResponse(STATUS_CODES.OK, 'Deleted video.', deletedVideo));
+    .json(new ApiResponse(STATUS_CODES.OK, 'Deleted video.', videoExists));
 });
 
 const getVideoComments = asyncHandler(async (req, res) => {
@@ -312,22 +298,8 @@ const getVideoComments = asyncHandler(async (req, res) => {
         video: new Types.ObjectId(videoId),
       },
     },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'owner',
-        foreignField: '_id',
-        as: 'owner',
-      },
-    },
-    {
-      $lookup: {
-        from: 'likes',
-        localField: '_id',
-        foreignField: 'comment',
-        as: 'likes',
-      },
-    },
+    $lookupUserDetails(),
+    $lookupLikes({ foreignField: 'comment' }),
     {
       $addFields: {
         owner: {
@@ -340,11 +312,7 @@ const getVideoComments = asyncHandler(async (req, res) => {
     },
     {
       $project: {
-        owner: {
-          username: 1,
-          avatar: 1,
-          displayName: 1,
-        },
+        owner: 1,
         content: 1,
         likes: 1,
       },
@@ -366,7 +334,7 @@ const getVideoComments = asyncHandler(async (req, res) => {
 
 const getVideos = asyncHandler(async (req, res) => {
   const {
-    query: { page, limit },
+    query: { page, limit, sort, query },
   } = validateRequest(req, getVideosValidation);
 
   const options: PaginateOptions = {
@@ -374,21 +342,40 @@ const getVideos = asyncHandler(async (req, res) => {
     limit,
   };
 
-  const aggregation = Video.aggregate([{ $match: { isPublished: true } }]);
+  const [sortByKey, sortType] = <Split<VideoSortOptions>>sort.split('.');
+
+  const aggregation = Video.aggregate([
+    {
+      $match: { isPublished: true },
+    },
+    {
+      $match: {
+        $or: [
+          {
+            title: {
+              $regex: query,
+              $options: 'i',
+            },
+          },
+        ],
+      },
+    },
+    {
+      $sort: {
+        [sortByKey]: sortType == 'asc' ? 1 : -1,
+      },
+    },
+    $lookupUserDetails(),
+  ]);
   const { docs, ...paginationData } = await Video.aggregatePaginate(
     aggregation,
     options
   );
 
-  const videos = await Video.populate(docs, {
-    path: 'owner',
-    select: ['-watchHistory', '-banner'],
-  });
-
   res.status(STATUS_CODES.OK).json(
     new ApiResponse(STATUS_CODES.OK, 'Videos retrieved.', {
+      videos: docs,
       ...paginationData,
-      videos,
     })
   );
 });
@@ -424,8 +411,7 @@ export {
   getVideo,
   getVideoComments,
   getVideos,
-  likeVideo,
+  toggleVideoLike,
   updateVideo,
-  uploadVideo
+  uploadVideo,
 };
-

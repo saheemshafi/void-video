@@ -1,8 +1,16 @@
 import { CookieOptions, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { Types } from 'mongoose';
-import { STATUS_CODES } from '../constants';
+import { PaginateOptions, Types } from 'mongoose';
+import { STATUS_CODES, cookieOptions } from '../constants';
+import {
+  $lookupLikes,
+  $lookupSubscriptions,
+  $lookupUserDetails,
+  $lookupVideoDetails,
+} from '../db/aggregations';
+import { Subscription } from '../models/subscription.model';
 import { User } from '../models/user.model';
+import { Video } from '../models/video.model';
 import { validateRequest } from '../utils';
 import ApiError from '../utils/api-error';
 import ApiResponse from '../utils/api-response';
@@ -10,7 +18,7 @@ import asyncHandler from '../utils/async-handler';
 import {
   mapToFileObject,
   removeFilesFromCloudinary,
-  uploadFileToCloudinary
+  uploadFileToCloudinary,
 } from '../utils/cloudinary';
 import {
   sendPasswordResetEmail,
@@ -24,6 +32,7 @@ import {
   createAccountValidation,
   emailPasswordResetLinkValidation,
   getChannelProfileValidation,
+  getLikedVideosValidation,
   loginValidation,
   resetPasswordValidation,
   revalidateSessionValidation,
@@ -120,11 +129,6 @@ const login = asyncHandler(async (req: Request, res: Response) => {
   const accessToken = user.generateAccessToken();
   const refreshToken = user.generateRefreshToken();
 
-  const cookieOptions: CookieOptions = {
-    httpOnly: true,
-    signed: true,
-  };
-
   res
     .cookie('token', accessToken, cookieOptions)
     .cookie('refresh-token', refreshToken, cookieOptions)
@@ -146,16 +150,12 @@ const getSession = asyncHandler(async (req: Request, res: Response) => {
 
 const logout = asyncHandler(async (req: Request, res: Response) => {
   res
-    .clearCookie('token')
-    .clearCookie('refresh-token')
+    .clearCookie('token', cookieOptions)
+    .clearCookie('refresh-token', cookieOptions)
     .status(STATUS_CODES.OK)
     .json(new ApiResponse(STATUS_CODES.OK, 'Logged out.'));
 });
 
-/*
- * GET auth/session/revalidate
- * Controller to revalidate a user session.
- **/
 const revalidateSession = asyncHandler(async (req, res) => {
   const { signedCookies } = validateRequest(req, revalidateSessionValidation);
 
@@ -329,22 +329,8 @@ const getChannelProfile = asyncHandler(async (req, res) => {
         username,
       },
     },
-    {
-      $lookup: {
-        from: 'subscriptions',
-        localField: '_id',
-        foreignField: 'channel',
-        as: 'subscribers',
-      },
-    },
-    {
-      $lookup: {
-        from: 'subscriptions',
-        localField: '_id',
-        foreignField: 'subscriber',
-        as: 'subscriptions',
-      },
-    },
+    $lookupSubscriptions(),
+    $lookupSubscriptions({ foreignField: 'subscriber', as: 'subscriptions' }),
     {
       $addFields: {
         totalSubscribers: {
@@ -371,8 +357,6 @@ const getChannelProfile = asyncHandler(async (req, res) => {
         avatar: 1,
         banner: 1,
         isSubscribed: 1,
-        subscribers: 1,
-        subscriptions: 1,
         totalSubscribers: 1,
         totalSubscriptions: 1,
       },
@@ -419,40 +403,7 @@ const getUserWatchHistory = asyncHandler(async (req, res) => {
         _id: req.user?._id,
       },
     },
-    {
-      $lookup: {
-        from: 'videos',
-        localField: 'watchHistory',
-        foreignField: '_id',
-        as: 'watchHistory',
-        pipeline: [
-          {
-            $lookup: {
-              from: 'users',
-              localField: 'owner',
-              foreignField: '_id',
-              as: 'owner',
-              pipeline: [
-                {
-                  $project: {
-                    fullName: 1,
-                    username: 1,
-                    avatar: 1,
-                  },
-                },
-              ],
-            },
-          },
-          {
-            $addFields: {
-              owner: {
-                $first: '$owner',
-              },
-            },
-          },
-        ],
-      },
-    },
+    $lookupVideoDetails({ localField: 'watchHistory', as: 'watchHistory' }),
   ]);
 
   res
@@ -500,6 +451,101 @@ const addVideoToWatchHistory = asyncHandler(async (req, res) => {
     );
 });
 
+const getSubscribedChannels = asyncHandler(async (req, res) => {
+  const subscribedChannels = await Subscription.aggregate([
+    {
+      $match: {
+        subscriber: new Types.ObjectId(req.user?._id),
+      },
+    },
+    $lookupUserDetails({ localField: 'channel', as: 'channel' }),
+    {
+      $replaceRoot: {
+        newRoot: {
+          $mergeObjects: '$channel',
+        },
+      },
+    },
+    $lookupSubscriptions(),
+    {
+      $addFields: {
+        totalSubscribers: {
+          $size: '$subscribers',
+        },
+      },
+    },
+    {
+      $project: {
+        username: 1,
+        displayName: 1,
+        avatar: 1,
+        createdAt: 1,
+        updatedAt: 1,
+        totalSubscribers: 1,
+      },
+    },
+  ]);
+
+  res
+    .status(STATUS_CODES.OK)
+    .json(
+      new ApiResponse(
+        STATUS_CODES.OK,
+        'Retrieved subscribed channels.',
+        subscribedChannels
+      )
+    );
+});
+
+const getLikedVideos = asyncHandler(async (req, res) => {
+  const {
+    query: { page, limit },
+  } = validateRequest(req, getLikedVideosValidation);
+
+  const videosAggregation = Video.aggregate([
+    {
+      $match: {
+        isPublished: true,
+      },
+    },
+    $lookupLikes(),
+    {
+      $replaceRoot: {
+        newRoot: {
+          $mergeObjects: '$likes',
+        },
+      },
+    },
+    {
+      $match: {
+        likedBy: new Types.ObjectId(req.user?._id),
+      },
+    },
+    $lookupVideoDetails({ localField: 'video', as: 'video' }),
+    {
+      $replaceRoot: {
+        newRoot: {
+          $first: '$video',
+        },
+      },
+    },
+  ]);
+
+  const options: PaginateOptions = { page, limit };
+
+  const { docs, ...paginationData } = await Video.aggregatePaginate(
+    videosAggregation,
+    options
+  );
+
+  res.status(STATUS_CODES.OK).json(
+    new ApiResponse(STATUS_CODES.OK, 'Liked videos retrieved.', {
+      videos: docs,
+      ...paginationData,
+    })
+  );
+});
+
 export {
   addVideoToWatchHistory,
   changeAvatar,
@@ -508,11 +554,12 @@ export {
   createAccount,
   emailPasswordResetLink,
   getChannelProfile,
+  getLikedVideos,
   getSession,
+  getSubscribedChannels,
   getUserWatchHistory,
   login,
   logout,
   resetPassword,
-  revalidateSession
+  revalidateSession,
 };
-

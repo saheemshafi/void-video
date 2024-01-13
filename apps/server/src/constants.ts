@@ -1,3 +1,5 @@
+import { CookieOptions } from 'express';
+
 export const DB_NAME = 'void_video';
 export const APP_NAME = 'Void Video';
 
@@ -20,3 +22,9 @@ export const STATUS_CODES = {
 } as const;
 
 export type STATUS_CODES_TYPE = typeof STATUS_CODES;
+
+export const cookieOptions: CookieOptions = {
+  httpOnly: true,
+  signed: true,
+  secure: process.env.NODE_ENV === 'development' ? false : true,
+};

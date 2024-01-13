@@ -13,6 +13,8 @@ import {
   changePassword,
   getUserWatchHistory,
   addVideoToWatchHistory,
+  getSubscribedChannels,
+  getLikedVideos,
 } from '../controllers/user.controller';
 import upload from '../middlewares/multer.middleware';
 import { authorize } from '../middlewares/auth.middleware';
@@ -45,7 +47,13 @@ userRouter
   .patch(authorize, upload.single('banner'), changeBanner);
 
 userRouter.route('/c/:username').get(authorize, getChannelProfile);
-userRouter.route('/watch-history').get(authorize, getUserWatchHistory);
-userRouter.route('/watch-history').post(authorize, addVideoToWatchHistory);
+
+userRouter
+  .route('/watch-history')
+  .get(authorize, getUserWatchHistory)
+  .post(authorize, addVideoToWatchHistory);
+
+userRouter.route('/channels-subscribed').get(authorize, getSubscribedChannels);
+userRouter.route('/liked-videos').get(authorize, getLikedVideos);
 
 export default userRouter;
