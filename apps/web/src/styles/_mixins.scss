@@ -13,3 +13,8 @@
   display: flex;
   flex-direction: column;
 }
+
+@mixin even-columns($count) {
+  display: grid;
+  grid-template-columns: repeat($count, 1fr);
+}

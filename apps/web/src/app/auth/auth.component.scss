@@ -1,0 +1,72 @@
+@use '../../styles/variables';
+@use '../../styles/mixins';
+
+:host {
+  --back-button-hover-clr: #{variables.$clr-dark-void};
+  --form-container-clr: #{variables.$clr-gray-smooth};
+  --background-clr: #{variables.$clr-snow};
+}
+
+.dark {
+  :host {
+    --back-button-hover-clr: #{variables.$clr-snow};
+    --form-container-clr: #{variables.$clr-gluon-gray};
+    --background-clr: #{variables.$clr-dark-void};
+  }
+}
+
+main {
+  min-height: 100vh;
+  background-color: var(--background-clr);
+  padding: calc(variables.$spacing-lg * 2);
+
+  .auth-container {
+    max-width: 500px;
+    margin-inline: auto;
+
+    .auth-header {
+      @include mixins.even-columns(3);
+      align-items: end;
+
+      > .back-btn {
+        @include mixins.flex-cvh;
+        gap: calc(variables.$spacing-sm / 2);
+        text-decoration: none;
+        color: variables.$clr-dusty-gray;
+        font-size: variables.$fs-xs;
+        font-weight: variables.$fw-semibold;
+        justify-self: flex-start;
+        transition: 150ms ease-in;
+
+        &:hover {
+          color: var(--back-button-hover-clr);
+        }
+
+        > i {
+          font-size: 1.25rem;
+        }
+      }
+
+      > .brand {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        color: inherit;
+        font-weight: variables.$fw-bold;
+        font-size: 1.3rem;
+        gap: calc(variables.$spacing-normal);
+        text-decoration: none;
+        > p {
+          margin: 0;
+        }
+      }
+    }
+
+    .form-container {
+      background-color: var(--form-container-clr);
+      padding: variables.$spacing-normal;
+      margin-top: variables.$spacing-normal;
+      border-radius: 0.5rem;
+    }
+  }
+}
