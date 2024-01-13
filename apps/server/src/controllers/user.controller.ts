@@ -1,7 +1,7 @@
 import { CookieOptions, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { PaginateOptions, Types } from 'mongoose';
-import { STATUS_CODES } from '../constants';
+import { STATUS_CODES, cookieOptions } from '../constants';
 import {
   $lookupLikes,
   $lookupSubscriptions,
@@ -129,11 +129,6 @@ const login = asyncHandler(async (req: Request, res: Response) => {
   const accessToken = user.generateAccessToken();
   const refreshToken = user.generateRefreshToken();
 
-  const cookieOptions: CookieOptions = {
-    httpOnly: true,
-    signed: true,
-  };
-
   res
     .cookie('token', accessToken, cookieOptions)
     .cookie('refresh-token', refreshToken, cookieOptions)
@@ -155,8 +150,8 @@ const getSession = asyncHandler(async (req: Request, res: Response) => {
 
 const logout = asyncHandler(async (req: Request, res: Response) => {
   res
-    .clearCookie('token')
-    .clearCookie('refresh-token')
+    .clearCookie('token', cookieOptions)
+    .clearCookie('refresh-token', cookieOptions)
     .status(STATUS_CODES.OK)
     .json(new ApiResponse(STATUS_CODES.OK, 'Logged out.'));
 });
