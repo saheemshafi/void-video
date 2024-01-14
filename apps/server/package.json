@@ -7,7 +7,7 @@
   "author": "Mir Saheem Shafi",
   "license": "ISC",
   "scripts": {
-    "dev": "concurrently \"npx tsc -w\" \"nodemon -r dotenv/config dist/index.js\"",
+    "dev": "nodemon",
     "build": "tsc",
     "start": "node dist/index.js",
     "lint": "eslint ."
@@ -42,7 +42,6 @@
     "@types/mongoose-aggregate-paginate-v2": "^1.0.12",
     "@types/multer": "^1.4.11",
     "@types/nodemailer": "^6.4.14",
-    "concurrently": "^8.2.2",
     "eslint": "^8.53.0",
     "nodemon": "^3.0.1",
     "ts-node": "^10.9.2"

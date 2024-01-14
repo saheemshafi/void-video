@@ -1,0 +1,13 @@
+{
+    "watch": [
+        "src"
+    ],
+    "ext": "ts,json",
+    "ignore": [
+        "node_modules"
+    ],
+    "exec": "npx ts-node --files --project tsconfig.json --require dotenv/config src/index.ts",
+    "script": "src/index.ts",
+    "tasks": [],
+    "verbose": true
+}

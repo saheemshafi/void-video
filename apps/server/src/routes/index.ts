@@ -5,6 +5,7 @@ import videoRouter from './video.routes';
 import subscriptionRouter from './subscription.routes';
 import playlistRouter from './playlist.routes';
 import commentRouter from './comment.routes';
+import searchRouter from './search.routes';
 
 const router = Router();
 router.get('/', (_, res) => {
@@ -17,5 +18,6 @@ router.use('/posts', postRouter);
 router.use('/subscriptions', subscriptionRouter);
 router.use('/playlists', playlistRouter);
 router.use('/comments', commentRouter);
+router.use('/search', searchRouter);
 
 export default router;
