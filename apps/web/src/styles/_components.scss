@@ -71,6 +71,9 @@ button {
   cursor: pointer;
   outline: none;
   border: 1px solid transparent;
+  transition:
+    color 100ms ease-in,
+    background-color 100ms ease-in;
 }
 
 button:is(:focus, :active) {
@@ -89,4 +92,23 @@ button.primary:is(:focus, :active) {
   outline: 2px solid rgba(variables.$clr-liquid-lava, 0.2);
   outline-offset: 1px;
   border-color: variables.$clr-liquid-lava;
+}
+
+button.ghost {
+  background-color: transparent;
+  color: variables.$clr-dusty-gray;
+}
+
+button.icon {
+  aspect-ratio: 1/1;
+  border-radius: variables.$radius-rounded;
+}
+
+i.bx {
+  font-size: variables.$fs-icon;
+  color: currentColor;
+}
+
+i.bx.sm {
+  font-size: variables.$fs-icon-sm;
 }
