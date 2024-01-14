@@ -16,7 +16,15 @@
     </button>
   </div>
   <div class="user-actions">
-    <button class="primary">Sign In</button>
-    <button>Sign Up</button>
+    <ng-container>
+      @if (session$ | async; as session) {
+        @if (session == null) {
+          <a routerLink="/auth" class="button primary">Sign In</a>
+          <a routerLink="/auth/sign-up" class="button">Sign Up</a>
+        } @else {
+          {{ session.displayName }}
+        }
+      }
+    </ng-container>
   </div>
 </header>
