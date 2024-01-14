@@ -2,7 +2,7 @@
 @use '../../../../styles/mixins';
 
 :host {
-  --sidebar-background: #{variables.$clr-gray-smooth};
+  --sidebar-background: #{variables.$clr-snow};
   --active-menu-btn-clr: #{variables.$clr-dark-void};
   --sidebar-scrollbar-clr: #{variables.$clr-dusty-gray};
 }

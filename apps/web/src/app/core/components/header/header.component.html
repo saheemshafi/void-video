@@ -1,1 +1,30 @@
-<p>header works!</p>
+<header>
+  <div class="search-container">
+    <div class="search-box">
+      <input
+        type="text"
+        name="search"
+        autocomplete="off"
+        aria-autocomplete="list"
+        id="search"
+        placeholder="Search for users, videos and playlists"
+      />
+      <i class="bx bx-search sm"></i>
+    </div>
+    <button class="icon primary ghost">
+      <i class="bx bxs-microphone sm"></i>
+    </button>
+  </div>
+  <div class="user-actions">
+    <ng-container>
+      @if (session$ | async; as session) {
+        @if (session == null) {
+          <a routerLink="/auth" class="button primary">Sign In</a>
+          <a routerLink="/auth/sign-up" class="button">Sign Up</a>
+        } @else {
+          {{ session.displayName }}
+        }
+      }
+    </ng-container>
+  </div>
+</header>

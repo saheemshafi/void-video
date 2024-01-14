@@ -9,10 +9,12 @@
 :root {
   color-scheme: light;
   color: variables.$clr-dark-void;
+  background-color: variables.$clr-gray-smooth;
 
   &.dark {
     color-scheme: dark;
     color: variables.$clr-snow;
+    background-color: variables.$clr-gluon-gray;
   }
 }
 
@@ -21,7 +23,7 @@ html {
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  scrollbar-gutter: stable;
+  // scrollbar-gutter: stable;
 }
 
 body {
