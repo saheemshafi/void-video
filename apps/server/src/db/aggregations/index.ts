@@ -64,3 +64,17 @@ export const $lookupSubscriptions = (
     as: lookupOptions?.as || 'subscribers',
   },
 });
+
+export const $aggregateSearch = (searchQuery: string, paths: string[]) => ({
+  $search: {
+    index: 'search-index',
+    text: {
+      query: searchQuery,
+      path: paths,
+      fuzzy: {
+        maxEdits: 2,
+        prefixLength: 3,
+      },
+    },
+  },
+});
