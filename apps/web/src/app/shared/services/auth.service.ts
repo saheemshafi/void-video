@@ -5,7 +5,7 @@ import {
   Injectable,
   OnDestroy,
   PLATFORM_ID,
-  inject
+  inject,
 } from '@angular/core';
 import {
   BehaviorSubject,
@@ -14,10 +14,14 @@ import {
   catchError,
   map,
   retry,
-  tap
+  tap,
 } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { LoginResponse, SessionResponse } from '../interfaces/auth';
+import {
+  CreateAccountRequest,
+  LoginResponse,
+  SessionResponse,
+} from '../interfaces/auth';
 import { Session } from '../interfaces/session';
 
 @Injectable({
@@ -51,7 +55,18 @@ export class AuthService implements OnDestroy {
     this.sessionSubject.complete();
   }
 
-  createAccount() {}
+  createAccount(userDetails: CreateAccountRequest) {
+  
+    const formData = new FormData();
+    Object.entries(userDetails).forEach((entry) =>
+      formData.set(entry[0], entry[1])
+    );
+
+    return this.http.post(
+      `${environment.serverUrl}/users/create-account`,
+      formData
+    );
+  }
 
   login(email: string, password: string): Observable<LoginResponse> {
     return this.http

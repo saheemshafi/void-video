@@ -1,34 +1,188 @@
 <h1 class="sr-only">Create a void video account</h1>
 <p>Sign Up for Void Video</p>
-<form>
+<form #form="ngForm" [formGroup]="signupForm" (ngSubmit)="createAccount()">
+  <div>
+    <label for="avatar" class="sr-only">Avatar</label>
+    <input
+      type="file"
+      accept="image/*"
+      name="avatar"
+      [attr.aria-invalid]="signupForm.get('avatar')?.errors"
+      [attr.aria-errormessage]="
+        signupForm.get('avatar')?.errors && 'avatar-error'
+      "
+      (change)="onAvatarSelect($event)"
+      id="avatar"
+    />
+    @if (
+      signupForm.get('avatar')?.touched &&
+      form.submitted &&
+      signupForm.get('avatar')?.errors
+    ) {
+      <div class="alert" id="avatar-error">
+        <i class="bx bxs-error"></i>
+        <span>
+          @if (signupForm.get('avatar')?.hasError('required')) {
+            Avatar is required.
+          } @else {
+            {{ signupForm.get('avatar')?.getError('server') }}
+          }
+        </span>
+      </div>
+    }
+  </div>
   <div>
     <label for="display-name" class="sr-only">Display Name</label>
     <input
       type="text"
-      name="display-name"
+      formControlName="displayName"
       id="display-name"
       placeholder="Display name"
+      [attr.aria-invalid]="signupForm.get('displayName')?.errors"
+      [attr.aria-errormessage]="
+        signupForm.get('displayName')?.errors && 'display-name-error'
+      "
     />
+    @if (
+      signupForm.get('displayName')?.touched &&
+      form.submitted &&
+      signupForm.get('displayName')?.errors
+    ) {
+      <div class="alert" id="display-name-error">
+        <i class="bx bxs-error"></i>
+        <span>
+          @if (signupForm.get('displayName')?.hasError('required')) {
+            Display name is required.
+          } @else if (signupForm.get('displayName')?.hasError('minlength')) {
+            Display name must have atleast
+            {{
+              signupForm.get('displayName')?.getError('minlength')
+                .requiredLength
+            }}
+            characters.
+          } @else {
+            {{ signupForm.get('displayName')?.getError('server') }}
+          }
+        </span>
+      </div>
+    }
   </div>
   <div>
     <label for="username" class="sr-only">Username</label>
-    <input type="text" name="username" id="username" placeholder="Username" />
+    <input
+      type="text"
+      formControlName="username"
+      id="username"
+      placeholder="Username"
+      [attr.aria-invalid]="signupForm.get('username')?.errors"
+      [attr.aria-errormessage]="
+        signupForm.get('username')?.errors && 'username-error'
+      "
+    />
+    @if (
+      signupForm.get('username')?.touched &&
+      form.submitted &&
+      signupForm.get('username')?.errors
+    ) {
+      <div class="alert" id="username-error">
+        <i class="bx bxs-error"></i>
+        <span>
+          @if (signupForm.get('username')?.hasError('required')) {
+            Username is required.
+          } @else if (signupForm.get('username')?.hasError('minlength')) {
+            Username name must have atleast
+            {{
+              signupForm.get('username')?.getError('minlength').requiredLength
+            }}
+            characters.
+          } @else {
+            {{ signupForm.get('username')?.getError('server') }}
+          }
+        </span>
+      </div>
+    }
   </div>
+
   <div>
     <label for="email" class="sr-only">Email Address</label>
-    <input type="email" name="email" id="email" placeholder="Email address" />
+    <input
+      type="email"
+      formControlName="email"
+      id="email"
+      placeholder="Email address"
+      [attr.aria-invalid]="signupForm.get('email')?.errors"
+      [attr.aria-errormessage]="
+        signupForm.get('email')?.errors && 'email-error'
+      "
+    />
+    @if (
+      signupForm.get('email')?.touched &&
+      form.submitted &&
+      signupForm.get('email')?.errors
+    ) {
+      <div class="alert" id="email-error">
+        <i class="bx bxs-error"></i>
+        <span>
+          @if (signupForm.get('email')?.hasError('required')) {
+            Email is required.
+          } @else if (signupForm.get('email')?.hasError('email')) {
+            Email is not valid.
+          } @else {
+            {{ signupForm.get('email')?.getError('server') }}
+          }
+        </span>
+      </div>
+    }
   </div>
   <div>
     <label for="password" class="sr-only">Password</label>
     <input
       type="password"
-      name="password"
+      formControlName="password"
       id="password"
       placeholder="Password"
+      [attr.aria-invalid]="signupForm.get('password')?.errors"
+      [attr.aria-errormessage]="
+        signupForm.get('password')?.errors && 'password-error'
+      "
     />
+    @if (
+      signupForm.get('password')?.touched &&
+      form.submitted &&
+      signupForm.get('password')?.errors
+    ) {
+      <div class="alert" id="password-error">
+        <i class="bx bxs-error"></i>
+        <span>
+          @if (signupForm.get('password')?.hasError('required')) {
+            Password is required.
+          } @else if (signupForm.get('password')?.hasError('minlength')) {
+            Password must have atleast
+            {{
+              signupForm.get('password')?.getError('minlength').requiredLength
+            }}
+            characters.
+          } @else {
+            {{ signupForm.get('password')?.getError('server') }}
+          }
+        </span>
+      </div>
+    }
   </div>
   <div>
-    <button class="primary">Sign Up</button>
+    <button class="primary" [disabled]="form.invalid || isSubmitting">
+      @if (isSubmitting) {
+        <app-svg-loader />
+      } @else {
+        Sign Up
+      }
+    </button>
     <p>Already have an account? <a routerLink="/auth">Sign In</a></p>
   </div>
 </form>
+@if (signupForm.hasError('server')) {
+  <div class="alert">
+    <i class="bx bxs-error"></i>
+    <span>{{ signupForm.getError('server') }}</span>
+  </div>
+}
