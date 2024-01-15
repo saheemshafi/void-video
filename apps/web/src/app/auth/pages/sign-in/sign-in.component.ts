@@ -1,10 +1,5 @@
 import { Component, inject } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../../shared/services/auth.service';
 
 @Component({
@@ -15,6 +10,8 @@ import { AuthService } from '../../../shared/services/auth.service';
 export class SignInComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+
+  isSubmitting: boolean = false;
 
   loginForm = this.fb.group({
     email: this.fb.control('', {
@@ -27,6 +24,7 @@ export class SignInComponent {
 
   login() {
     if (this.loginForm.invalid) return;
+    this.isSubmitting = true;
     this.authService
       .login(
         this.loginForm.value.email ?? '',
@@ -34,10 +32,11 @@ export class SignInComponent {
       )
       .subscribe({
         next: (response) => {
-          console.log(response);
+          this.isSubmitting = false;
+          // show an alert that you are logged in
         },
         error: ({ error }) => {
-          console.log(error);
+          this.isSubmitting = false;
           if (error.errors) {
             error.errors.forEach(
               (validationError: { field: string; message: string }) => {

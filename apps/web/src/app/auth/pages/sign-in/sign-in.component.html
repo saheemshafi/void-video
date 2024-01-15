@@ -1,6 +1,6 @@
 <h1 class="sr-only">Sign in to your account</h1>
 <p>Welcome Back!</p>
-<form [formGroup]="loginForm" (ngSubmit)="login()">
+<form #form="ngForm" [formGroup]="loginForm" (ngSubmit)="login()">
   <div>
     <label for="email" class="sr-only">Email</label>
     <input
@@ -11,7 +11,11 @@
       [attr.aria-errormessage]="loginForm.get('email')?.errors && 'email-error'"
       placeholder="Email address"
     />
-    @if (loginForm.get('email')?.touched && loginForm.get('email')?.errors) {
+    @if (
+      loginForm.get('email')?.touched &&
+      form.submitted &&
+      loginForm.get('email')?.errors
+    ) {
       <div class="alert" id="email-error">
         <i class="bx bxs-error"></i>
         <span>
@@ -36,7 +40,13 @@
     />
   </div>
   <div>
-    <button [disabled]="loginForm.invalid" class="primary">Sign In</button>
+    <button [disabled]="loginForm.invalid || isSubmitting" class="primary">
+      @if (isSubmitting) {
+        <app-svg-loader />
+      } @else {
+        Sign In
+      }
+    </button>
     <p>Already have an account? <a routerLink="/auth/sign-up">Sign Up</a></p>
   </div>
 </form>
