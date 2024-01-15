@@ -1,0 +1,17 @@
+@if (control?.touched && control?.errors) {
+  <div class="alert" id="email-error">
+    <i class="bx bxs-error"></i>
+    <span>
+      @if (control?.hasError('required')) {
+        {{ fieldName }} is required.
+      } @else if (control?.hasError('email')) {
+        {{ fieldName }} is not valid.
+      } @else if (control?.hasError('minlength')) {
+        {{ fieldName }} must be atleast
+        {{ control?.getError('minlength').requiredLength }} characters.
+      } @else {
+        {{ control?.getError('server') }}
+      }
+    </span>
+  </div>
+}

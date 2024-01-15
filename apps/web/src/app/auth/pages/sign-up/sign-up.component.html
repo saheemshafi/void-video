@@ -2,7 +2,7 @@
 <p>Sign Up for Void Video</p>
 <form #form="ngForm" [formGroup]="signupForm" (ngSubmit)="createAccount()">
   <div>
-    <label for="avatar" class="sr-only">Avatar</label>
+    <label for="avatar">Avatar</label>
     <input
       type="file"
       accept="image/*"
@@ -14,25 +14,16 @@
       (change)="onAvatarSelect($event)"
       id="avatar"
     />
-    @if (
-      signupForm.get('avatar')?.touched &&
-      form.submitted &&
-      signupForm.get('avatar')?.errors
-    ) {
-      <div class="alert" id="avatar-error">
-        <i class="bx bxs-error"></i>
-        <span>
-          @if (signupForm.get('avatar')?.hasError('required')) {
-            Avatar is required.
-          } @else {
-            {{ signupForm.get('avatar')?.getError('server') }}
-          }
-        </span>
-      </div>
+    @if (form.submitted) {
+      <app-field-error
+        [control]="signupForm.get('avatar')"
+        fieldName="Avatar"
+        id="avatar-error"
+      />
     }
   </div>
   <div>
-    <label for="display-name" class="sr-only">Display Name</label>
+    <label for="display-name">Display Name</label>
     <input
       type="text"
       formControlName="displayName"
@@ -43,32 +34,16 @@
         signupForm.get('displayName')?.errors && 'display-name-error'
       "
     />
-    @if (
-      signupForm.get('displayName')?.touched &&
-      form.submitted &&
-      signupForm.get('displayName')?.errors
-    ) {
-      <div class="alert" id="display-name-error">
-        <i class="bx bxs-error"></i>
-        <span>
-          @if (signupForm.get('displayName')?.hasError('required')) {
-            Display name is required.
-          } @else if (signupForm.get('displayName')?.hasError('minlength')) {
-            Display name must have atleast
-            {{
-              signupForm.get('displayName')?.getError('minlength')
-                .requiredLength
-            }}
-            characters.
-          } @else {
-            {{ signupForm.get('displayName')?.getError('server') }}
-          }
-        </span>
-      </div>
+    @if (form.submitted) {
+      <app-field-error
+        [control]="signupForm.get('displayName')"
+        fieldName="Display name"
+        id="display-name-error"
+      />
     }
   </div>
   <div>
-    <label for="username" class="sr-only">Username</label>
+    <label for="username">Username</label>
     <input
       type="text"
       formControlName="username"
@@ -79,32 +54,17 @@
         signupForm.get('username')?.errors && 'username-error'
       "
     />
-    @if (
-      signupForm.get('username')?.touched &&
-      form.submitted &&
-      signupForm.get('username')?.errors
-    ) {
-      <div class="alert" id="username-error">
-        <i class="bx bxs-error"></i>
-        <span>
-          @if (signupForm.get('username')?.hasError('required')) {
-            Username is required.
-          } @else if (signupForm.get('username')?.hasError('minlength')) {
-            Username name must have atleast
-            {{
-              signupForm.get('username')?.getError('minlength').requiredLength
-            }}
-            characters.
-          } @else {
-            {{ signupForm.get('username')?.getError('server') }}
-          }
-        </span>
-      </div>
+    @if (form.submitted) {
+      <app-field-error
+        [control]="signupForm.get('username')"
+        fieldName="Username"
+        id="username-error"
+      />
     }
   </div>
 
   <div>
-    <label for="email" class="sr-only">Email Address</label>
+    <label for="email">Email Address</label>
     <input
       type="email"
       formControlName="email"
@@ -115,27 +75,16 @@
         signupForm.get('email')?.errors && 'email-error'
       "
     />
-    @if (
-      signupForm.get('email')?.touched &&
-      form.submitted &&
-      signupForm.get('email')?.errors
-    ) {
-      <div class="alert" id="email-error">
-        <i class="bx bxs-error"></i>
-        <span>
-          @if (signupForm.get('email')?.hasError('required')) {
-            Email is required.
-          } @else if (signupForm.get('email')?.hasError('email')) {
-            Email is not valid.
-          } @else {
-            {{ signupForm.get('email')?.getError('server') }}
-          }
-        </span>
-      </div>
+    @if (form.submitted) {
+      <app-field-error
+        [control]="signupForm.get('email')"
+        fieldName="Email"
+        id="email-error"
+      />
     }
   </div>
   <div>
-    <label for="password" class="sr-only">Password</label>
+    <label for="password">Password</label>
     <input
       type="password"
       formControlName="password"
@@ -146,27 +95,12 @@
         signupForm.get('password')?.errors && 'password-error'
       "
     />
-    @if (
-      signupForm.get('password')?.touched &&
-      form.submitted &&
-      signupForm.get('password')?.errors
-    ) {
-      <div class="alert" id="password-error">
-        <i class="bx bxs-error"></i>
-        <span>
-          @if (signupForm.get('password')?.hasError('required')) {
-            Password is required.
-          } @else if (signupForm.get('password')?.hasError('minlength')) {
-            Password must have atleast
-            {{
-              signupForm.get('password')?.getError('minlength').requiredLength
-            }}
-            characters.
-          } @else {
-            {{ signupForm.get('password')?.getError('server') }}
-          }
-        </span>
-      </div>
+    @if (form.submitted) {
+      <app-field-error
+        [control]="signupForm.get('password')"
+        fieldName="Password"
+        id="password-error"
+      />
     }
   </div>
   <div>

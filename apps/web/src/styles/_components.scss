@@ -2,28 +2,38 @@
 @use './mixins';
 
 form {
-  @include mixins.flex-column;
   gap: variables.$spacing-normal;
 
-  > div:last-child {
-    @include mixins.flex-column;
-    gap: variables.$spacing-sm;
-    margin-top: variables.$spacing-normal;
+  > div {
+    &:not(:first-child) {
+      margin-top: variables.$spacing-normal;
 
-    button {
-      width: 100%;
-    }
+      button {
+        width: 100%;
+      }
 
-    p {
-      text-align: center;
-      font-size: variables.$fs-xs;
-      font-weight: variables.$fw-semibold;
-      color: variables.$clr-dusty-gray;
+      p {
+        text-align: center;
+        font-size: variables.$fs-xs;
+        font-weight: variables.$fw-semibold;
+        color: variables.$clr-dusty-gray;
 
-      a {
-        color: variables.$clr-liquid-lava;
+        a {
+          color: variables.$clr-liquid-lava;
+        }
       }
     }
+    &:last-child {
+      margin-top: variables.$spacing-lg;
+    }
+  }
+
+  label {
+    font-size: variables.$fs-xs;
+    font-weight: variables.$fw-semibold;
+    display: inline-block;
+    color: variables.$clr-dusty-gray;
+    margin-bottom: variables.$spacing-sm;
   }
 }
 

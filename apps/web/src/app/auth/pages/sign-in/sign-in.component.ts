@@ -41,13 +41,13 @@ export class SignInComponent {
             error.errors.forEach(
               (validationError: { field: string; message: string }) => {
                 this.loginForm.get(validationError.field)?.setErrors({
-                  server: [true, validationError.message],
+                  server: validationError.message,
                 });
               }
             );
           } else {
             this.loginForm.setErrors({
-              server: [true, error.message],
+              server: error.message,
             });
           }
         },
