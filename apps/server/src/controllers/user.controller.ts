@@ -41,7 +41,7 @@ import {
 const createAccount = asyncHandler(async (req: Request, res: Response) => {
   const {
     body: { displayName, username, email, password },
-    files: { avatar, banner },
+    files: { avatar },
   } = validateRequest(req, createAccountValidation);
 
   const userExists = await User.findOne({ $or: [{ username }, { email }] });
@@ -54,23 +54,16 @@ const createAccount = asyncHandler(async (req: Request, res: Response) => {
   }
 
   const tempAvatarPath = avatar[0]?.path;
-  const tempBannerPath = banner[0]?.path;
 
   if (!tempAvatarPath) {
     throw new ApiError(STATUS_CODES.BAD_REQUEST, 'Avatar is required.');
   }
 
-  const uploads = [
-    uploadFileToCloudinary(tempAvatarPath, { folder: 'avatars' }),
-    tempBannerPath
-      ? uploadFileToCloudinary(tempBannerPath, { folder: 'banners' })
-      : undefined,
-  ];
+  const avatarResponse = await uploadFileToCloudinary(tempAvatarPath, {
+    folder: 'avatars',
+  });
 
-  const [avatarUploadResponse, bannerUploadResponse] =
-    await Promise.allSettled(uploads);
-
-  if (avatarUploadResponse?.status == 'rejected') {
+  if (!avatarResponse) {
     throw new ApiError(
       STATUS_CODES.INTERNAL_SERVER_ERROR,
       'Failed to upload avatar.'
@@ -82,11 +75,7 @@ const createAccount = asyncHandler(async (req: Request, res: Response) => {
     username,
     email,
     password,
-    avatar: mapToFileObject(avatarUploadResponse?.value),
-    banner:
-      bannerUploadResponse?.status == 'fulfilled'
-        ? mapToFileObject(bannerUploadResponse.value)
-        : null,
+    avatar: mapToFileObject(avatarResponse),
   });
 
   const createdUser = await User.findById(user._id);
@@ -311,7 +300,9 @@ const changeBanner = asyncHandler(async (req, res) => {
     { new: true }
   );
 
-  await removeFilesFromCloudinary(req.user?.banner?.public_id || '');
+  if (req.user?.banner) {
+    await removeFilesFromCloudinary(req.user?.banner?.public_id || '');
+  }
 
   res
     .status(STATUS_CODES.OK)

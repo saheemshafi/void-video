@@ -13,7 +13,6 @@ export const createAccountValidation = z.object({
     .strict(),
   files: z.object({
     avatar: z.array(fileValidation).min(1).max(1),
-    banner: z.array(fileValidation).min(1).max(1),
   }),
 });
 
