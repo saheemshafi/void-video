@@ -90,8 +90,12 @@ button,
 }
 
 button:disabled {
-  filter: brightness(60%);
   cursor: default;
+  filter: brightness(90%);
+}
+
+.dark button:disabled {
+  filter: brightness(60%);
 }
 
 :is(button, .button):is(:focus, :active):not(:disabled) {
