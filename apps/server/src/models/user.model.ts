@@ -46,7 +46,10 @@ const userSchema = new Schema<IUser, IUserModel, IUserInstanceMethods>(
       index: true,
     },
     avatar: fileSchema,
-    banner: fileSchema,
+    banner: {
+      type: fileSchema,
+      default: null,
+    },
     password: {
       type: String,
       required: true,
