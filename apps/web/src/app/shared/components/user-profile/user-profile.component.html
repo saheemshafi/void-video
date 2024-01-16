@@ -26,7 +26,9 @@
         <div class="avatar-details">
           <p>{{ session.displayName }}</p>
           <small>&#64;{{ session.username }}</small>
-          <a [routerLink]="['/', session.username]">View Your Channel</a>
+          <a cdkMenuItem [routerLink]="['/c', session.username]"
+            >View Your Channel</a
+          >
         </div>
       </div>
       <div class="menu-group">
