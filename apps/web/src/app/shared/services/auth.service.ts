@@ -29,7 +29,9 @@ import { Session } from '../interfaces/session';
 })
 export class AuthService implements OnDestroy {
   private http = inject(HttpClient);
-  private sessionSubject = new BehaviorSubject<Session | null>(null);
+  private sessionSubject = new BehaviorSubject<Session | null | undefined>(
+    undefined
+  );
   session$ = this.sessionSubject.asObservable();
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
@@ -37,10 +39,16 @@ export class AuthService implements OnDestroy {
 
     this.getSession()
       .pipe(
-        catchError((error) => {
-          if (error.error.status == 401) {
-            return this.revalidateSession();
+        catchError(({ error }) => {
+          if (error.status == 401) {
+            return this.revalidateSession().pipe(
+              catchError(() => {
+                this.sessionSubject.next(null);
+                return NEVER;
+              })
+            );
           }
+          this.sessionSubject.next(null);
           return NEVER;
         })
       )
@@ -56,7 +64,6 @@ export class AuthService implements OnDestroy {
   }
 
   createAccount(userDetails: CreateAccountRequest) {
-  
     const formData = new FormData();
     Object.entries(userDetails).forEach((entry) =>
       formData.set(entry[0], entry[1])
