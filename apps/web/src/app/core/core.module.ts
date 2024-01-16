@@ -10,6 +10,9 @@ import { HomeComponent } from './pages/home/home.component';
 import { CdkMenuModule } from '@angular/cdk/menu';
 import { SharedModule } from '../shared/shared.module';
 import { ChannelPageComponent } from './pages/channel-page/channel-page.component';
+import { SubscriptionsPageComponent } from './pages/feed/subscriptions-page/subscriptions-page.component';
+import { HistoryPageComponent } from './pages/feed/history-page/history-page.component';
+import { YouPageComponent } from './pages/feed/you-page/you-page.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +21,9 @@ import { ChannelPageComponent } from './pages/channel-page/channel-page.componen
     SidebarComponent,
     HomeComponent,
     ChannelPageComponent,
+    SubscriptionsPageComponent,
+    HistoryPageComponent,
+    YouPageComponent,
   ],
   imports: [
     CommonModule,

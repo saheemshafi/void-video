@@ -26,6 +26,7 @@
             routerLink="/"
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
+            [routerLinkActiveOptions]="{ exact: true }"
             class="menu-button"
             cdkMenuItem
           >
@@ -36,6 +37,7 @@
         <li>
           <a
             routerLink="/feed/subscriptions"
+            [routerLinkActiveOptions]="{ exact: true }"
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
             class="menu-button"
@@ -52,26 +54,28 @@
       <ul>
         <li>
           <a
-            routerLink="/u/watch-history"
+            routerLink="/feed/you"
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="menu-button"
+            cdkMenuItem
+          >
+            <i class="bx bxs-user-account"></i>
+            <span>You</span>
+          </a>
+        </li>
+        <li>
+          <a
+            routerLink="/feed/history"
+            routerLinkActive="active"
+            ariaCurrentWhenActive="page"
+            [routerLinkActiveOptions]="{ exact: true }"
             class="menu-button"
             cdkMenuItem
           >
             <i class="bx bxs-stopwatch"></i>
             <span>Watch History</span>
-          </a>
-        </li>
-        <li>
-          <a
-            routerLink="/u/subscribers"
-            routerLinkActive="active"
-            ariaCurrentWhenActive="page"
-            class="menu-button"
-            cdkMenuItem
-          >
-            <i class="bx bxs-group"></i>
-            <span>Subscribers</span>
           </a>
         </li>
       </ul>
@@ -84,6 +88,7 @@
             routerLink="/u/watch-history"
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
+            [routerLinkActiveOptions]="{ exact: true }"
             class="menu-button"
             cdkMenuItem
           >
@@ -99,6 +104,7 @@
             routerLink="/u/subscribers"
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
+            [routerLinkActiveOptions]="{ exact: true }"
             class="menu-button"
             cdkMenuItem
           >
@@ -114,6 +120,7 @@
             routerLink="/u/subscribers"
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
+            [routerLinkActiveOptions]="{ exact: true }"
             class="menu-button"
             cdkMenuItem
           >
@@ -129,6 +136,7 @@
             routerLink="/u/subscribers"
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
+            [routerLinkActiveOptions]="{ exact: true }"
             class="menu-button"
             cdkMenuItem
           >
