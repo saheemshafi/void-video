@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../../shared/services/auth.service';
 import { LoginRequest } from '../../../shared/interfaces/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-in',
@@ -11,6 +12,7 @@ import { LoginRequest } from '../../../shared/interfaces/auth';
 export class SignInComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private router = inject(Router);
 
   isSubmitting: boolean = false;
 
@@ -29,7 +31,7 @@ export class SignInComponent {
     this.authService.login(<LoginRequest>this.loginForm.value).subscribe({
       next: (response) => {
         this.isSubmitting = false;
-        // show an alert that you are logged in
+        this.router.navigate(['']);
       },
       error: ({ error }) => {
         this.isSubmitting = false;
