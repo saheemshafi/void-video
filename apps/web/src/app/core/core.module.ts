@@ -9,6 +9,7 @@ import { HomeComponent } from './pages/home/home.component';
 
 import { CdkMenuModule } from '@angular/cdk/menu';
 import { SharedModule } from '../shared/shared.module';
+import { ChannelPageComponent } from './pages/channel-page/channel-page.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { SharedModule } from '../shared/shared.module';
     HeaderComponent,
     SidebarComponent,
     HomeComponent,
+    ChannelPageComponent,
   ],
   imports: [
     CommonModule,
