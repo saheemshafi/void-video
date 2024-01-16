@@ -1,0 +1,61 @@
+@if (session$ | async; as session) {
+  <button
+    [cdkMenuTriggerFor]="profileMenu"
+    id="profile-menu"
+    class="button icon"
+  >
+    <img
+      class="avatar-image"
+      [src]="session.avatar.secure_url"
+      width="40"
+      height="40"
+      [alt]="session.displayName"
+    />
+  </button>
+
+  <ng-template #profileMenu>
+    <div class="menu" cdkMenu>
+      <div class="menu-header">
+        <img
+          class="avatar-image"
+          [src]="session.avatar.secure_url"
+          width="40"
+          height="40"
+          [alt]="session.displayName"
+        />
+        <div class="avatar-details">
+          <p>{{ session.displayName }}</p>
+          <small>&#64;{{ session.username }}</small>
+          <a [routerLink]="['/', session.username]">View Your Channel</a>
+        </div>
+      </div>
+      <div class="menu-group">
+        <a class="menu-item" cdkMenuItem>
+          <i class="bx bxs-movie-play sm"></i>
+          Studio
+        </a>
+      </div>
+      <div class="menu-group">
+        <a class="menu-item" cdkMenuItem>
+          <i class="bx bxs-cog sm"></i>
+          Settings
+        </a>
+        <div class="menu-item" cdkMenuItem [cdkMenuTriggerFor]="appearanceMenu">
+          <i class="bx bxs-sun sm"></i>
+          Appearance
+          <i class="bx bx-chevron-right sm"></i>
+        </div>
+      </div>
+      <div class="menu-group">
+        <a class="menu-item" cdkMenuItem>
+          <i class="bx bxs-log-out sm"></i>
+          Sign Out
+        </a>
+      </div>
+    </div>
+  </ng-template>
+}
+
+<ng-template #appearanceMenu>
+  <app-appearance-menu />
+</ng-template>

@@ -11,14 +11,14 @@
       />
       <i class="bx bx-search sm"></i>
     </div>
-    <button class="icon primary ghost">
+    <button class="button icon primary ghost">
       <i class="bx bxs-microphone sm"></i>
     </button>
   </div>
   <div class="user-actions">
     <ng-container>
       @if (session$ | async; as session) {
-        {{ session.displayName }}
+        <app-user-profile />
       } @else {
         <a routerLink="/auth" class="button primary">Sign In</a>
         <a routerLink="/auth/sign-up" class="button">Sign Up</a>

@@ -8,6 +8,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HomeComponent } from './pages/home/home.component';
 
 import { CdkMenuModule } from '@angular/cdk/menu';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,12 @@ import { CdkMenuModule } from '@angular/cdk/menu';
     SidebarComponent,
     HomeComponent,
   ],
-  imports: [CommonModule, CoreRoutingModule, NgOptimizedImage, CdkMenuModule],
+  imports: [
+    CommonModule,
+    CoreRoutingModule,
+    NgOptimizedImage,
+    SharedModule,
+    CdkMenuModule,
+  ],
 })
 export class CoreModule {}
