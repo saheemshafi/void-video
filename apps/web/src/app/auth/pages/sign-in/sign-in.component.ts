@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../../shared/services/auth.service';
+import { LoginRequest } from '../../../shared/interfaces/auth';
 
 @Component({
   selector: 'app-sign-in',
@@ -25,32 +26,27 @@ export class SignInComponent {
   login() {
     if (this.loginForm.invalid) return;
     this.isSubmitting = true;
-    this.authService
-      .login(
-        this.loginForm.value.email ?? '',
-        this.loginForm.value.password ?? ''
-      )
-      .subscribe({
-        next: (response) => {
-          this.isSubmitting = false;
-          // show an alert that you are logged in
-        },
-        error: ({ error }) => {
-          this.isSubmitting = false;
-          if (error.errors) {
-            error.errors.forEach(
-              (validationError: { field: string; message: string }) => {
-                this.loginForm.get(validationError.field)?.setErrors({
-                  server: validationError.message,
-                });
-              }
-            );
-          } else {
-            this.loginForm.setErrors({
-              server: error.message,
-            });
-          }
-        },
-      });
+    this.authService.login(<LoginRequest>this.loginForm.value).subscribe({
+      next: (response) => {
+        this.isSubmitting = false;
+        // show an alert that you are logged in
+      },
+      error: ({ error }) => {
+        this.isSubmitting = false;
+        if (error.errors) {
+          error.errors.forEach(
+            (validationError: { field: string; message: string }) => {
+              this.loginForm.get(validationError.field)?.setErrors({
+                server: validationError.message,
+              });
+            }
+          );
+        } else {
+          this.loginForm.setErrors({
+            server: error.message,
+          });
+        }
+      },
+    });
   }
 }

@@ -19,6 +19,7 @@ import {
 import { environment } from '../../../environments/environment';
 import {
   CreateAccountRequest,
+  LoginRequest,
   LoginResponse,
   SessionResponse,
 } from '../interfaces/auth';
@@ -75,11 +76,11 @@ export class AuthService implements OnDestroy {
     );
   }
 
-  login(email: string, password: string): Observable<LoginResponse> {
+  login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http
       .post<LoginResponse>(
         `${environment.serverUrl}/users/login`,
-        { email, password },
+        credentials,
         {
           withCredentials: true,
         }
