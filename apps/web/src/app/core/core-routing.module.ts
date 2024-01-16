@@ -14,7 +14,7 @@ const routes: Routes = [
         component: HomeComponent,
       },
       {
-        path: ':username',
+        path: 'c/:username',
         component: ChannelPageComponent,
       },
     ],
