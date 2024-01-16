@@ -29,7 +29,10 @@
     />
   </div>
   <div>
-    <button [disabled]="loginForm.invalid || isSubmitting" class="primary">
+    <button
+      [disabled]="loginForm.invalid || isSubmitting"
+      class="button primary"
+    >
       @if (isSubmitting) {
         <app-svg-loader />
       } @else {

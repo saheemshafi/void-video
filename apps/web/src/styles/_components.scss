@@ -65,7 +65,6 @@ textarea {
   border-color: variables.$clr-liquid-lava;
 }
 
-button,
 .button {
   background-color: variables.$clr-snow;
   border-radius: 0.4rem;
@@ -89,42 +88,41 @@ button,
     filter 100ms;
 }
 
-button:disabled {
+.button:disabled {
   cursor: default;
   filter: brightness(90%);
 }
 
-.dark button:disabled {
+.dark .button:disabled {
   filter: brightness(60%);
 }
 
-:is(button, .button):is(:focus, :active):not(:disabled) {
+.button:is(:focus, :active):not(:disabled) {
   outline: 2px solid rgba(variables.$clr-snow, 0.2);
   outline-offset: 1px;
   border-color: variables.$clr-snow;
 }
 
-button.primary,
 .button.primary {
   color: variables.$clr-snow;
   background-color: variables.$clr-liquid-lava;
   border: 1px solid rgba(variables.$clr-dusty-gray, 0.2);
 }
 
-:is(button.primary, .button.primary):is(:focus, :active):not(:disabled) {
+:is(.button.primary):is(:focus, :active):not(:disabled) {
   outline: 2px solid rgba(variables.$clr-liquid-lava, 0.2);
   outline-offset: 1px;
   border-color: variables.$clr-liquid-lava;
 }
 
-button.ghost,
 .button.ghost {
   background-color: transparent;
   color: variables.$clr-dusty-gray;
 }
 
-button.icon,
 .button.icon {
+  min-width: initial !important;
+  padding: 0;
   aspect-ratio: 1/1;
   border-radius: variables.$radius-rounded;
 }
