@@ -16,13 +16,13 @@
     </button>
   </div>
   <div class="user-actions">
-    <ng-container>
-      @if (session$ | async; as session) {
+    @if ((session$ | async) !== undefined) {
+      @if (session$ | async) {
         <app-user-profile />
       } @else {
         <a routerLink="/auth" class="button primary">Sign In</a>
         <a routerLink="/auth/sign-up" class="button">Sign Up</a>
       }
-    </ng-container>
+    }
   </div>
 </header>
