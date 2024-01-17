@@ -14,6 +14,7 @@ import { ChannelLayoutComponent } from './pages/channel/channel-layout/channel-l
 import { HistoryPageComponent } from './pages/feed/history-page/history-page.component';
 import { SubscriptionsPageComponent } from './pages/feed/subscriptions-page/subscriptions-page.component';
 import { YouPageComponent } from './pages/feed/you-page/you-page.component';
+import { SidebarSubscriptionListComponent } from './components/sidebar-subscription-list/sidebar-subscription-list.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { YouPageComponent } from './pages/feed/you-page/you-page.component';
     YouPageComponent,
     ChannelLayoutComponent,
     ChannelHomePageComponent,
+    SidebarSubscriptionListComponent,
   ],
   imports: [
     CommonModule,

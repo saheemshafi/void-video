@@ -17,7 +17,7 @@
     </a>
   </div>
 
-  <div cdkMenu>
+  <div>
     <div class="menu-group">
       <p class="menu-title">Menu</p>
       <ul>
@@ -28,7 +28,6 @@
             ariaCurrentWhenActive="page"
             [routerLinkActiveOptions]="{ exact: true }"
             class="menu-button"
-            cdkMenuItem
           >
             <i class="bx bxs-compass"></i>
             <span>Browse</span>
@@ -41,7 +40,6 @@
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
             class="menu-button"
-            cdkMenuItem
           >
             <i class="bx bxs-group"></i>
             <span>Subscriptions</span>
@@ -59,7 +57,6 @@
             ariaCurrentWhenActive="page"
             [routerLinkActiveOptions]="{ exact: true }"
             class="menu-button"
-            cdkMenuItem
           >
             <i class="bx bxs-user-account"></i>
             <span>You</span>
@@ -72,7 +69,6 @@
             ariaCurrentWhenActive="page"
             [routerLinkActiveOptions]="{ exact: true }"
             class="menu-button"
-            cdkMenuItem
           >
             <i class="bx bxs-stopwatch"></i>
             <span>Watch History</span>
@@ -82,24 +78,7 @@
     </div>
     <div class="menu-group subscriptions">
       <p class="menu-title">Subscriptions</p>
-      <ul>
-        <li>
-          <a
-            routerLink="/u/watch-history"
-            routerLinkActive="active"
-            ariaCurrentWhenActive="page"
-            [routerLinkActiveOptions]="{ exact: true }"
-            class="menu-button"
-            cdkMenuItem
-          >
-            <img
-              class="avatar"
-              src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            />
-            <span>Joshua Morony</span>
-          </a>
-        </li>
-      </ul>
+      <app-sidebar-subscription-list />
     </div>
   </div>
 </aside>

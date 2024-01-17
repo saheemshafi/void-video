@@ -107,32 +107,11 @@ aside {
               }
             }
 
-            &[cdkMenuItem]:focus-visible {
+            &:focus-visible {
               background-color: var(--menu-item-focused-bg);
               outline: none;
               color: var(--active-menu-btn-clr);
             }
-          }
-        }
-
-        &.subscriptions {
-          > ul {
-            font-weight: variables.$fw-semibold;
-            color: inherit;
-
-            > li {
-              font-size: variables.$fs-xs;
-              > a {
-                padding: calc(variables.$spacing-sm / 3);
-              }
-            }
-          }
-
-          .avatar {
-            width: variables.$fs-icon;
-            aspect-ratio: 1;
-            object-fit: cover;
-            border-radius: variables.$radius-rounded;
           }
         }
       }

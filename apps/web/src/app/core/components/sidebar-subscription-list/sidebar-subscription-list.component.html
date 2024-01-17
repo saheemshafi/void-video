@@ -1,0 +1,30 @@
+@if ((session$ | async) !== undefined) {
+  @if (session$ | async; as session) {
+    @if (subscriptions$ | async; as subscribedChannels) {
+      <ul cdkMenu>
+        @for (channel of subscribedChannels; track channel._id) {
+          <li>
+            <a
+              cdkMenuItem
+              [routerLink]="['/c', channel.username]"
+              class="menu-button"
+            >
+              <img
+                class="avatar"
+                [src]="channel.avatar.secure_url"
+                [alt]="channel.displayName"
+              />
+              <span>{{ channel.displayName }}</span>
+            </a>
+          </li>
+        } @empty {
+          <p class="info-text">No channels subscribed.</p>
+        }
+      </ul>
+    }
+  } @else {
+    <p class="info-text">
+      <a routerLink="/auth">Login</a> to see your subscriptions.
+    </p>
+  }
+}
