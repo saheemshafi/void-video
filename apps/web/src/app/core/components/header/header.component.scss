@@ -13,6 +13,7 @@
 
 header {
   padding: variables.$spacing-normal;
+  gap: variables.$spacing-normal;
   @include mixins.flex-cv;
   justify-content: space-between;
 
