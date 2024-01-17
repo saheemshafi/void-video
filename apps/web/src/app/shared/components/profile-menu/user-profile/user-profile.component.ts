@@ -10,4 +10,10 @@ import { AuthService } from '../../../services/auth.service';
 export class UserProfileComponent {
   private authService = inject(AuthService);
   session$ = this.authService.session$;
+
+  logout(): void {
+    this.authService.logout().subscribe(() => {
+      // TODO: add a toast
+    });
+  }
 }

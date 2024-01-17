@@ -33,6 +33,7 @@ export class AuthService implements OnDestroy {
   private sessionSubject = new BehaviorSubject<Session | null | undefined>(
     undefined
   );
+
   session$ = this.sessionSubject.asObservable();
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
@@ -107,9 +108,11 @@ export class AuthService implements OnDestroy {
   }
 
   logout() {
-    return this.http.get(`${environment.serverUrl}/users/logout`, {
-      withCredentials: true,
-    });
+    return this.http
+      .get(`${environment.serverUrl}/users/logout`, {
+        withCredentials: true,
+      })
+      .pipe(tap({ next: () => this.sessionSubject.next(null) }));
   }
 
   changePassword() {
