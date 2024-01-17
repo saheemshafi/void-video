@@ -1,18 +1,36 @@
-<div class="menu" cdkMenu>
-  <div class="menu-group">
-    <a class="menu-item" cdkMenuItem>
-      <i class="bx bxs-devices sm"></i>
-      System
-    </a>
-  </div>
-  <div class="menu-group">
-    <a class="menu-item" cdkMenuItem>
-      <i class="bx bxs-sun sm"></i>
-      Light
-    </a>
-    <div class="menu-item" cdkMenuItem>
-      <i class="bx bxs-moon sm"></i>
-      Dark
+<ng-template #menu>
+  @if (currentTheme$ | async; as theme) {
+    <div class="menu" cdkMenu>
+      <div class="menu-group" cdkMenuGroup>
+        <button
+          (click)="setTheme($event)"
+          [ngClass]="{ 'menu-item': true, active: theme == 'system' }"
+          cdkMenuItem
+        >
+          <i class="bx bxs-devices sm"></i>
+          System
+        </button>
+      </div>
+      <div class="menu-group" cdkMenuGroup>
+        <button
+          (click)="setTheme($event)"
+          data-theme="light"
+          [ngClass]="{ 'menu-item': true, active: theme == 'light' }"
+          cdkMenuItem
+        >
+          <i class="bx bxs-sun sm"></i>
+          Light
+        </button>
+        <button
+          (click)="setTheme($event)"
+          data-theme="dark"
+          cdkMenuItem
+          [ngClass]="{ 'menu-item': true, active: theme == 'dark' }"
+        >
+          <i class="bx bxs-moon sm"></i>
+          Dark
+        </button>
+      </div>
     </div>
-  </div>
-</div>
+  }
+</ng-template>

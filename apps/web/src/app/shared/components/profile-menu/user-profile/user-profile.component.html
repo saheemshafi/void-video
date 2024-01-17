@@ -31,11 +31,15 @@
           <i class="bx bxs-cog sm"></i>
           Settings
         </a>
-        <div class="menu-item" cdkMenuItem [cdkMenuTriggerFor]="appearanceMenu">
+        <button
+          class="menu-item"
+          cdkMenuItem
+          [cdkMenuTriggerFor]="appearanceMenu.menu"
+        >
           <i class="bx bxs-sun sm"></i>
           Appearance
           <i class="bx bx-chevron-right sm"></i>
-        </div>
+        </button>
       </div>
       <div class="menu-group">
         <button class="menu-item" cdkMenuItem (click)="logout()">
@@ -45,8 +49,6 @@
       </div>
     </div>
   </ng-template>
-}
 
-<ng-template #appearanceMenu>
-  <app-appearance-menu />
-</ng-template>
+  <app-appearance-menu #appearanceMenu />
+}
