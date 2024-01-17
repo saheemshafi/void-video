@@ -1,0 +1,10 @@
+@use '../../../../../styles/variables';
+
+#profile-menu:is(:hover, :active, :focus) {
+  border: none;
+}
+
+#profile-menu[aria-expanded='true'] {
+  outline: 3px solid variables.$clr-slate-gray;
+  outline-offset: 1px;
+}
