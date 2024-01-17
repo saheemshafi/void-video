@@ -1,17 +1,18 @@
-import { NgModule } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { NgModule } from '@angular/core';
 
-import { CoreRoutingModule } from './core-routing.module';
-import { CoreComponent } from './core.component';
 import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { CoreRoutingModule } from './core-routing.module';
+import { CoreComponent } from './core.component';
 import { HomeComponent } from './pages/home/home.component';
 
 import { CdkMenuModule } from '@angular/cdk/menu';
 import { SharedModule } from '../shared/shared.module';
-import { ChannelPageComponent } from './pages/channel-page/channel-page.component';
-import { SubscriptionsPageComponent } from './pages/feed/subscriptions-page/subscriptions-page.component';
+import { ChannelHomePageComponent } from './pages/channel/channel-home-page/channel-home-page.component';
+import { ChannelLayoutComponent } from './pages/channel/channel-layout/channel-layout.component';
 import { HistoryPageComponent } from './pages/feed/history-page/history-page.component';
+import { SubscriptionsPageComponent } from './pages/feed/subscriptions-page/subscriptions-page.component';
 import { YouPageComponent } from './pages/feed/you-page/you-page.component';
 
 @NgModule({
@@ -20,10 +21,11 @@ import { YouPageComponent } from './pages/feed/you-page/you-page.component';
     HeaderComponent,
     SidebarComponent,
     HomeComponent,
-    ChannelPageComponent,
     SubscriptionsPageComponent,
     HistoryPageComponent,
     YouPageComponent,
+    ChannelLayoutComponent,
+    ChannelHomePageComponent,
   ],
   imports: [
     CommonModule,
