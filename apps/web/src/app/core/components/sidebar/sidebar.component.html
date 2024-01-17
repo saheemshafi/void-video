@@ -17,7 +17,7 @@
     </a>
   </div>
 
-  <div>
+  <div cdkMenu>
     <div class="menu-group">
       <p class="menu-title">Menu</p>
       <ul>
@@ -26,7 +26,9 @@
             routerLink="/"
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
+            [routerLinkActiveOptions]="{ exact: true }"
             class="menu-button"
+            cdkMenuItem
           >
             <i class="bx bxs-compass"></i>
             <span>Browse</span>
@@ -35,9 +37,11 @@
         <li>
           <a
             routerLink="/feed/subscriptions"
+            [routerLinkActiveOptions]="{ exact: true }"
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
             class="menu-button"
+            cdkMenuItem
           >
             <i class="bx bxs-group"></i>
             <span>Subscriptions</span>
@@ -50,24 +54,28 @@
       <ul>
         <li>
           <a
-            routerLink="/u/watch-history"
+            routerLink="/feed/you"
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
+            [routerLinkActiveOptions]="{ exact: true }"
             class="menu-button"
+            cdkMenuItem
           >
-            <i class="bx bxs-stopwatch"></i>
-            <span>Watch History</span>
+            <i class="bx bxs-user-account"></i>
+            <span>You</span>
           </a>
         </li>
         <li>
           <a
-            routerLink="/u/subscribers"
+            routerLink="/feed/history"
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
+            [routerLinkActiveOptions]="{ exact: true }"
             class="menu-button"
+            cdkMenuItem
           >
-            <i class="bx bxs-group"></i>
-            <span>Subscribers</span>
+            <i class="bx bxs-stopwatch"></i>
+            <span>Watch History</span>
           </a>
         </li>
       </ul>
@@ -80,49 +88,9 @@
             routerLink="/u/watch-history"
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
+            [routerLinkActiveOptions]="{ exact: true }"
             class="menu-button"
-          >
-            <img
-              class="avatar"
-              src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            />
-            <span>Joshua Morony</span>
-          </a>
-        </li>
-        <li>
-          <a
-            routerLink="/u/subscribers"
-            routerLinkActive="active"
-            ariaCurrentWhenActive="page"
-            class="menu-button"
-          >
-            <img
-              class="avatar"
-              src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            />
-            <span>Joshua Morony</span>
-          </a>
-        </li>
-        <li>
-          <a
-            routerLink="/u/subscribers"
-            routerLinkActive="active"
-            ariaCurrentWhenActive="page"
-            class="menu-button"
-          >
-            <img
-              class="avatar"
-              src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            />
-            <span>Joshua Morony</span>
-          </a>
-        </li>
-        <li>
-          <a
-            routerLink="/u/subscribers"
-            routerLinkActive="active"
-            ariaCurrentWhenActive="page"
-            class="menu-button"
+            cdkMenuItem
           >
             <img
               class="avatar"

@@ -1,3 +1,5 @@
+@use './variables';
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -8,4 +10,8 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
+}
+
+.avatar {
+  border-radius: variables.$radius-rounded;
 }

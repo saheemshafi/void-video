@@ -1,0 +1,33 @@
+@use '../../../../../styles/variables';
+
+.menu-header {
+  display: grid;
+  gap: variables.$spacing-sm;
+  grid-template-columns: auto 1fr;
+  padding: variables.$spacing-normal;
+  padding-bottom: variables.$spacing-sm;
+  font-weight: variables.$fw-semibold;
+
+  p {
+    margin: 0;
+  }
+
+  small {
+    font-size: variables.$fs-xs;
+    display: block;
+    margin-top: 1px;
+    color: variables.$clr-dusty-gray;
+  }
+
+  a {
+    color: variables.$clr-liquid-lava;
+    font-size: variables.$fs-xs;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: variables.$spacing-sm;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

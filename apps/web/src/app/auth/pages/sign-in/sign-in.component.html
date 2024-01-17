@@ -1,8 +1,8 @@
 <h1 class="sr-only">Sign in to your account</h1>
 <p>Welcome Back!</p>
-<form [formGroup]="loginForm" (ngSubmit)="login()">
+<form #form="ngForm" [formGroup]="loginForm" (ngSubmit)="login()">
   <div>
-    <label for="email" class="sr-only">Email</label>
+    <label for="email">Email</label>
     <input
       type="email"
       formControlName="email"
@@ -11,23 +11,16 @@
       [attr.aria-errormessage]="loginForm.get('email')?.errors && 'email-error'"
       placeholder="Email address"
     />
-    @if (loginForm.get('email')?.touched && loginForm.get('email')?.errors) {
-      <div class="alert" id="email-error">
-        <i class="bx bxs-error"></i>
-        <span>
-          @if (loginForm.get('email')?.hasError('required')) {
-            Email is required.
-          } @else if (loginForm.get('email')?.hasError('email')) {
-            Email is not valid.
-          } @else {
-            {{ loginForm.get('email')?.getError('server')[1] }}
-          }
-        </span>
-      </div>
+    @if (form.submitted) {
+      <app-field-error
+        [control]="loginForm.get('email')"
+        fieldName="Email"
+        id="email-error"
+      />
     }
   </div>
   <div>
-    <label for="password" class="sr-only">Password</label>
+    <label for="password">Password</label>
     <input
       type="password"
       formControlName="password"
@@ -36,13 +29,19 @@
     />
   </div>
   <div>
-    <button [disabled]="loginForm.invalid" class="primary">Sign In</button>
+    <button
+      [disabled]="loginForm.invalid || isSubmitting"
+      class="button primary"
+    >
+      @if (isSubmitting) {
+        <app-svg-loader />
+      } @else {
+        Sign In
+      }
+    </button>
     <p>Already have an account? <a routerLink="/auth/sign-up">Sign Up</a></p>
   </div>
 </form>
-@if (loginForm.hasError('server')) {
-  <div class="alert">
-    <i class="bx bxs-error"></i>
-    <span>{{ loginForm.getError('server')[1] }}</span>
-  </div>
+@if (form.submitted) {
+  <app-field-error [control]="loginForm" />
 }

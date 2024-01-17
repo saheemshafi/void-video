@@ -1,11 +1,8 @@
 import { Component, inject } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../../shared/services/auth.service';
+import { LoginRequest } from '../../../shared/interfaces/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-in',
@@ -15,6 +12,9 @@ import { AuthService } from '../../../shared/services/auth.service';
 export class SignInComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private router = inject(Router);
+
+  isSubmitting: boolean = false;
 
   loginForm = this.fb.group({
     email: this.fb.control('', {
@@ -27,31 +27,28 @@ export class SignInComponent {
 
   login() {
     if (this.loginForm.invalid) return;
-    this.authService
-      .login(
-        this.loginForm.value.email ?? '',
-        this.loginForm.value.password ?? ''
-      )
-      .subscribe({
-        next: (response) => {
-          console.log(response);
-        },
-        error: ({ error }) => {
-          console.log(error);
-          if (error.errors) {
-            error.errors.forEach(
-              (validationError: { field: string; message: string }) => {
-                this.loginForm.get(validationError.field)?.setErrors({
-                  server: [true, validationError.message],
-                });
-              }
-            );
-          } else {
-            this.loginForm.setErrors({
-              server: [true, error.message],
-            });
-          }
-        },
-      });
+    this.isSubmitting = true;
+    this.authService.login(<LoginRequest>this.loginForm.value).subscribe({
+      next: (response) => {
+        this.isSubmitting = false;
+        this.router.navigate(['']);
+      },
+      error: ({ error }) => {
+        this.isSubmitting = false;
+        if (error.errors) {
+          error.errors.forEach(
+            (validationError: { field: string; message: string }) => {
+              this.loginForm.get(validationError.field)?.setErrors({
+                server: validationError.message,
+              });
+            }
+          );
+        } else {
+          this.loginForm.setErrors({
+            server: error.message,
+          });
+        }
+      },
+    });
   }
 }

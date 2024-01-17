@@ -1,4 +1,6 @@
 @use './styles/font-face';
+@use './styles/cdk-menu';
 @use './styles/normalize';
 @use './styles/components';
 @use './styles/utilities';
+@import "@angular/cdk/overlay-prebuilt.css";

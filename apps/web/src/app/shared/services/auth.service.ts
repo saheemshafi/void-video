@@ -5,7 +5,7 @@ import {
   Injectable,
   OnDestroy,
   PLATFORM_ID,
-  inject
+  inject,
 } from '@angular/core';
 import {
   BehaviorSubject,
@@ -14,10 +14,15 @@ import {
   catchError,
   map,
   retry,
-  tap
+  tap,
 } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { LoginResponse, SessionResponse } from '../interfaces/auth';
+import {
+  CreateAccountRequest,
+  LoginRequest,
+  LoginResponse,
+  SessionResponse,
+} from '../interfaces/auth';
 import { Session } from '../interfaces/session';
 
 @Injectable({
@@ -25,7 +30,10 @@ import { Session } from '../interfaces/session';
 })
 export class AuthService implements OnDestroy {
   private http = inject(HttpClient);
-  private sessionSubject = new BehaviorSubject<Session | null>(null);
+  private sessionSubject = new BehaviorSubject<Session | null | undefined>(
+    undefined
+  );
+
   session$ = this.sessionSubject.asObservable();
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
@@ -33,10 +41,16 @@ export class AuthService implements OnDestroy {
 
     this.getSession()
       .pipe(
-        catchError((error) => {
-          if (error.error.status == 401) {
-            return this.revalidateSession();
+        catchError(({ error }) => {
+          if (error.status == 401) {
+            return this.revalidateSession().pipe(
+              catchError(() => {
+                this.sessionSubject.next(null);
+                return NEVER;
+              })
+            );
           }
+          this.sessionSubject.next(null);
           return NEVER;
         })
       )
@@ -51,13 +65,23 @@ export class AuthService implements OnDestroy {
     this.sessionSubject.complete();
   }
 
-  createAccount() {}
+  createAccount(userDetails: CreateAccountRequest) {
+    const formData = new FormData();
+    Object.entries(userDetails).forEach((entry) =>
+      formData.set(entry[0], entry[1])
+    );
 
-  login(email: string, password: string): Observable<LoginResponse> {
+    return this.http.post(
+      `${environment.serverUrl}/users/create-account`,
+      formData
+    );
+  }
+
+  login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http
       .post<LoginResponse>(
         `${environment.serverUrl}/users/login`,
-        { email, password },
+        credentials,
         {
           withCredentials: true,
         }
@@ -84,9 +108,11 @@ export class AuthService implements OnDestroy {
   }
 
   logout() {
-    return this.http.get(`${environment.serverUrl}/users/logout`, {
-      withCredentials: true,
-    });
+    return this.http
+      .get(`${environment.serverUrl}/users/logout`, {
+        withCredentials: true,
+      })
+      .pipe(tap({ next: () => this.sessionSubject.next(null) }));
   }
 
   changePassword() {

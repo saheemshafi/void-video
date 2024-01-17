@@ -11,20 +11,18 @@
       />
       <i class="bx bx-search sm"></i>
     </div>
-    <button class="icon primary ghost">
+    <button class="button icon primary ghost">
       <i class="bx bxs-microphone sm"></i>
     </button>
   </div>
   <div class="user-actions">
-    <ng-container>
-      @if (session$ | async; as session) {
-        @if (session == null) {
-          <a routerLink="/auth" class="button primary">Sign In</a>
-          <a routerLink="/auth/sign-up" class="button">Sign Up</a>
-        } @else {
-          {{ session.displayName }}
-        }
+    @if ((session$ | async) !== undefined) {
+      @if (session$ | async) {
+        <app-user-profile />
+      } @else {
+        <a routerLink="/auth" class="button primary">Sign In</a>
+        <a routerLink="/auth/sign-up" class="button">Sign Up</a>
       }
-    </ng-container>
+    }
   </div>
 </header>

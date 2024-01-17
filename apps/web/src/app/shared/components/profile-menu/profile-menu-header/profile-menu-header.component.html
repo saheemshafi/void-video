@@ -1,0 +1,14 @@
+<div class="menu-header">
+  <img
+    class="avatar"
+    [src]="avatar"
+    width="40"
+    height="40"
+    [alt]="displayName"
+  />
+  <div class="avatar-details">
+    <p>{{ displayName }}</p>
+    <small>&#64;{{ username }}</small>
+    <a cdkMenuItem [routerLink]="['/c', username]">View Your Channel</a>
+  </div>
+</div>

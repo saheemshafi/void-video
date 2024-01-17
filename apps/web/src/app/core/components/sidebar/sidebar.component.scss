@@ -5,12 +5,14 @@
   --sidebar-background: #{variables.$clr-snow};
   --active-menu-btn-clr: #{variables.$clr-dark-void};
   --sidebar-scrollbar-clr: #{variables.$clr-dusty-gray};
+  --menu-item-focused-bg: #{variables.$clr-gray-smooth};
 }
 
 .dark {
   :host {
     --sidebar-background: #{variables.$clr-dark-void};
     --active-menu-btn-clr: #{variables.$clr-snow};
+    --menu-item-focused-bg: #{variables.$clr-gluon-gray};
   }
 }
 
@@ -27,7 +29,7 @@
   background-color: rgba(variables.$clr-dusty-gray, 0.3);
   border-radius: 4px;
 
-  &:hover{
+  &:hover {
     background-color: rgba(variables.$clr-dusty-gray, 0.5);
   }
 }
@@ -103,6 +105,12 @@ aside {
               > i {
                 color: variables.$clr-liquid-lava;
               }
+            }
+
+            &[cdkMenuItem]:focus-visible {
+              background-color: var(--menu-item-focused-bg);
+              outline: none;
+              color: var(--active-menu-btn-clr);
             }
           }
         }

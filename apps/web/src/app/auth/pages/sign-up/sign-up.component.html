@@ -1,34 +1,122 @@
 <h1 class="sr-only">Create a void video account</h1>
 <p>Sign Up for Void Video</p>
-<form>
+<form #form="ngForm" [formGroup]="signupForm" (ngSubmit)="createAccount()">
   <div>
-    <label for="display-name" class="sr-only">Display Name</label>
+    <label for="avatar">Avatar</label>
+    <input
+      type="file"
+      accept="image/*"
+      name="avatar"
+      [attr.aria-invalid]="signupForm.get('avatar')?.errors"
+      [attr.aria-errormessage]="
+        signupForm.get('avatar')?.errors && 'avatar-error'
+      "
+      (change)="onAvatarSelect($event)"
+      id="avatar"
+    />
+    @if (form.submitted) {
+      <app-field-error
+        [control]="signupForm.get('avatar')"
+        fieldName="Avatar"
+        id="avatar-error"
+      />
+    }
+  </div>
+  <div>
+    <label for="display-name">Display Name</label>
     <input
       type="text"
-      name="display-name"
+      formControlName="displayName"
       id="display-name"
       placeholder="Display name"
+      [attr.aria-invalid]="signupForm.get('displayName')?.errors"
+      [attr.aria-errormessage]="
+        signupForm.get('displayName')?.errors && 'display-name-error'
+      "
     />
+    @if (form.submitted) {
+      <app-field-error
+        [control]="signupForm.get('displayName')"
+        fieldName="Display name"
+        id="display-name-error"
+      />
+    }
   </div>
   <div>
-    <label for="username" class="sr-only">Username</label>
-    <input type="text" name="username" id="username" placeholder="Username" />
+    <label for="username">Username</label>
+    <input
+      type="text"
+      formControlName="username"
+      id="username"
+      placeholder="Username"
+      [attr.aria-invalid]="signupForm.get('username')?.errors"
+      [attr.aria-errormessage]="
+        signupForm.get('username')?.errors && 'username-error'
+      "
+    />
+    @if (form.submitted) {
+      <app-field-error
+        [control]="signupForm.get('username')"
+        fieldName="Username"
+        id="username-error"
+      />
+    }
+  </div>
+
+  <div>
+    <label for="email">Email Address</label>
+    <input
+      type="email"
+      formControlName="email"
+      id="email"
+      placeholder="Email address"
+      [attr.aria-invalid]="signupForm.get('email')?.errors"
+      [attr.aria-errormessage]="
+        signupForm.get('email')?.errors && 'email-error'
+      "
+    />
+    @if (form.submitted) {
+      <app-field-error
+        [control]="signupForm.get('email')"
+        fieldName="Email"
+        id="email-error"
+      />
+    }
   </div>
   <div>
-    <label for="email" class="sr-only">Email Address</label>
-    <input type="email" name="email" id="email" placeholder="Email address" />
-  </div>
-  <div>
-    <label for="password" class="sr-only">Password</label>
+    <label for="password">Password</label>
     <input
       type="password"
-      name="password"
+      formControlName="password"
       id="password"
       placeholder="Password"
+      [attr.aria-invalid]="signupForm.get('password')?.errors"
+      [attr.aria-errormessage]="
+        signupForm.get('password')?.errors && 'password-error'
+      "
     />
+    @if (form.submitted) {
+      <app-field-error
+        [control]="signupForm.get('password')"
+        fieldName="Password"
+        id="password-error"
+      />
+    }
   </div>
   <div>
-    <button class="primary">Sign Up</button>
+    <button class="button primary" [disabled]="form.invalid || isSubmitting">
+      @if (isSubmitting) {
+        <app-svg-loader />
+      } @else {
+        Sign Up
+      }
+    </button>
     <p>Already have an account? <a routerLink="/auth">Sign In</a></p>
   </div>
 </form>
+@if (signupForm.hasError('server')) {
+  <div class="alert">
+    <i class="bx bxs-error"></i>
+    <span>{{ signupForm.getError('server') }}</span>
+  </div>
+}

@@ -1,21 +1,26 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import {
   BrowserModule,
   provideClientHydration,
 } from '@angular/platform-browser';
 
-import {
-  provideHttpClient,
-  withFetch
-} from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SharedModule } from './shared/shared.module';
+import { ThemeService } from './shared/services/theme.service';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule, SharedModule],
-  providers: [provideClientHydration(), provideHttpClient(withFetch())],
+  imports: [BrowserModule, AppRoutingModule],
+  providers: [
+    provideClientHydration(),
+    provideHttpClient(withFetch()),
+    {
+      provide: APP_INITIALIZER,
+      deps: [ThemeService],
+      useFactory: () => {},
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,0 +1,9 @@
+@use '../../../../../styles/variables';
+
+[cdkMenu] {
+  width: initial;
+
+  .active {
+    background-color: var(--active-item-bg);
+  }
+}

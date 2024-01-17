@@ -1,0 +1,54 @@
+@if (session$ | async; as session) {
+  <button
+    [cdkMenuTriggerFor]="profileMenu"
+    id="profile-menu"
+    class="button ghost icon"
+  >
+    <img
+      class="avatar"
+      [src]="session.avatar.secure_url"
+      width="36"
+      height="36"
+      [alt]="session.displayName"
+    />
+  </button>
+
+  <ng-template #profileMenu>
+    <div class="menu" cdkMenu>
+      <app-profile-menu-header
+        [avatar]="session.avatar.secure_url"
+        [displayName]="session.displayName"
+        [username]="session.username"
+      />
+      <div class="menu-group">
+        <a class="menu-item" cdkMenuItem>
+          <i class="bx bxs-movie-play sm"></i>
+          Studio
+        </a>
+      </div>
+      <div class="menu-group">
+        <a class="menu-item" cdkMenuItem>
+          <i class="bx bxs-cog sm"></i>
+          Settings
+        </a>
+        <button
+          class="menu-item"
+          cdkMenuItem
+          [cdkMenuTriggerFor]="appearanceMenu.menu"
+        >
+          <i class="bx bxs-sun sm"></i>
+          Appearance
+          <i class="bx bx-chevron-right sm"></i>
+        </button>
+      </div>
+      <div class="menu-group">
+        <button class="menu-item" cdkMenuItem (click)="logout()">
+          <i class="bx bxs-log-out sm"></i>
+          Sign Out
+        </button>
+      </div>
+    </div>
+  </ng-template>
+
+  <app-appearance-menu #appearanceMenu />
+}

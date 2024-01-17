@@ -1,0 +1,13 @@
+.spinner_6kVp {
+  transform-origin: center;
+  animation: spinner_irSm 0.75s infinite linear;
+  margin-right: auto;
+}
+@keyframes spinner_irSm {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+svg {
+  fill: currentColor;
+}

@@ -2,28 +2,38 @@
 @use './mixins';
 
 form {
-  @include mixins.flex-column;
   gap: variables.$spacing-normal;
 
-  > div:last-child {
-    @include mixins.flex-column;
-    gap: variables.$spacing-sm;
-    margin-top: variables.$spacing-normal;
+  > div {
+    &:not(:first-child) {
+      margin-top: variables.$spacing-normal;
 
-    button {
-      width: 100%;
-    }
+      button {
+        width: 100%;
+      }
 
-    p {
-      text-align: center;
-      font-size: variables.$fs-xs;
-      font-weight: variables.$fw-semibold;
-      color: variables.$clr-dusty-gray;
+      p {
+        text-align: center;
+        font-size: variables.$fs-xs;
+        font-weight: variables.$fw-semibold;
+        color: variables.$clr-dusty-gray;
 
-      a {
-        color: variables.$clr-liquid-lava;
+        a {
+          color: variables.$clr-liquid-lava;
+        }
       }
     }
+    &:last-child {
+      margin-top: variables.$spacing-lg;
+    }
+  }
+
+  label {
+    font-size: variables.$fs-xs;
+    font-weight: variables.$fw-semibold;
+    display: inline-block;
+    color: variables.$clr-dusty-gray;
+    margin-bottom: variables.$spacing-sm;
   }
 }
 
@@ -55,10 +65,10 @@ textarea {
   border-color: variables.$clr-liquid-lava;
 }
 
-button,
 .button {
   background-color: variables.$clr-snow;
   border-radius: 0.4rem;
+  min-width: max-content;
   box-shadow: variables.$shadow-smooth-dark;
   height: 2.5rem;
   display: inline-flex;
@@ -79,38 +89,41 @@ button,
     filter 100ms;
 }
 
-button:disabled {
-  filter: brightness(60%);
+.button:disabled {
   cursor: default;
+  filter: brightness(90%);
 }
 
-:is(button, .button):is(:focus, :active):not(:disabled) {
+.dark .button:disabled {
+  filter: brightness(60%);
+}
+
+.button:is(:focus, :active):not(:disabled) {
   outline: 2px solid rgba(variables.$clr-snow, 0.2);
   outline-offset: 1px;
   border-color: variables.$clr-snow;
 }
 
-button.primary,
 .button.primary {
   color: variables.$clr-snow;
   background-color: variables.$clr-liquid-lava;
   border: 1px solid rgba(variables.$clr-dusty-gray, 0.2);
 }
 
-:is(button.primary, .button.primary):is(:focus, :active):not(:disabled) {
+:is(.button.primary):is(:focus, :active):not(:disabled) {
   outline: 2px solid rgba(variables.$clr-liquid-lava, 0.2);
   outline-offset: 1px;
   border-color: variables.$clr-liquid-lava;
 }
 
-button.ghost,
 .button.ghost {
   background-color: transparent;
   color: variables.$clr-dusty-gray;
 }
 
-button.icon,
 .button.icon {
+  min-width: initial !important;
+  padding: 0;
   aspect-ratio: 1/1;
   border-radius: variables.$radius-rounded;
 }

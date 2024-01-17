@@ -7,11 +7,5 @@ import { AuthService } from '../../../shared/services/auth.service';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
-  private authService = inject(AuthService);
-  session$ = this.authService.session$;
-
-  constructor() {
-    this.session$ = this.authService.session$;
-  }
-  
+  constructor() {}
 }
