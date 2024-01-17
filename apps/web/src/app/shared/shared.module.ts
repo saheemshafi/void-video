@@ -1,12 +1,11 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { SvgLoaderComponent } from './components/svg-loader/svg-loader.component';
-import { FieldErrorComponent } from './components/field-error/field-error.component';
-import { UserProfileComponent } from './components/profile-menu/user-profile/user-profile.component';
 import { CdkMenuModule } from '@angular/cdk/menu';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { FieldErrorComponent } from './components/field-error/field-error.component';
 import { AppearanceMenuComponent } from './components/profile-menu/appearance-menu/appearance-menu.component';
-import { ProfileMenuHeaderComponent } from './components/profile-menu/profile-menu-header/profile-menu-header.component';
+import { UserProfileComponent } from './components/profile-menu/user-profile/user-profile.component';
+import { SvgLoaderComponent } from './components/svg-loader/svg-loader.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +13,6 @@ import { ProfileMenuHeaderComponent } from './components/profile-menu/profile-me
     FieldErrorComponent,
     UserProfileComponent,
     AppearanceMenuComponent,
-    ProfileMenuHeaderComponent,
   ],
   imports: [CommonModule, CdkMenuModule, RouterModule],
   exports: [SvgLoaderComponent, FieldErrorComponent, UserProfileComponent],

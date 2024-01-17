@@ -7,7 +7,7 @@
   "author": "Mir Saheem Shafi",
   "license": "ISC",
   "scripts": {
-    "dev": "nodemon",
+    "dev": "docker compose up -d && nodemon",
     "build": "tsc",
     "start": "node dist/index.js",
     "lint": "eslint ."
