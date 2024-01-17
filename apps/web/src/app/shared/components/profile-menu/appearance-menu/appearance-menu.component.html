@@ -4,6 +4,7 @@
       <div class="menu-group" cdkMenuGroup>
         <button
           (click)="setTheme($event)"
+          data-theme="system"
           [ngClass]="{ 'menu-item': true, active: theme == 'system' }"
           cdkMenuItem
         >
