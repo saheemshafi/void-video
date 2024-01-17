@@ -68,6 +68,7 @@ textarea {
 .button {
   background-color: variables.$clr-snow;
   border-radius: 0.4rem;
+  min-width: max-content;
   box-shadow: variables.$shadow-smooth-dark;
   height: 2.5rem;
   display: inline-flex;
