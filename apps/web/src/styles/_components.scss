@@ -110,7 +110,7 @@ textarea {
   border: 1px solid rgba(variables.$clr-dusty-gray, 0.2);
 }
 
-:is(.button.primary):is(:focus, :active):not(:disabled) {
+.button.primary:is(:focus, :active):not(:disabled) {
   outline: 2px solid rgba(variables.$clr-liquid-lava, 0.2);
   outline-offset: 1px;
   border-color: variables.$clr-liquid-lava;
@@ -120,6 +120,11 @@ textarea {
   background-color: transparent;
   color: variables.$clr-dusty-gray;
 }
+
+.button.ghost:hover:not(:disabled) {
+  background-color: variables.$clr-gray-smooth-dark;
+}
+
 
 .button.icon {
   min-width: initial !important;

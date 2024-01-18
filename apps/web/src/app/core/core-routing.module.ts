@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CoreComponent } from './core.component';
-import { HomeComponent } from './pages/home/home.component';
-import { ChannelPageComponent } from './pages/channel-page/channel-page.component';
-import { SubscriptionsPageComponent } from './pages/feed/subscriptions-page/subscriptions-page.component';
+import { ChannelHomePageComponent } from './pages/channel/channel-home-page/channel-home-page.component';
+import { ChannelLayoutComponent } from './pages/channel/channel-layout/channel-layout.component';
 import { HistoryPageComponent } from './pages/feed/history-page/history-page.component';
+import { SubscriptionsPageComponent } from './pages/feed/subscriptions-page/subscriptions-page.component';
 import { YouPageComponent } from './pages/feed/you-page/you-page.component';
+import { HomeComponent } from './pages/home/home.component';
 
 const routes: Routes = [
   {
@@ -18,7 +19,13 @@ const routes: Routes = [
       },
       {
         path: 'c/:username',
-        component: ChannelPageComponent,
+        component: ChannelLayoutComponent,
+        children: [
+          {
+            path: '',
+            component: ChannelHomePageComponent,
+          },
+        ],
       },
       {
         path: 'feed/you',
