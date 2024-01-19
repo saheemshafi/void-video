@@ -6,15 +6,15 @@ import ApiError from '../utils/api-error';
 import ApiResponse from '../utils/api-response';
 import asyncHandler from '../utils/async-handler';
 import {
-  deleteCommentValidation,
-  toggleCommentLikeValidation,
-  updateCommentValidation,
+  deleteCommentSchema,
+  toggleCommentLikeSchema,
+  updateCommentSchema,
 } from '../validations/comment.validation';
 
 const toggleCommentLike = asyncHandler(async (req, res) => {
   const {
     params: { commentId },
-  } = validateRequest(req, toggleCommentLikeValidation);
+  } = validateRequest(req, toggleCommentLikeSchema);
 
   const likeExists = await Like.findOne({
     $or: [
@@ -58,7 +58,7 @@ const updateComment = asyncHandler(async (req, res) => {
   const {
     params: { commentId },
     body: { content },
-  } = validateRequest(req, updateCommentValidation);
+  } = validateRequest(req, updateCommentSchema);
 
   const commentExists = await Comment.findById(commentId);
 
@@ -93,7 +93,7 @@ const updateComment = asyncHandler(async (req, res) => {
 const deleteComment = asyncHandler(async (req, res) => {
   const {
     params: { commentId },
-  } = validateRequest(req, deleteCommentValidation);
+  } = validateRequest(req, deleteCommentSchema);
 
   const commentExists = await Comment.findById(commentId);
 
