@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { ApiResponse } from '../interfaces/api-response';
 import { SubscriptionsResponse } from '../interfaces/user';
-import { Observable, map, of, switchMap } from 'rxjs';
+import { Observable, map, of, shareReplay, switchMap } from 'rxjs';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -25,7 +25,8 @@ export class UserService {
             )
             .pipe(map((response) => response.data))
         : of([])
-    )
+    ),
+    shareReplay(1)
   );
 
   getSubscribedChannels(): Observable<SubscriptionsResponse> {
