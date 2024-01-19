@@ -1,28 +1,30 @@
 import z from 'zod';
-import fileValidation from './multer.validation';
-import { objectIdValidation, paginationValidation } from './utils.validation';
+import fileSchema from './multer.validation';
+import { objectIdSchema, paginationSchema } from './utils.validation';
+import { videoIdSchema } from './video.validation';
 
-export const createAccountValidation = z.object({
-  body: z
-    .object({
-      displayName: z.string().min(3),
-      username: z.string().min(6).toLowerCase(),
-      email: z.string().email(),
-      password: z.string().min(8),
-    })
-    .strict(),
+export const userIdSchema = objectIdSchema('User');
+
+const userSchema = z.object({
+  displayName: z.string().min(3),
+  username: z.string().min(6).toLowerCase(),
+  email: z.string().email(),
+});
+
+const passwordSchema = z.string().min(8);
+
+export const createAccountSchema = z.object({
+  body: userSchema.merge(z.object({ password: passwordSchema })).strict(),
   files: z.object({
-    avatar: z.array(fileValidation).min(1).max(1),
+    avatar: z.array(fileSchema).min(1).max(1),
   }),
 });
 
-export const loginValidation = z.object({
-  body: z
-    .object({
-      username: z.string().optional(),
-      email: z.string().email().optional(),
-      password: z.string(),
-    })
+export const loginSchema = z.object({
+  body: userSchema
+    .omit({ displayName: true })
+    .partial()
+    .merge(z.object({ password: passwordSchema }))
     .strict()
     .refine((body) => [body.email, body.username].some(Boolean), {
       path: ['body'],
@@ -30,62 +32,54 @@ export const loginValidation = z.object({
     }),
 });
 
-export const revalidateSessionValidation = z.object({
+export const revalidateSessionSchema = z.object({
   signedCookies: z.object({
     'refresh-token': z.string(),
   }),
 });
 
-export const emailPasswordResetLinkValidation = z.object({
-  body: z
-    .object({
-      email: z.string().email(),
-    })
-    .strict(),
+export const emailPasswordResetLinkSchema = z.object({
+  body: userSchema.pick({ email: true }).strict(),
 });
 
-export const resetPasswordValidation = z.object({
+export const resetPasswordSchema = z.object({
   body: z
     .object({
       token: z.string(),
-      password: z.string().min(8),
+      password: passwordSchema,
     })
     .strict(),
 });
 
-export const changeAvatarValidation = z.object({
-  file: fileValidation,
+export const changeAvatarSchema = z.object({
+  file: fileSchema,
 });
 
-export const changeBannerValidation = z.object({
-  file: fileValidation,
+export const changeBannerSchema = z.object({
+  file: fileSchema,
 });
 
-export const getChannelProfileValidation = z.object({
-  params: z
-    .object({
-      username: z.string(),
-    })
-    .strict(),
+export const getChannelProfileSchema = z.object({
+  params: userSchema.pick({ username: true }).strict(),
 });
 
-export const changePasswordValidation = z.object({
+export const changePasswordSchema = z.object({
   body: z
     .object({
-      oldPassword: z.string().min(8),
-      newPassword: z.string().min(8),
+      oldPassword: passwordSchema,
+      newPassword: passwordSchema,
     })
     .strict(),
 });
 
-export const addVideoToWatchHistoryValidation = z.object({
+export const addVideoToWatchHistorySchema = z.object({
   body: z
     .object({
-      videoId: objectIdValidation('Video'),
+      videoId: videoIdSchema,
     })
     .strict(),
 });
 
-export const getLikedVideosValidation = z.object({
-  query: paginationValidation,
+export const getLikedVideosSchema = z.object({
+  query: paginationSchema,
 });

@@ -1,8 +1,8 @@
 import z from 'zod';
-import { objectIdValidation } from './utils.validation';
+import { userIdSchema } from './user.validation';
 
-export const toggleSubscriptionValidation = z.object({
+export const toggleSubscriptionSchema = z.object({
   params: z.object({
-    channelId: objectIdValidation('User'),
+    channelId: userIdSchema,
   }),
 });

@@ -1,86 +1,87 @@
 import z from 'zod';
-import fileValidation from './multer.validation';
-import { objectIdValidation, paginationValidation } from './utils.validation';
+import fileSchema from './multer.validation';
+import { objectIdSchema, paginationSchema } from './utils.validation';
 
-export const uploadVideoValidation = z.object({
-  body: z
-    .object({
-      title: z.string().min(10),
-      description: z.string().min(25),
-      isPublished: z.coerce.boolean().optional().default(false),
-    })
-    .strict(),
+export const videoIdSchema = objectIdSchema('Video');
+
+const videoSchema = z.object({
+  title: z.string().min(10),
+  description: z.string().min(25),
+  isPublished: z.coerce.boolean().optional(),
+});
+
+export const uploadVideoSchema = z.object({
+  body: videoSchema.strict().transform(({ isPublished, ...rest }) => ({
+    ...rest,
+    isPublished: isPublished || false,
+  })),
   files: z.object({
-    video: z.array(fileValidation).min(1).max(1),
-    thumbnail: z.array(fileValidation).min(1).max(1),
+    video: z.array(fileSchema).min(1).max(1),
+    thumbnail: z.array(fileSchema).min(1).max(1),
   }),
 });
 
-export const getVideoValidation = z.object({
+export const getVideoSchema = z.object({
   params: z.object({
-    videoId: objectIdValidation('Video'),
+    videoId: videoIdSchema,
   }),
 });
 
-export const updateVideoValidation = z.object({
-  body: z
-    .object({
-      title: z.string().min(10).optional(),
-      description: z.string().min(25).optional(),
-      isPublished: z.boolean().optional(),
-    })
+export const updateVideoSchema = z.object({
+  body: videoSchema
+    .partial()
     .strict()
     .refine((body) => Object.keys(body).length !== 0, {
       path: ['body'],
       message: 'Request body is empty.',
     }),
   params: z.object({
-    videoId: objectIdValidation('Video'),
+    videoId: videoIdSchema,
   }),
 });
 
-export const deleteVideoValidation = z.object({
+export const deleteVideoSchema = z.object({
   params: z.object({
-    videoId: objectIdValidation('Video'),
+    videoId: videoIdSchema,
   }),
 });
 
-export const getVideoCommentsValidation = z.object({
+export const getVideoCommentsSchema = z.object({
   params: z.object({
-    videoId: objectIdValidation('Video'),
+    videoId: videoIdSchema,
   }),
-  query: paginationValidation,
+  query: paginationSchema,
 });
 
 export const videoSortOptions = z
   .enum(['views.asc', 'views.desc', 'title.asc', 'title.desc'])
   .default('title.asc');
 
-export const getVideosValidation = z.object({
-  query: paginationValidation.extend({
+export const getVideosSchema = z.object({
+  query: paginationSchema.extend({
     sort: videoSortOptions,
     query: z.string().default(''),
   }),
 });
 
-export const addCommentToVideoValidation = z.object({
+export const addCommentToVideoSchema = z.object({
   params: z.object({
-    videoId: objectIdValidation('Video'),
+    videoId: videoIdSchema,
   }),
   body: z.object({
     content: z.string().min(3),
   }),
 });
 
-export const toggleVideoLikeValidation = z.object({
+export const toggleVideoLikeSchema = z.object({
   params: z.object({
-    videoId: objectIdValidation('Video'),
+    videoId: videoIdSchema,
   }),
 });
 
-export const changeVideoThumbnailValidation = z.object({
+export const changeVideoThumbnailSchema = z.object({
   params: z.object({
-    videoId: objectIdValidation('Video'),
+    videoId: videoIdSchema,
   }),
-  file: fileValidation,
+  file: fileSchema,
 });

@@ -12,14 +12,13 @@ import {
   uploadFileToCloudinary,
 } from '../utils/cloudinary';
 import {
-  addVideoToPlaylistValidation,
-  changePlaylistThumbnailValidation,
-  createPlaylistValidation,
-  deletePlaylistValidation,
-  getPlaylistValidation,
-  getPlaylistsValidation,
-  removeVideoFromPlaylistValidation,
-  updatePlaylistValidation,
+  reqWithVideoAndPlaylistIdSchema,
+  changePlaylistThumbnailSchema,
+  createPlaylistSchema,
+  deletePlaylistSchema,
+  getPlaylistSchema,
+  getPlaylistsSchema,
+  updatePlaylistSchema,
 } from '../validations/playlist.validation';
 import { $lookupUserDetails, $lookupVideoDetails } from '../db/aggregations';
 
@@ -27,7 +26,7 @@ const createPlaylist = asyncHandler(async (req, res) => {
   const {
     body: { title, description, private: isPrivate },
     file: thumbnail,
-  } = validateRequest(req, createPlaylistValidation);
+  } = validateRequest(req, createPlaylistSchema);
 
   const thumbnailResponse = await uploadFileToCloudinary(thumbnail.path, {
     folder: 'thumbnails',
@@ -76,7 +75,7 @@ const updatePlaylist = asyncHandler(async (req, res) => {
   const {
     body: playlistDetails,
     params: { playlistId },
-  } = validateRequest(req, updatePlaylistValidation);
+  } = validateRequest(req, updatePlaylistSchema);
 
   const playlistExists = await Playlist.findById(playlistId);
 
@@ -102,7 +101,7 @@ const updatePlaylist = asyncHandler(async (req, res) => {
 const deletePlaylist = asyncHandler(async (req, res) => {
   const {
     params: { playlistId },
-  } = validateRequest(req, deletePlaylistValidation);
+  } = validateRequest(req, deletePlaylistSchema);
 
   const playlistExists = await Playlist.findById(playlistId);
 
@@ -134,7 +133,7 @@ const changePlaylistThumbnail = asyncHandler(async (req, res) => {
   const {
     params: { playlistId },
     file: thumbnail,
-  } = validateRequest(req, changePlaylistThumbnailValidation);
+  } = validateRequest(req, changePlaylistThumbnailSchema);
 
   const playlistExists = await Playlist.findById(playlistId);
 
@@ -190,7 +189,7 @@ const changePlaylistThumbnail = asyncHandler(async (req, res) => {
 const addVideoToPlaylist = asyncHandler(async (req, res) => {
   const {
     params: { playlistId, videoId },
-  } = validateRequest(req, addVideoToPlaylistValidation);
+  } = validateRequest(req, reqWithVideoAndPlaylistIdSchema);
 
   const playlist = await Playlist.findById(playlistId);
 
@@ -237,7 +236,7 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
 const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
   const {
     params: { playlistId, videoId },
-  } = validateRequest(req, removeVideoFromPlaylistValidation);
+  } = validateRequest(req, reqWithVideoAndPlaylistIdSchema);
 
   const playlist = await Playlist.findById(playlistId);
 
@@ -280,7 +279,7 @@ const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
 const getPlaylist = asyncHandler(async (req, res) => {
   const {
     params: { playlistId },
-  } = validateRequest(req, getPlaylistValidation);
+  } = validateRequest(req, getPlaylistSchema);
 
   const playlist = await Playlist.aggregate([
     {
@@ -326,7 +325,7 @@ const getPlaylist = asyncHandler(async (req, res) => {
 const getPlaylists = asyncHandler(async (req, res) => {
   const {
     query: { page, limit },
-  } = validateRequest(req, getPlaylistsValidation);
+  } = validateRequest(req, getPlaylistsSchema);
 
   const options: PaginateOptions = {
     page,

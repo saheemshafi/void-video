@@ -25,24 +25,24 @@ import {
   sendPasswordResetSuccessEmail,
 } from '../utils/email';
 import {
-  addVideoToWatchHistoryValidation,
-  changeAvatarValidation,
-  changeBannerValidation,
-  changePasswordValidation,
-  createAccountValidation,
-  emailPasswordResetLinkValidation,
-  getChannelProfileValidation,
-  getLikedVideosValidation,
-  loginValidation,
-  resetPasswordValidation,
-  revalidateSessionValidation,
+  addVideoToWatchHistorySchema,
+  changeAvatarSchema,
+  changeBannerSchema,
+  changePasswordSchema,
+  createAccountSchema,
+  emailPasswordResetLinkSchema,
+  getChannelProfileSchema,
+  getLikedVideosSchema,
+  loginSchema,
+  resetPasswordSchema,
+  revalidateSessionSchema,
 } from '../validations/user.validation';
 
 const createAccount = asyncHandler(async (req: Request, res: Response) => {
   const {
     body: { displayName, username, email, password },
     files: { avatar },
-  } = validateRequest(req, createAccountValidation);
+  } = validateRequest(req, createAccountSchema);
 
   const userExists = await User.findOne({ $or: [{ username }, { email }] });
 
@@ -97,7 +97,7 @@ const createAccount = asyncHandler(async (req: Request, res: Response) => {
 const login = asyncHandler(async (req: Request, res: Response) => {
   const {
     body: { username, email, password },
-  } = validateRequest(req, loginValidation);
+  } = validateRequest(req, loginSchema);
 
   const user = await User.findOne({ $or: [{ username }, { email }] }).select(
     '+password'
@@ -146,7 +146,7 @@ const logout = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const revalidateSession = asyncHandler(async (req, res) => {
-  const { signedCookies } = validateRequest(req, revalidateSessionValidation);
+  const { signedCookies } = validateRequest(req, revalidateSessionSchema);
 
   const incomingToken = signedCookies['refresh-token'];
 
@@ -185,7 +185,7 @@ const revalidateSession = asyncHandler(async (req, res) => {
 const emailPasswordResetLink = asyncHandler(async (req, res) => {
   const {
     body: { email },
-  } = validateRequest(req, emailPasswordResetLinkValidation);
+  } = validateRequest(req, emailPasswordResetLinkSchema);
 
   const user = await User.findOne({ email });
 
@@ -214,7 +214,7 @@ const emailPasswordResetLink = asyncHandler(async (req, res) => {
 const resetPassword = asyncHandler(async (req, res) => {
   const {
     body: { token, password },
-  } = validateRequest(req, resetPasswordValidation);
+  } = validateRequest(req, resetPasswordSchema);
 
   const decodedToken = jwt.verify(
     token,
@@ -250,7 +250,7 @@ const resetPassword = asyncHandler(async (req, res) => {
 });
 
 const changeAvatar = asyncHandler(async (req, res) => {
-  const { file: avatar } = validateRequest(req, changeAvatarValidation);
+  const { file: avatar } = validateRequest(req, changeAvatarSchema);
 
   const avatarUploadResponse = await uploadFileToCloudinary(avatar.path, {
     folder: 'avatars',
@@ -279,7 +279,7 @@ const changeAvatar = asyncHandler(async (req, res) => {
 });
 
 const changeBanner = asyncHandler(async (req, res) => {
-  const { file: banner } = validateRequest(req, changeBannerValidation);
+  const { file: banner } = validateRequest(req, changeBannerSchema);
 
   const bannerUploadResponse = await uploadFileToCloudinary(banner.path, {
     folder: 'banners',
@@ -312,7 +312,7 @@ const changeBanner = asyncHandler(async (req, res) => {
 const getChannelProfile = asyncHandler(async (req, res) => {
   const {
     params: { username },
-  } = validateRequest(req, getChannelProfileValidation);
+  } = validateRequest(req, getChannelProfileSchema);
 
   const channel = await User.aggregate([
     {
@@ -364,7 +364,7 @@ const getChannelProfile = asyncHandler(async (req, res) => {
 const changePassword = asyncHandler(async (req, res) => {
   const {
     body: { oldPassword, newPassword },
-  } = validateRequest(req, changePasswordValidation);
+  } = validateRequest(req, changePasswordSchema);
 
   const user = await User.findById(req.user?._id).select('+password');
 
@@ -411,7 +411,7 @@ const getUserWatchHistory = asyncHandler(async (req, res) => {
 const addVideoToWatchHistory = asyncHandler(async (req, res) => {
   const {
     body: { videoId },
-  } = validateRequest(req, addVideoToWatchHistoryValidation);
+  } = validateRequest(req, addVideoToWatchHistorySchema);
 
   const user = await User.findById(req.user?._id);
 
@@ -491,7 +491,7 @@ const getSubscribedChannels = asyncHandler(async (req, res) => {
 const getLikedVideos = asyncHandler(async (req, res) => {
   const {
     query: { page, limit },
-  } = validateRequest(req, getLikedVideosValidation);
+  } = validateRequest(req, getLikedVideosSchema);
 
   const videosAggregation = Video.aggregate([
     {

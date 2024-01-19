@@ -15,15 +15,15 @@ import {
   uploadFileToCloudinary,
 } from '../utils/cloudinary';
 import {
-  addCommentToPostValidation,
-  changePostImagesValidation,
-  deletePostValidation,
-  getPostCommentsValidation,
-  getPostValidation,
-  getPostsValidation,
-  togglePostLikeValidation,
-  updatePostValidation,
-  uploadPostValidation,
+  addCommentToPostSchema,
+  changePostImagesSchema,
+  deletePostSchema,
+  getPostCommentsSchema,
+  getPostSchema,
+  getPostsSchema,
+  togglePostLikeSchema,
+  updatePostSchema,
+  uploadPostSchema,
 } from '../validations/post.validation';
 import { $lookupLikes, $lookupUserDetails } from '../db/aggregations';
 
@@ -31,7 +31,7 @@ const uploadPost = asyncHandler(async (req: Request, res: Response) => {
   const {
     body: { content },
     files,
-  } = validateRequest(req, uploadPostValidation);
+  } = validateRequest(req, uploadPostSchema);
 
   const images: (UploadApiResponse | null)[] = [];
 
@@ -76,7 +76,7 @@ const uploadPost = asyncHandler(async (req: Request, res: Response) => {
 const getPosts = asyncHandler(async (req, res) => {
   const {
     query: { page, limit },
-  } = validateRequest(req, getPostsValidation);
+  } = validateRequest(req, getPostsSchema);
 
   const options: PaginateOptions = { page, limit };
 
@@ -97,7 +97,7 @@ const getPosts = asyncHandler(async (req, res) => {
 const getPost = asyncHandler(async (req: Request, res: Response) => {
   const {
     params: { postId },
-  } = validateRequest(req, getPostValidation);
+  } = validateRequest(req, getPostSchema);
 
   const post = await Post.aggregate([
     {
@@ -142,7 +142,7 @@ const updatePost = asyncHandler(async (req: Request, res: Response) => {
   const {
     body: { content },
     params: { postId },
-  } = validateRequest(req, updatePostValidation);
+  } = validateRequest(req, updatePostSchema);
 
   const post = await Post.findById(postId);
 
@@ -170,7 +170,7 @@ const updatePost = asyncHandler(async (req: Request, res: Response) => {
 const deletePost = asyncHandler(async (req: Request, res: Response) => {
   const {
     params: { postId },
-  } = validateRequest(req, deletePostValidation);
+  } = validateRequest(req, deletePostSchema);
 
   const postExists = await Post.findById(postId);
 
@@ -202,7 +202,7 @@ const deletePost = asyncHandler(async (req: Request, res: Response) => {
 const togglePostLike = asyncHandler(async (req: Request, res: Response) => {
   const {
     params: { postId },
-  } = validateRequest(req, togglePostLikeValidation);
+  } = validateRequest(req, togglePostLikeSchema);
 
   const likeExists = await Like.findOne({
     $or: [
@@ -247,7 +247,7 @@ const changePostImages = asyncHandler(async (req, res) => {
     params: { postId },
     files,
     body: { replaceWithIds },
-  } = validateRequest(req, changePostImagesValidation);
+  } = validateRequest(req, changePostImagesSchema);
 
   const post = await Post.findById(postId);
 
@@ -300,7 +300,7 @@ const getPostComments = asyncHandler(async (req: Request, res: Response) => {
   const {
     params: { postId },
     query: { page, limit },
-  } = validateRequest(req, getPostCommentsValidation);
+  } = validateRequest(req, getPostCommentsSchema);
 
   const options: PaginateOptions = {
     page,
@@ -353,7 +353,7 @@ const addCommentToPost = asyncHandler(async (req: Request, res: Response) => {
   const {
     params: { postId },
     body: { content },
-  } = validateRequest(req, addCommentToPostValidation);
+  } = validateRequest(req, addCommentToPostSchema);
 
   const comment = await Comment.create({
     content,

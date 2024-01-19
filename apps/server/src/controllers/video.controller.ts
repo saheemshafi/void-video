@@ -13,15 +13,15 @@ import {
   uploadFileToCloudinary,
 } from '../utils/cloudinary';
 import {
-  addCommentToVideoValidation,
-  changeVideoThumbnailValidation,
-  deleteVideoValidation,
-  getVideoCommentsValidation,
-  getVideoValidation,
-  getVideosValidation,
-  toggleVideoLikeValidation,
-  updateVideoValidation,
-  uploadVideoValidation,
+  addCommentToVideoSchema,
+  changeVideoThumbnailSchema,
+  deleteVideoSchema,
+  getVideoCommentsSchema,
+  getVideoSchema,
+  getVideosSchema,
+  toggleVideoLikeSchema,
+  updateVideoSchema,
+  uploadVideoSchema,
 } from '../validations/video.validation';
 import { Split } from '../types/utils.types';
 import { VideoSortOptions } from '../types/validation.types';
@@ -31,7 +31,7 @@ const uploadVideo = asyncHandler(async (req, res) => {
   const {
     body: { title, description, isPublished },
     files,
-  } = validateRequest(req, uploadVideoValidation);
+  } = validateRequest(req, uploadVideoSchema);
 
   const tempThumbnailPath = files.thumbnail[0]?.path;
   const tempVideoPath = files.video[0]?.path;
@@ -89,7 +89,7 @@ const uploadVideo = asyncHandler(async (req, res) => {
 const toggleVideoLike = asyncHandler(async (req, res) => {
   const {
     params: { videoId },
-  } = validateRequest(req, toggleVideoLikeValidation);
+  } = validateRequest(req, toggleVideoLikeSchema);
 
   const likeExists = await Like.findOne({
     $or: [
@@ -132,7 +132,7 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
 const getVideo = asyncHandler(async (req, res) => {
   const {
     params: { videoId },
-  } = validateRequest(req, getVideoValidation);
+  } = validateRequest(req, getVideoSchema);
 
   const video = await Video.aggregate([
     {
@@ -181,7 +181,7 @@ const updateVideo = asyncHandler(async (req, res) => {
   const {
     body: { title, description, isPublished },
     params: { videoId },
-  } = validateRequest(req, updateVideoValidation);
+  } = validateRequest(req, updateVideoSchema);
 
   const existingVideo = await Video.findById(videoId);
 
@@ -214,7 +214,7 @@ const changeVideoThumbnail = asyncHandler(async (req, res) => {
   const {
     file: thumbnail,
     params: { videoId },
-  } = validateRequest(req, changeVideoThumbnailValidation);
+  } = validateRequest(req, changeVideoThumbnailSchema);
 
   const videoExists = await Video.findById(videoId);
 
@@ -250,7 +250,7 @@ const changeVideoThumbnail = asyncHandler(async (req, res) => {
 const deleteVideo = asyncHandler(async (req, res) => {
   const {
     params: { videoId },
-  } = validateRequest(req, deleteVideoValidation);
+  } = validateRequest(req, deleteVideoSchema);
 
   const videoExists = await Video.findById(videoId);
 
@@ -285,7 +285,7 @@ const getVideoComments = asyncHandler(async (req, res) => {
   const {
     params: { videoId },
     query: { limit, page },
-  } = validateRequest(req, getVideoCommentsValidation);
+  } = validateRequest(req, getVideoCommentsSchema);
 
   const options: PaginateOptions = {
     page,
@@ -335,7 +335,7 @@ const getVideoComments = asyncHandler(async (req, res) => {
 const getVideos = asyncHandler(async (req, res) => {
   const {
     query: { page, limit, sort, query },
-  } = validateRequest(req, getVideosValidation);
+  } = validateRequest(req, getVideosSchema);
 
   const options: PaginateOptions = {
     page,
@@ -384,7 +384,7 @@ const addCommentToVideo = asyncHandler(async (req, res) => {
   const {
     params: { videoId },
     body: { content },
-  } = validateRequest(req, addCommentToVideoValidation);
+  } = validateRequest(req, addCommentToVideoSchema);
 
   const comment = await Comment.create({
     content,

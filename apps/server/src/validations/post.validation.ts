@@ -1,75 +1,72 @@
 import z from 'zod';
-import fileValidation from './multer.validation';
-import { objectIdValidation, paginationValidation } from './utils.validation';
+import fileSchema from './multer.validation';
+import { objectIdSchema, paginationSchema } from './utils.validation';
+import { commentSchema } from './comment.validation';
 
-export const uploadPostValidation = z.object({
-  body: z
-    .object({
-      content: z.string().min(10),
-    })
-    .strict(),
-  files: z.array(fileValidation),
+const postIdSchema = objectIdSchema('Post');
+
+const postSchema = z.object({
+  content: z.string().min(10),
 });
 
-export const getPostValidation = z.object({
+export const uploadPostSchema = z.object({
+  body: postSchema.strict(),
+  files: z.array(fileSchema),
+});
+
+export const getPostSchema = z.object({
   params: z.object({
-    postId: objectIdValidation('Post'),
+    postId: postIdSchema,
   }),
 });
 
-export const getPostsValidation = z.object({
-  query: paginationValidation,
+export const getPostsSchema = z.object({
+  query: paginationSchema,
 });
 
-export const deletePostValidation = z.object({
+export const deletePostSchema = z.object({
   params: z.object({
-    postId: objectIdValidation('Post'),
+    postId: postIdSchema,
   }),
 });
 
-export const addCommentToPostValidation = z.object({
+export const addCommentToPostSchema = z.object({
   params: z.object({
-    postId: objectIdValidation('Post'),
+    postId: postIdSchema,
   }),
-  body: z.object({
-    content: z.string().min(3),
-  }),
+  body: commentSchema,
 });
 
-export const getPostCommentsValidation = z.object({
+export const getPostCommentsSchema = z.object({
   params: z.object({
-    postId: objectIdValidation('Post'),
+    postId: postIdSchema,
   }),
-  query: paginationValidation,
+  query: paginationSchema,
 });
 
-export const togglePostLikeValidation = z.object({
+export const togglePostLikeSchema = z.object({
   params: z.object({
-    postId: objectIdValidation('Post'),
+    postId: postIdSchema,
   }),
 });
 
-export const updatePostValidation = z.object({
-  body: z
-    .object({
-      content: z.string().min(10),
-    })
-    .strict(),
+export const updatePostSchema = z.object({
+  body: postSchema.strict(),
   params: z.object({
-    postId: objectIdValidation('Post'),
+    postId: postIdSchema,
   }),
 });
 
-export const changePostImagesValidation = z
+export const changePostImagesSchema = z
   .object({
-    files: z.array(fileValidation).min(1).max(4),
+    files: z.array(fileSchema).min(1).max(4),
     body: z
       .object({
         replaceWithIds: z.array(z.string()),
       })
       .strict(),
     params: z.object({
-      postId: objectIdValidation('Post'),
+      postId: postIdSchema,
     }),
   })
   .refine(({ files, body }) => body.replaceWithIds.length == files.length, {
