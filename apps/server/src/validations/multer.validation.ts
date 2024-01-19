@@ -1,6 +1,6 @@
 import z from 'zod';
 
-const fileValidation = z.object({
+const fileSchema = z.object({
   fieldname: z.string(),
   originalname: z.string(),
   encoding: z.string(),
@@ -11,4 +11,4 @@ const fileValidation = z.object({
   path: z.string(),
 });
 
-export default fileValidation;
+export default fileSchema;

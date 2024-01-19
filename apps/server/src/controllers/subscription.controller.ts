@@ -6,12 +6,12 @@ import { validateRequest } from '../utils';
 import ApiError from '../utils/api-error';
 import ApiResponse from '../utils/api-response';
 import asyncHandler from '../utils/async-handler';
-import { toggleSubscriptionValidation } from '../validations/subscription.validation';
+import { toggleSubscriptionSchema } from '../validations/subscription.validation';
 
 const toggleSubscription = asyncHandler(async (req, res) => {
   const {
     params: { channelId },
-  } = validateRequest(req, toggleSubscriptionValidation);
+  } = validateRequest(req, toggleSubscriptionSchema);
 
   if (req.user?._id.equals(new Types.ObjectId(channelId))) {
     throw new ApiError(STATUS_CODES.CONFLICT, 'Cannot subscribe to yourself.');

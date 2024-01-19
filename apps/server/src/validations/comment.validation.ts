@@ -1,23 +1,27 @@
 import z from 'zod';
-import { objectIdValidation } from './utils.validation';
+import { objectIdSchema } from './utils.validation';
 
-export const toggleCommentLikeValidation = z.object({
+export const commentIdSchema = objectIdSchema('Comment');
+
+export const commentSchema = z.object({
+  content: z.string().min(3),
+});
+
+export const toggleCommentLikeSchema = z.object({
   params: z.object({
-    commentId: objectIdValidation('Comment'),
+    commentId: commentIdSchema,
   }),
 });
 
-export const deleteCommentValidation = z.object({
+export const deleteCommentSchema = z.object({
   params: z.object({
-    commentId: objectIdValidation('Comment'),
+    commentId: commentIdSchema,
   }),
 });
 
-export const updateCommentValidation = z.object({
+export const updateCommentSchema = z.object({
   params: z.object({
-    commentId: objectIdValidation('Comment'),
+    commentId: commentIdSchema,
   }),
-  body: z.object({
-    content: z.string().min(3),
-  }),
+  body: commentSchema,
 });

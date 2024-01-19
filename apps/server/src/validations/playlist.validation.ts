@@ -1,25 +1,28 @@
 import z from 'zod';
 import fileValidation from './multer.validation';
-import { objectIdValidation, paginationValidation } from './utils.validation';
+import { objectIdSchema, paginationSchema } from './utils.validation';
+import { videoIdSchema } from './video.validation';
 
-export const createPlaylistValidation = z.object({
-  body: z
-    .object({
-      title: z.string().min(5),
-      description: z.string().min(15).optional(),
-      private: z.coerce.boolean().optional(),
-    })
+export const playlistSchema = z.object({
+  title: z.string().min(5),
+  description: z.string().min(15),
+  private: z.coerce.boolean(),
+});
+
+const playlistIdSchema = objectIdSchema('Playlist');
+
+export const createPlaylistSchema = z.object({
+  body: playlistSchema
+    .omit({ title: true })
+    .partial()
+    .merge(playlistSchema.pick({ title: true }))
     .strict(),
   file: fileValidation,
 });
 
-export const updatePlaylistValidation = z.object({
-  body: z
-    .object({
-      title: z.string().min(5).optional(),
-      description: z.string().min(15).optional(),
-      private: z.coerce.boolean().optional(),
-    })
+export const updatePlaylistSchema = z.object({
+  body: playlistSchema
+    .partial()
     .strict()
     .refine((body) => Object.keys(body).length == 0, {
       path: ['body'],
@@ -27,52 +30,43 @@ export const updatePlaylistValidation = z.object({
     }),
   params: z
     .object({
-      playlistId: objectIdValidation('Playlist'),
+      playlistId: objectIdSchema('Playlist'),
     })
     .strict(),
 });
 
-export const deletePlaylistValidation = z.object({
+export const deletePlaylistSchema = z.object({
   params: z
     .object({
-      playlistId: objectIdValidation('Playlist'),
+      playlistId: playlistIdSchema,
     })
     .strict(),
 });
 
-export const changePlaylistThumbnailValidation = z.object({
+export const changePlaylistThumbnailSchema = z.object({
   params: z
     .object({
-      playlistId: objectIdValidation('Playlist'),
+      playlistId: playlistIdSchema,
     })
     .strict(),
   file: fileValidation,
 });
 
-export const addVideoToPlaylistValidation = z.object({
+export const reqWithVideoAndPlaylistIdSchema = z.object({
   params: z
     .object({
-      playlistId: objectIdValidation('Playlist'),
-      videoId: objectIdValidation('Video'),
+      playlistId: playlistIdSchema,
+      videoId: videoIdSchema,
     })
     .strict(),
 });
 
-export const removeVideoFromPlaylistValidation = z.object({
-  params: z
-    .object({
-      playlistId: objectIdValidation('Playlist'),
-      videoId: objectIdValidation('Video'),
-    })
-    .strict(),
-});
-
-export const getPlaylistValidation = z.object({
+export const getPlaylistSchema = z.object({
   params: z.object({
-    playlistId: objectIdValidation('Playlist'),
+    playlistId: playlistIdSchema,
   }),
 });
 
-export const getPlaylistsValidation = z.object({
-  query: paginationValidation,
+export const getPlaylistsSchema = z.object({
+  query: paginationSchema,
 });
