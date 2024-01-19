@@ -10,5 +10,5 @@ import { Subscription } from '../../../../shared/interfaces/user';
 })
 export class SubscriptionListComponent {
   @Input({ required: true, alias: 'subscriptions' })
-  subscriptions$!: Observable<Subscription[]>;
+  subscriptions$!: Observable<Subscription[] | null>;
 }
