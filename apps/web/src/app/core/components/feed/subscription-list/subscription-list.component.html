@@ -1,0 +1,3 @@
+@for (subscription of subscriptions$ | async; track subscription._id) {
+  <app-subscription-card [subscription]="subscription" />
+}
