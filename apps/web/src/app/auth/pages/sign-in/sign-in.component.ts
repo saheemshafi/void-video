@@ -30,10 +30,10 @@ export class SignInComponent {
     if (this.loginForm.invalid) return;
     this.isSubmitting = true;
     this.authService.login(<LoginRequest>this.loginForm.value).subscribe({
-      next: (resonse) => {
+      next: (response) => {
         this.isSubmitting = false;
         this.router.navigate([
-          this.activatedRoute.snapshot.queryParamMap.get('callback-url'),
+          this.activatedRoute.snapshot.queryParamMap.get('callback-url') || '/',
         ]);
       },
       error: ({ error }) => {
