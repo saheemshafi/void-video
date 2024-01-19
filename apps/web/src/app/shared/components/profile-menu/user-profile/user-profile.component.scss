@@ -5,7 +5,7 @@
 }
 
 #profile-menu[aria-expanded='true'] {
-  outline: 3px solid variables.$clr-slate-gray;
+  outline: 3px solid rgba(variables.$clr-dusty-gray, 0.2);
   outline-offset: 1px;
 }
 
