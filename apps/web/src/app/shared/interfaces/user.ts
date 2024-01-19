@@ -3,6 +3,6 @@ import { Session } from './session';
 
 export type User = Omit<Session, 'watchHistory'>;
 
-export type SubscriptionsResponse = ApiResponse<
-  Array<User & { totalSubscribers: number }>
->;
+export type Subscription = User & { totalSubscribers: number };
+
+export type SubscriptionsResponse = ApiResponse<Array<Subscription>>;

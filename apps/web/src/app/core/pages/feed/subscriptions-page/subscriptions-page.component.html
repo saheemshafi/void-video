@@ -1,1 +1,52 @@
 <h1>Subscriptions</h1>
+@if ((session$ | async) !== undefined) {
+  @if (session$ | async; as session) {
+    <app-subscription-list [subscriptions]="subscriptions$" />
+  } @else {
+    <app-fullscreen-info
+      text="Login to see your subscriptions"
+      [iconTemplate]="fullscreenInfoIcon"
+    />
+    <ng-template #fullscreenInfoIcon>
+      <svg
+        class="fullscreen-info-icon"
+        width="636"
+        height="735"
+        viewBox="0 0 636 735"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g filter="url(#filter0_d_0_1)">
+          <rect
+            x="113.777"
+            y="6.78931"
+            width="515.853"
+            height="636.799"
+            rx="61"
+            transform="rotate(6.49375 113.777 6.78931)"
+          />
+          <rect
+            x="114.217"
+            y="7.34265"
+            width="514.853"
+            height="635.799"
+            rx="60.5"
+            transform="rotate(6.49375 114.217 7.34265)"
+            stroke="#878787"
+            stroke-opacity="0.18"
+            data-background
+          />
+        </g>
+        <path
+          d="M457.5 221.667L427.833 251.333M427.833 251.333L472.333 295.833L420.417 347.75L375.917 303.25M427.833 251.333L375.917 303.25M314.952 364.215C322.611 371.772 328.699 380.77 332.867 390.689C337.034 400.609 339.198 411.256 339.234 422.015C339.27 432.775 337.178 443.435 333.077 453.383C328.976 463.33 322.948 472.368 315.339 479.977C307.731 487.585 298.693 493.613 288.746 497.714C278.798 501.815 268.138 503.907 257.378 503.871C246.618 503.835 235.972 501.671 226.052 497.504C216.133 493.336 207.135 487.248 199.578 479.589C184.717 464.202 176.494 443.594 176.68 422.203C176.866 400.812 185.446 380.35 200.572 365.224C215.698 350.098 236.16 341.517 257.551 341.332C278.942 341.146 299.55 349.369 314.937 364.23L314.952 364.215ZM314.952 364.215L375.917 303.25"
+          stroke="white"
+          stroke-opacity="0.38"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          data-foreground
+        />
+      </svg>
+    </ng-template>
+  }
+}

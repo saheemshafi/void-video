@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../../shared/services/auth.service';
 import { LoginRequest } from '../../../shared/interfaces/auth';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-in',
@@ -13,6 +13,7 @@ export class SignInComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
 
   isSubmitting: boolean = false;
 
@@ -31,7 +32,9 @@ export class SignInComponent {
     this.authService.login(<LoginRequest>this.loginForm.value).subscribe({
       next: (response) => {
         this.isSubmitting = false;
-        this.router.navigate(['']);
+        this.router.navigate([
+          this.activatedRoute.snapshot.queryParamMap.get('callback-url') || '/',
+        ]);
       },
       error: ({ error }) => {
         this.isSubmitting = false;

@@ -20,7 +20,12 @@
       @if (session$ | async) {
         <app-user-profile />
       } @else {
-        <a routerLink="/auth" class="button primary">Sign In</a>
+        <a
+          routerLink="/auth"
+          [queryParams]="{ 'callback-url': currentPageUrl$ | async }"
+          class="button primary"
+          >Sign In</a
+        >
         <a routerLink="/auth/sign-up" class="button">Sign Up</a>
       }
     }

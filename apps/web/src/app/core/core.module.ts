@@ -15,6 +15,8 @@ import { HistoryPageComponent } from './pages/feed/history-page/history-page.com
 import { SubscriptionsPageComponent } from './pages/feed/subscriptions-page/subscriptions-page.component';
 import { YouPageComponent } from './pages/feed/you-page/you-page.component';
 import { SidebarSubscriptionListComponent } from './components/sidebar-subscription-list/sidebar-subscription-list.component';
+import { SubscriptionListComponent } from './components/feed/subscription-list/subscription-list.component';
+import { SubscriptionCardComponent } from './components/feed/subscription-card/subscription-card.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +30,8 @@ import { SidebarSubscriptionListComponent } from './components/sidebar-subscript
     ChannelLayoutComponent,
     ChannelHomePageComponent,
     SidebarSubscriptionListComponent,
+    SubscriptionListComponent,
+    SubscriptionCardComponent,
   ],
   imports: [
     CommonModule,

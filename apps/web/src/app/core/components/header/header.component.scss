@@ -3,17 +3,20 @@
 
 :host {
   --search-input-background: #{variables.$clr-snow};
+  --header-background: #{variables.$clr-gray-smooth};
 }
 
 .dark {
   :host {
     --search-input-background: #{variables.$clr-slate-gray};
+    --header-background: #{variables.$clr-gluon-gray};
   }
 }
 
 header {
   padding: variables.$spacing-normal;
   gap: variables.$spacing-normal;
+  background-color: var(--header-background);
   @include mixins.flex-cv;
   justify-content: space-between;
 

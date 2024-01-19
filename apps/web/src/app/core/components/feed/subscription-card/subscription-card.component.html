@@ -1,0 +1,36 @@
+<div class="subscription">
+  <div class="subscription-image">
+    <a
+      [routerLink]="['/c', subscription.username]"
+      [attr.aria-label]="subscription.displayName"
+    >
+      <img
+        class="subscription-avatar"
+        [ngSrc]="subscription.avatar.secure_url"
+        [alt]="subscription.displayName"
+        width="80"
+        height="80"
+      />
+    </a>
+  </div>
+  <div class="subscription-details">
+    <a [routerLink]="['/c', subscription.username]" class="subscription-info">
+      <span>{{ subscription.displayName }}</span>
+      <span class="subscription-meta">
+        <small>&#64;{{ subscription.username }}</small>
+        <i class="bx bxs-circle" aria-hidden></i>
+        <small
+          >{{
+            subscription.totalSubscribers | abbreviateNumber
+          }}
+          subscribers</small
+        >
+      </span>
+    </a>
+  </div>
+  <div>
+    <button class="button ghost">
+      <i class="bx bxs-bell-ring xs"></i> Subscribed
+    </button>
+  </div>
+</div>

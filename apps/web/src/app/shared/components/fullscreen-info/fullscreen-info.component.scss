@@ -1,0 +1,25 @@
+@use '../../../../styles/variables';
+
+:host {
+  height: 100%;
+}
+
+.fullscreen-info {
+  text-align: center;
+  height: inherit;
+
+  display: grid;
+  place-content: center;
+  justify-content: center;
+  text-wrap: balance;
+
+  > div {
+    max-width: 600px;
+
+    .info-heading {
+      font-weight: variables.$fw-semibold;
+      line-height: 1.4;
+      max-width: 300px;
+    }
+  }
+}
