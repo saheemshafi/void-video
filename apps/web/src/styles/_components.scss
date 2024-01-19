@@ -99,9 +99,9 @@ textarea {
 }
 
 .button:is(:focus, :active):not(:disabled) {
-  outline: 2px solid rgba(variables.$clr-snow, 0.2);
+  outline: 2px solid rgba(variables.$clr-dusty-gray, 0.4);
   outline-offset: 1px;
-  border-color: variables.$clr-snow;
+  border-color: rgba(variables.$clr-dusty-gray, 0.2);
 }
 
 .button.primary {
@@ -119,12 +119,12 @@ textarea {
 .button.ghost {
   background-color: transparent;
   color: variables.$clr-dusty-gray;
+  border: 1px solid rgba(variables.$clr-dusty-gray, 0.2);
 }
 
-.button.ghost:hover:not(:disabled) {
-  background-color: variables.$clr-gray-smooth-dark;
+.button.ghost:is(:hover, :active):not(:disabled) {
+  background-color: variables.$clr-gray-smooth;
 }
-
 
 .button.icon {
   min-width: initial !important;
@@ -140,6 +140,10 @@ i.bx {
 
 i.bx.sm {
   font-size: variables.$fs-icon-sm;
+}
+
+i.bx.xs {
+  font-size: variables.$fs-icon-xs;
 }
 
 .alert {
@@ -174,5 +178,32 @@ i.bx.sm {
     opacity: 1;
     transform: translateX(0);
     max-height: 1000px;
+  }
+}
+
+.fullscreen-info-icon {
+  --fullscreen-icon-bg: #{variables.$clr-snow};
+  --fullscreen-icon-clr: #{variables.$clr-dark-void};
+  max-width: 100%;
+  width: 200px;
+  height: fit-content;
+
+  [data-background] {
+    fill: var(--fullscreen-icon-bg);
+  }
+
+  [data-foreground] {
+    stroke: var(--fullscreen-icon-clr);
+  }
+}
+
+.dark {
+  .button.ghost:is(:hover, :active):not(:disabled) {
+    background-color: variables.$clr-gray-smooth-dark;
+  }
+
+  .fullscreen-info-icon {
+    --fullscreen-icon-bg: #{variables.$clr-gray-smooth-dark};
+    --fullscreen-icon-clr: #{variables.$clr-snow};
   }
 }
