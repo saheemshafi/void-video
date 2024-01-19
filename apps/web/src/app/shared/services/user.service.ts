@@ -2,8 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { ApiResponse } from '../interfaces/api-response';
-import { SubscriptionsResponse } from '../interfaces/user';
-import { Observable, map, of, shareReplay, switchMap } from 'rxjs';
+import {
+  SubscriptionsResponse,
+  WatchHistoryResponse,
+} from '../interfaces/user';
+import { Observable, map, of, share, shareReplay, switchMap } from 'rxjs';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -25,6 +28,22 @@ export class UserService {
             )
             .pipe(map((response) => response.data))
         : of([])
+    ),
+    shareReplay(1)
+  );
+
+  watchHistory$ = this.authService.session$.pipe(
+    switchMap((session) =>
+      session
+        ? this.http
+            .get<WatchHistoryResponse>(
+              `${environment.serverUrl}/users/watch-history`,
+              {
+                withCredentials: true,
+              }
+            )
+            .pipe(map((response) => response.data))
+        : of(null)
     ),
     shareReplay(1)
   );
