@@ -37,6 +37,7 @@ import {
   resetPasswordSchema,
   revalidateSessionSchema,
 } from '../validations/user.validation';
+import fs from 'fs/promises';
 
 const createAccount = asyncHandler(async (req: Request, res: Response) => {
   const {
@@ -44,19 +45,16 @@ const createAccount = asyncHandler(async (req: Request, res: Response) => {
     files: { avatar },
   } = validateRequest(req, createAccountSchema);
 
+  const tempAvatarPath = avatar[0]?.path ?? '';
+
   const userExists = await User.findOne({ $or: [{ username }, { email }] });
 
   if (userExists) {
+    await fs.unlink(tempAvatarPath);
     throw new ApiError(
       STATUS_CODES.CONFLICT,
       'username or email already exists.'
     );
-  }
-
-  const tempAvatarPath = avatar[0]?.path;
-
-  if (!tempAvatarPath) {
-    throw new ApiError(STATUS_CODES.BAD_REQUEST, 'Avatar is required.');
   }
 
   const avatarResponse = await uploadFileToCloudinary(tempAvatarPath, {
