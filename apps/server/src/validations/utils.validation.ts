@@ -7,9 +7,8 @@ export const paginationSchema = z.object({
   page: z.coerce.number().gte(0).default(1),
 });
 
-export const objectIdSchema = (modelName: Models) => {
-  return z.string().refine((modelId) => isValidObjectId(modelId), {
+export const objectIdSchema = (modelName: Models) =>
+  z.string().refine((modelId) => isValidObjectId(modelId), {
     path: [modelName],
     message: `${modelName} id is not valid.`,
   });
-};
