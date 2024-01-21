@@ -58,10 +58,13 @@ export const videoSortOptions = z
   .default('title.asc');
 
 export const getVideosSchema = z.object({
-  query: paginationSchema.extend({
-    sort: videoSortOptions,
-    query: z.string().default(''),
-  }),
+  query: z
+    .object({
+      sort: videoSortOptions,
+      query: z.string().default(''),
+      userId: objectIdSchema('User').optional()
+    })
+    .merge(paginationSchema),
 });
 
 export const addCommentToVideoSchema = z.object({

@@ -43,9 +43,7 @@ export const $lookupVideoDetails = (lookupOptions?: ILookupOptions) => ({
   },
 });
 
-export const $lookupLikes = (
-  lookupOptions?: ILookupOptions
-): PipelineStage => ({
+export const $lookupLikes = (lookupOptions?: ILookupOptions) => ({
   $lookup: {
     from: 'likes',
     localField: lookupOptions?.localField || '_id',
