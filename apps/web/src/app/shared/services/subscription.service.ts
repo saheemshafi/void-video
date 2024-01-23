@@ -1,17 +1,15 @@
+import { isPlatformServer } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID, inject } from '@angular/core';
-import { AuthService } from './auth.service';
-import { isPlatformServer } from '@angular/common';
+import { NEVER, catchError, map, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { SubscriptionStatusResponse } from '../interfaces/api-response';
-import { NEVER, catchError, map, of, startWith } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SubscriptionService {
   private http = inject(HttpClient);
-  private authService = inject(AuthService);
 
   constructor(@Inject(PLATFORM_ID) private _platformId: Object) {}
 
