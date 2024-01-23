@@ -373,6 +373,9 @@ const getVideos = asyncHandler(async (req, res) => {
       },
     },
     $lookupUserDetails(),
+    {
+      $unwind: '$owner',
+    },
   ]);
   const { docs, ...paginationData } = await Video.aggregatePaginate(
     aggregation,
