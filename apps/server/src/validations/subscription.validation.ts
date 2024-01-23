@@ -6,3 +6,9 @@ export const toggleSubscriptionSchema = z.object({
     channelId: userIdSchema,
   }),
 });
+
+export const getSubscriptionStatusSchema = z.object({
+  params: z.object({
+    channelId: userIdSchema,
+  }),
+});

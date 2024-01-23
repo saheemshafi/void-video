@@ -6,7 +6,10 @@ import { validateRequest } from '../utils';
 import ApiError from '../utils/api-error';
 import ApiResponse from '../utils/api-response';
 import asyncHandler from '../utils/async-handler';
-import { toggleSubscriptionSchema } from '../validations/subscription.validation';
+import {
+  getSubscriptionStatusSchema,
+  toggleSubscriptionSchema,
+} from '../validations/subscription.validation';
 
 const toggleSubscription = asyncHandler(async (req, res) => {
   const {
@@ -38,15 +41,11 @@ const toggleSubscription = asyncHandler(async (req, res) => {
       );
     }
 
-    res
-      .status(STATUS_CODES.OK)
-      .json(
-        new ApiResponse(
-          STATUS_CODES.OK,
-          'Subscription removed.',
-          subscriptionExists
-        )
-      );
+    res.status(STATUS_CODES.OK).json(
+      new ApiResponse(STATUS_CODES.OK, 'Subscription removed.', {
+        isSubscribed: false,
+      })
+    );
   } else {
     const subscription = await Subscription.create({
       channel: channel._id,
@@ -63,9 +62,28 @@ const toggleSubscription = asyncHandler(async (req, res) => {
     res
       .status(STATUS_CODES.OK)
       .json(
-        new ApiResponse(STATUS_CODES.OK, 'Subscription added.', subscription)
+        new ApiResponse(STATUS_CODES.OK, 'Subscription added.', {
+          isSubscribed: true,
+        })
       );
   }
 });
 
-export { toggleSubscription };
+const getSubscriptionStatus = asyncHandler(async (req, res) => {
+  const {
+    params: { channelId },
+  } = validateRequest(req, getSubscriptionStatusSchema);
+
+  const subscriptionExists = await Subscription.findOne({
+    subscriber: req.user?._id,
+    channel: channelId,
+  });
+
+  res.status(STATUS_CODES.OK).json(
+    new ApiResponse(STATUS_CODES.OK, 'Subscription status retrieved.', {
+      isSubscribed: subscriptionExists ? true : false,
+    })
+  );
+});
+
+export { toggleSubscription, getSubscriptionStatus };
