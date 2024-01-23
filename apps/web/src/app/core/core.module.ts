@@ -17,6 +17,8 @@ import { YouPageComponent } from './pages/feed/you-page/you-page.component';
 import { SidebarSubscriptionListComponent } from './components/sidebar-subscription-list/sidebar-subscription-list.component';
 import { SubscriptionListComponent } from './components/feed/subscription-list/subscription-list.component';
 import { SubscriptionCardComponent } from './components/feed/subscription-card/subscription-card.component';
+import { VideoCardComponent } from './components/video-card/video-card.component';
+import { WatchComponent } from './pages/watch/watch.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,8 @@ import { SubscriptionCardComponent } from './components/feed/subscription-card/s
     SidebarSubscriptionListComponent,
     SubscriptionListComponent,
     SubscriptionCardComponent,
+    VideoCardComponent,
+    WatchComponent,
   ],
   imports: [
     CommonModule,

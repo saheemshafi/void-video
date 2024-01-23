@@ -7,6 +7,7 @@ import { HistoryPageComponent } from './pages/feed/history-page/history-page.com
 import { SubscriptionsPageComponent } from './pages/feed/subscriptions-page/subscriptions-page.component';
 import { YouPageComponent } from './pages/feed/you-page/you-page.component';
 import { HomeComponent } from './pages/home/home.component';
+import { WatchComponent } from './pages/watch/watch.component';
 
 const routes: Routes = [
   {
@@ -38,6 +39,10 @@ const routes: Routes = [
       {
         path: 'feed/history',
         component: HistoryPageComponent,
+      },
+      {
+        path: 'watch/:videoId',
+        component: WatchComponent,
       },
     ],
   },
