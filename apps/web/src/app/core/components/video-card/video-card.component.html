@@ -2,7 +2,9 @@
   <div class="thumbnail-container" (click)="navigateToVideo()">
     <img
       class="thumbnail"
-      [src]="video.thumbnail.secure_url"
+      [ngSrc]="video.thumbnail.public_id"
+      width="600"
+      height="338"
       [alt]="video.title"
     />
     @if (video.source.duration) {
@@ -18,7 +20,7 @@
         [attr.aria-label]="video.owner.username"
         [title]="video.owner.displayName"
       >
-        <img [src]="video.owner.avatar.secure_url" />
+        <img [ngSrc]="video.owner.avatar.public_id" width="80" height="80"/>
       </a>
     </div>
     <div>

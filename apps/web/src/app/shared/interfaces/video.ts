@@ -5,7 +5,7 @@ export interface Video {
   _id: string;
   title: string;
   description: string;
-  owner: User;
+  owner: User & { isSubscribed: boolean };
   source: IFile;
   thumbnail: IFile;
   views: number;

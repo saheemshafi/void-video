@@ -2,7 +2,7 @@
   <div class="owner">
     <div>
       <a class="owner-avatar" [routerLink]="['/c', video.owner.username]">
-        <img [ngSrc]="video.owner.avatar.secure_url" width="40" height="40" />
+        <img [ngSrc]="video.owner.avatar.public_id" width="40" height="40" />
       </a>
     </div>
     <div class="owner-info">
@@ -14,8 +14,8 @@
       </p>
     </div>
     <div>
-      <button class="button ghost">
-        <i class="bx bxs-bell-ring xs"></i> Subscribed
+      <button class="button" [ngClass]="{ ghost: video.owner.isSubscribed }">
+        <i class="bx bxs-bell-ring xs"></i> Unsubscribe
       </button>
     </div>
   </div>

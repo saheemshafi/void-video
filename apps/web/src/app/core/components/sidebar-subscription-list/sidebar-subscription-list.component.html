@@ -11,8 +11,10 @@
             >
               <img
                 class="avatar"
-                [src]="channel.avatar.secure_url"
+                [ngSrc]="channel.avatar.public_id"
                 [alt]="channel.displayName"
+                width="80"
+                height="80"
               />
               <span>{{ channel.displayName }}</span>
             </a>

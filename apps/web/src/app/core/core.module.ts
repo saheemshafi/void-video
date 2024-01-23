@@ -1,4 +1,7 @@
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import {
+  CommonModule,
+  NgOptimizedImage
+} from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { HeaderComponent } from './components/header/header.component';
@@ -48,5 +51,6 @@ import { WatchComponent } from './pages/watch/watch.component';
     SharedModule,
     CdkMenuModule,
   ],
+  providers: [],
 })
 export class CoreModule {}
