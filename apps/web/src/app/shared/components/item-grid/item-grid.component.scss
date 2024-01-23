@@ -1,0 +1,22 @@
+@use '../../../../styles/variables';
+@use '../../../../styles/mixins';
+
+.item-grid {
+  gap: variables.$spacing-normal variables.$spacing-sm;
+  align-content: start;
+  height: fit-content;
+  @include mixins.even-columns(1);
+}
+
+@media screen and (min-width: variables.$breakpoint-md) {
+  .item-grid {
+    @include mixins.even-columns(2);
+  }
+}
+
+@media screen and (min-width: variables.$breakpoint-xl) {
+  .item-grid {
+    @include mixins.even-columns(3);
+  }
+}
+
