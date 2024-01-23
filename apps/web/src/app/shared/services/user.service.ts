@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
+import { Observable, map, of, shareReplay, switchMap } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { ApiResponse } from '../interfaces/api-response';
 import {
   SubscriptionsResponse,
+  VideosResponse,
   WatchHistoryResponse,
-} from '../interfaces/user';
-import { Observable, map, of, share, shareReplay, switchMap } from 'rxjs';
+} from '../interfaces/api-response';
 import { AuthService } from './auth.service';
 
 @Injectable({

@@ -1,5 +1,5 @@
 import { IFile } from './file';
-import { User } from './user';
+import { User } from './api-response';
 
 export interface Video {
   _id: string;
