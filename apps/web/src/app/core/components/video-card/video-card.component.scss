@@ -1,0 +1,98 @@
+@use '../../../../styles/variables';
+@use '../../../../styles/mixins';
+
+:host {
+  --card-focused-background: #e8e8e85f;
+  --card-focused-border: #e5e5e5;
+  --link-hovered: #{variables.$clr-slate-gray};
+}
+
+.dark {
+  :host {
+    --card-focused-background: #{variables.$clr-gray-smooth-dark};
+    --card-focused-border: #{variables.$clr-slate-gray};
+    --link-hovered: #{variables.$clr-snow};
+  }
+}
+
+.video-card {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  padding: calc(variables.$spacing-sm / 2);
+  border-radius: calc(variables.$radius-round / 2);
+  transition:
+    background-color 100ms ease-out,
+    border-color 20ms ease-in;
+  border: 1px solid transparent;
+
+  &:focus-within {
+    background-color: var(--card-focused-background);
+    border-color: var(--card-focused-border);
+  }
+
+  .thumbnail-container {
+    position: relative;
+    cursor: pointer;
+
+    .video-views {
+      position: absolute;
+      right: variables.$spacing-sm;
+      bottom: variables.$spacing-sm;
+      background-color: rgba(variables.$clr-dark-void, 0.8);
+      font-size: variables.$fs-xs;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-weight: variables.$fw-semibold;
+      color: variables.$clr-snow;
+    }
+
+    > .thumbnail {
+      object-fit: cover;
+      aspect-ratio: 16/9;
+      margin-bottom: variables.$spacing-normal;
+      border-radius: calc(variables.$radius-round / 2);
+    }
+  }
+  > .video-card-info {
+    display: flex;
+    gap: variables.$spacing-sm;
+    align-items: flex-start;
+
+    .video-card-img {
+      width: 2.25rem;
+      aspect-ratio: 1/1;
+
+      a {
+        border-radius: variables.$radius-rounded;
+        > img {
+          border-radius: inherit;
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+
+    .video-title {
+      font-weight: variables.$fw-semibold;
+    }
+
+    .video-extra-info {
+      font-size: variables.$fs-xs;
+      @include mixins.flex-cv;
+      gap: variables.$spacing-sm;
+      color: variables.$clr-dusty-gray;
+      margin-top: calc(variables.$spacing-sm/2);
+
+      > :first-child {
+        font-weight: variables.$fw-semibold;
+
+        &:hover {
+          color: var(--link-hovered);
+        }
+      }
+    }
+  }
+}

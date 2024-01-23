@@ -8,23 +8,20 @@ import { UserProfileComponent } from './components/profile-menu/user-profile/use
 import { SvgLoaderComponent } from './components/svg-loader/svg-loader.component';
 import { AbbreviateNumberPipe } from './pipes/abbreviate-number.pipe';
 import { FullscreenInfoComponent } from './components/fullscreen-info/fullscreen-info.component';
+import { ItemGridComponent } from './components/item-grid/item-grid.component';
+
+const exports = [
+  SvgLoaderComponent,
+  FieldErrorComponent,
+  UserProfileComponent,
+  AbbreviateNumberPipe,
+  FullscreenInfoComponent,
+  ItemGridComponent,
+];
 
 @NgModule({
-  declarations: [
-    SvgLoaderComponent,
-    FieldErrorComponent,
-    UserProfileComponent,
-    AppearanceMenuComponent,
-    AbbreviateNumberPipe,
-    FullscreenInfoComponent,
-  ],
+  declarations: [AppearanceMenuComponent, ItemGridComponent, ...exports],
   imports: [CommonModule, CdkMenuModule, RouterModule],
-  exports: [
-    SvgLoaderComponent,
-    FieldErrorComponent,
-    UserProfileComponent,
-    AbbreviateNumberPipe,
-    FullscreenInfoComponent,
-  ],
+  exports: exports,
 })
 export class SharedModule {}

@@ -1,1 +1,6 @@
 <h1>Watch History</h1>
+<app-item-grid>
+  @for (video of watchHistory$ | async; track video._id) {
+    <app-video-card [video]="video" />
+  }
+</app-item-grid>

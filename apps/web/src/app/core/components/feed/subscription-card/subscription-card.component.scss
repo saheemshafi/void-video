@@ -29,10 +29,10 @@
   &:hover {
     background-color: var(--card-hovered-background);
     border: 1px solid var(--card-border);
-    // box-shadow: var(--card-shadow);
   }
 
   .subscription-image {
+    flex-shrink: 0;
     a {
       display: block;
     }
