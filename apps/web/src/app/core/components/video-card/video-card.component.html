@@ -1,0 +1,36 @@
+<div class="video-card">
+  <div class="thumbnail-container" (click)="navigateToVideo()">
+    <img
+      class="thumbnail"
+      [src]="video.thumbnail.secure_url"
+      [alt]="video.title"
+    />
+    @if (video.source.duration) {
+      <span class="video-views" aria-label="Total video views">{{
+        video.source.duration / 60 | number: '1.2-2'
+      }}</span>
+    }
+  </div>
+  <div class="video-card-info">
+    <div class="video-card-img">
+      <a
+        [routerLink]="['/c', video.owner.username]"
+        [attr.aria-label]="video.owner.username"
+        [title]="video.owner.displayName"
+      >
+        <img [src]="video.owner.avatar.secure_url" />
+      </a>
+    </div>
+    <div>
+      <a [routerLink]="['/watch', video._id]" class="video-title">{{
+        video.title
+      }}</a>
+      <div class="video-extra-info">
+        <a [routerLink]="['/c', video.owner.username]"
+          >&#64;{{ video.owner.username }}</a
+        >
+        <span>{{ video.views | abbreviateNumber }} views</span>
+      </div>
+    </div>
+  </div>
+</div>
