@@ -8,6 +8,8 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ThemeService } from './shared/services/theme.service';
+import { provideCloudinaryLoader } from '@angular/common';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [AppComponent],
@@ -15,6 +17,7 @@ import { ThemeService } from './shared/services/theme.service';
   providers: [
     provideClientHydration(),
     provideHttpClient(withFetch()),
+    provideCloudinaryLoader(environment.cloudinaryUrl),
     {
       provide: APP_INITIALIZER,
       deps: [ThemeService],
