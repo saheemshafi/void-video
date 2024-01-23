@@ -1,0 +1,22 @@
+<div class="channel-bar">
+  <div class="owner">
+    <div>
+      <a class="owner-avatar" [routerLink]="['/c', video.owner.username]">
+        <img [ngSrc]="video.owner.avatar.secure_url" width="40" height="40" />
+      </a>
+    </div>
+    <div class="owner-info">
+      <a [routerLink]="['/c', video.owner.username]" class="owner-name">{{
+        video.owner.displayName
+      }}</a>
+      <p class="owner-subscribers">
+        {{ 1453032 | abbreviateNumber }} subscribers
+      </p>
+    </div>
+    <div>
+      <button class="button ghost">
+        <i class="bx bxs-bell-ring xs"></i> Subscribed
+      </button>
+    </div>
+  </div>
+</div>
