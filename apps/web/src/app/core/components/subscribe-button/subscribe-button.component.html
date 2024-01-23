@@ -1,0 +1,13 @@
+@if (subscriptionStatus$ | async; as status) {
+  <button
+    class="button"
+    [ngClass]="{ ghost: status.isSubscribed }"
+    (click)="toggleSubscription()"
+  >
+    @if (status.isSubscribed) {
+      <i class="bx bxs-bell-ring xs"></i> Unsubscribe
+    } @else {
+      <i class="bx bx-bell xs"></i> Subscribe
+    }
+  </button>
+}

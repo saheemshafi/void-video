@@ -14,9 +14,7 @@
       </p>
     </div>
     <div>
-      <button class="button" [ngClass]="{ ghost: video.owner.isSubscribed }">
-        <i class="bx bxs-bell-ring xs"></i> Unsubscribe
-      </button>
+      <app-subscribe-button [channelId]="video.owner._id" />
     </div>
   </div>
 </div>

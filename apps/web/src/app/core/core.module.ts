@@ -24,6 +24,7 @@ import { HistoryPageComponent } from './pages/feed/history-page/history-page.com
 import { SubscriptionsPageComponent } from './pages/feed/subscriptions-page/subscriptions-page.component';
 import { YouPageComponent } from './pages/feed/you-page/you-page.component';
 import { WatchComponent } from './pages/watch/watch.component';
+import { SubscribeButtonComponent } from './components/subscribe-button/subscribe-button.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { WatchComponent } from './pages/watch/watch.component';
     WatchComponent,
     VideoPlayerComponent,
     WatchPageChannelBarComponent,
+    SubscribeButtonComponent,
   ],
   imports: [
     CommonModule,

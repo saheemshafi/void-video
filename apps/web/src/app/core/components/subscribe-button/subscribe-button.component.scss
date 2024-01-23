@@ -1,0 +1,6 @@
+@use '../../../../styles/variables';
+
+button {
+  gap: variables.$spacing-sm;
+  margin-left: variables.$spacing-normal;
+}
