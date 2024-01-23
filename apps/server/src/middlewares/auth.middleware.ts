@@ -12,7 +12,7 @@ export const authorize =
         req.signedCookies['token'] ||
         req.header('Authorization')?.replace('Bearer ', '');
 
-      if (!ignoreUnauthorized && !token) {
+      if (!token) {
         throw new ApiError(STATUS_CODES.UNAUTHORIZED, 'Unauthorized.');
       }
 
@@ -25,13 +25,14 @@ export const authorize =
         typeof verifiedToken !== 'string' && verifiedToken.id
       );
 
-      if (!ignoreUnauthorized && !user) {
+      if (!user) {
         throw new ApiError(STATUS_CODES.UNAUTHORIZED, 'Unauthorized.');
       }
 
       req.user = user || undefined;
       next();
     } catch (error) {
+      if (ignoreUnauthorized) return next();
       next(
         new ApiError(
           STATUS_CODES.UNAUTHORIZED,
