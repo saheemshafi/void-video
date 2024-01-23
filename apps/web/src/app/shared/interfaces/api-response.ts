@@ -17,6 +17,8 @@ export type SubscriptionsResponse = ApiResponse<Array<Subscription>>;
 
 export type WatchHistoryResponse = ApiResponse<Array<Video>>;
 
+export type SubscriptionStatusResponse = ApiResponse<{ isSubscribed: boolean }>;
+
 export type VideoResponse = ApiResponse<Video>;
 
 export type VideosResponse = ApiResponse<Paginated<Array<Video>, 'videos'>>;

@@ -13,7 +13,7 @@ export class UserProfileComponent {
 
   logout(): void {
     this.authService.logout().subscribe(() => {
-      // TODO: add a toast
+      location.reload();
     });
   }
 }

@@ -1,5 +1,5 @@
 import { CdkMenuModule } from '@angular/cdk/menu';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FieldErrorComponent } from './components/field-error/field-error.component';
@@ -21,7 +21,7 @@ const exports = [
 
 @NgModule({
   declarations: [AppearanceMenuComponent, ItemGridComponent, ...exports],
-  imports: [CommonModule, CdkMenuModule, RouterModule],
+  imports: [CommonModule, CdkMenuModule, RouterModule, NgOptimizedImage],
   exports: exports,
 })
 export class SharedModule {}

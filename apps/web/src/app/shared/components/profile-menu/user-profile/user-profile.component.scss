@@ -4,6 +4,11 @@
   border: none;
 }
 
+#profile-menu > img {
+  width: 100%;
+  height: 100%;
+}
+
 #profile-menu[aria-expanded='true'] {
   outline: 3px solid rgba(variables.$clr-dusty-gray, 0.2);
   outline-offset: 1px;
@@ -16,6 +21,11 @@
   padding: variables.$spacing-normal;
   padding-bottom: variables.$spacing-sm;
   font-weight: variables.$fw-semibold;
+
+  .avatar{
+    width: 40px;
+    height: 40px;
+  }
 
   p {
     margin: 0;

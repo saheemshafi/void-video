@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
+import { map, shareReplay } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { VideoResponse, VideosResponse } from '../interfaces/api-response';
-import { BehaviorSubject, Subject, map, shareReplay, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +19,9 @@ export class VideoService {
 
   getVideo(videoId: string) {
     return this.http
-      .get<VideoResponse>(`${environment.serverUrl}/videos/${videoId}`)
+      .get<VideoResponse>(`${environment.serverUrl}/videos/${videoId}`, {
+        withCredentials: true,
+      })
       .pipe(map((response) => response.data));
   }
 }
