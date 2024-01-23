@@ -140,7 +140,52 @@ const getVideo = asyncHandler(async (req, res) => {
         _id: new Types.ObjectId(videoId),
       },
     },
-    $lookupUserDetails(),
+    {
+      $lookup: {
+        ...$lookupUserDetails().$lookup,
+        pipeline: [
+          {
+            $lookup: {
+              from: 'subscriptions',
+              localField: '_id',
+              foreignField: 'channel',
+              as: 'subscriptionDetails',
+              pipeline: [
+                {
+                  $match: {
+                    subscriber: req.user?._id,
+                  },
+                },
+              ],
+            },
+          },
+          {
+            $addFields: {
+              isSubscribed: {
+                $cond: {
+                  if: {
+                    $gt: [
+                      {
+                        $size: '$subscriptionDetails',
+                      },
+                      0,
+                    ],
+                  },
+                  then: true,
+                  else: false,
+                },
+              },
+            },
+          },
+          {
+            $project: {
+              ...$lookupUserDetails().$lookup.pipeline[0]?.$project,
+              isSubscribed: 1,
+            },
+          },
+        ],
+      },
+    },
     $lookupLikes(),
     {
       $addFields: {
