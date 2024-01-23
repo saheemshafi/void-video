@@ -1,1 +1,21 @@
-<p>watch works!</p>
+@if (video$ | async; as video) {
+  <section class="watch-layout">
+    <div class="player">
+      <app-video-player [videoUrl]="video.source.secure_url" />
+      <div>
+        <h1 class="video-title">{{ video.title }}</h1>
+        <app-watch-page-channel-bar [video]="video" />
+        <div class="video-description">
+          <div class="video-info">
+            <div>
+              <span>{{ video.views | abbreviateNumber }} views</span>
+              <span>Uploaded {{ video.createdAt | date }}</span>
+            </div>
+          </div>
+          {{ video.description }}
+        </div>
+      </div>
+    </div>
+    <div></div>
+  </section>
+}

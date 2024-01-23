@@ -1,0 +1,49 @@
+@use '../../../../styles/variables';
+@use '../../../../styles/mixins';
+
+:root {
+  --shadow: #{variables.$shadow-smooth};
+}
+
+.dark {
+  :root {
+    --shadow: #{variables.$shadow-smooth-dark};
+  }
+}
+.watch-layout {
+  display: flex;
+
+  .player {
+    width: 100%;
+    max-width: 656px;
+  }
+
+  .video-title {
+    font-size: calc(variables.$fs-normal * 1.2);
+    margin-block: variables.$spacing-normal;
+  }
+}
+
+.video-description {
+  margin-block: variables.$spacing-normal;
+  padding: variables.$spacing-normal;
+  border-radius: calc(variables.$radius-round / 1.5);
+  background-color: rgba(variables.$clr-dusty-gray, 0.05);
+  font-size: variables.$fs-sm;
+  border: 1px solid rgba(variables.$clr-dusty-gray, 0.1);
+  line-height: 1.5;
+  box-shadow: var(--shadow);
+
+  .video-info {
+    @include mixins.flex-cv;
+    justify-content: space-between;
+    font-weight: variables.$fw-semibold;
+    gap: variables.$spacing-sm;
+
+    margin-bottom: variables.$spacing-sm;
+    > div {
+      display: inherit;
+      gap: inherit;
+    }
+  }
+}
