@@ -18,7 +18,7 @@ const videoRouter = Router();
 videoRouter
   .route('/')
   .post(
-    authorize,
+    authorize(),
     upload.fields([
       {
         name: 'thumbnail',
@@ -32,19 +32,19 @@ videoRouter
 
 videoRouter
   .route('/:videoId')
-  .get(getVideo)
-  .patch(authorize, updateVideo)
-  .delete(authorize, deleteVideo);
+  .get(authorize(true), getVideo)
+  .patch(authorize(), updateVideo)
+  .delete(authorize(), deleteVideo);
 
 videoRouter
   .route('/:videoId/change-thumbnail')
-  .patch(authorize, changeVideoThumbnail);
+  .patch(authorize(), changeVideoThumbnail);
 
 videoRouter
   .route('/:videoId/comments')
   .get(getVideoComments)
-  .post(authorize, addCommentToVideo);
+  .post(authorize(), addCommentToVideo);
 
-videoRouter.route('/:videoId/toggle-like').get(authorize, toggleVideoLike);
+videoRouter.route('/:videoId/toggle-like').get(authorize(), toggleVideoLike);
 
 export default videoRouter;

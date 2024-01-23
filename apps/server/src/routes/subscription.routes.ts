@@ -4,7 +4,7 @@ import { toggleSubscription } from '../controllers/subscription.controller';
 
 const subscriptionRouter = Router();
 
-subscriptionRouter.use(authorize);
+subscriptionRouter.use(authorize());
 
 subscriptionRouter.route('/channels/:channelId').get(toggleSubscription);
 

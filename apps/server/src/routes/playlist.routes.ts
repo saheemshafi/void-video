@@ -16,22 +16,22 @@ const playlistRouter = Router();
 
 playlistRouter
   .route('/')
-  .post(authorize, upload.single('thumbnail'), createPlaylist)
+  .post(authorize(), upload.single('thumbnail'), createPlaylist)
   .get(getPlaylists);
 
 playlistRouter
   .route('/:playlistId')
   .get(getPlaylist)
-  .patch(authorize, updatePlaylist)
-  .delete(authorize, deletePlaylist);
+  .patch(authorize(), updatePlaylist)
+  .delete(authorize(), deletePlaylist);
 
 playlistRouter
   .route('/:playlistId/change-thumbnail')
-  .patch(authorize, upload.single('thumbnail'), changePlaylistThumbnail);
+  .patch(authorize(), upload.single('thumbnail'), changePlaylistThumbnail);
 
 playlistRouter
   .route('/:playlistId/:videoId')
-  .post(authorize, addVideoToPlaylist)
-  .delete(authorize, removeVideoFromPlaylist);
+  .post(authorize(), addVideoToPlaylist)
+  .delete(authorize(), removeVideoFromPlaylist);
 
 export default playlistRouter;

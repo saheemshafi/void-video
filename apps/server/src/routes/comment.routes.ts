@@ -10,11 +10,11 @@ const commentRouter = Router();
 
 commentRouter
   .route('/:commentId/toggle-like')
-  .get(authorize, toggleCommentLike);
+  .get(authorize(), toggleCommentLike);
 
 commentRouter
   .route('/:commentId')
   .patch(updateComment)
-  .delete(authorize, deleteComment);
+  .delete(authorize(), deleteComment);
 
 export default commentRouter;
