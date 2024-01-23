@@ -28,8 +28,7 @@ export class UserService {
             )
             .pipe(map((response) => response.data))
         : of([])
-    ),
-    shareReplay(1)
+    )
   );
 
   watchHistory$ = this.authService.session$.pipe(
