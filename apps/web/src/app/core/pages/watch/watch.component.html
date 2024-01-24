@@ -34,6 +34,11 @@
               height="84.5"
               [alt]="recommendation.title"
             />
+            @if (recommendation.source.duration) {
+              <span class="video-duration" aria-label="Video duration">{{
+                recommendation.source.duration / 60 | number: '1.2-2'
+              }}</span>
+            }
           </a>
           <div>
             <a

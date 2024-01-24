@@ -71,11 +71,24 @@
       .recommendation-img {
         border-radius: calc(variables.$radius-round / 2);
         flex-shrink: 0;
+        position: relative;
 
         > img {
           aspect-ratio: 16 / 9;
           object-fit: cover;
           border-radius: inherit;
+        }
+
+        > span.video-duration {
+          position: absolute;
+          right: calc(variables.$spacing-sm / 2);
+          bottom: calc(variables.$spacing-sm / 2);
+          background-color: rgba(variables.$clr-dark-void, 0.8);
+          font-size: variables.$fs-xs;
+          padding: 1px 4px;
+          border-radius: 3px;
+          font-weight: variables.$fw-semibold;
+          color: variables.$clr-snow;
         }
       }
 
@@ -104,8 +117,8 @@
   }
 }
 
-@media screen and (max-width:variables.$breakpoint-lg) {
-  .watch-layout{
+@media screen and (max-width: variables.$breakpoint-lg) {
+  .watch-layout {
     display: grid;
   }
 }
