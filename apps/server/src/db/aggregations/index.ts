@@ -1,4 +1,3 @@
-import { PipelineStage } from 'mongoose';
 
 type ILookupOptions = {
   localField?: string;
@@ -52,9 +51,7 @@ export const $lookupLikes = (lookupOptions?: ILookupOptions) => ({
   },
 });
 
-export const $lookupSubscriptions = (
-  lookupOptions?: ILookupOptions
-): PipelineStage => ({
+export const $lookupSubscriptions = (lookupOptions?: ILookupOptions) => ({
   $lookup: {
     from: 'subscriptions',
     localField: lookupOptions?.localField || '_id',

@@ -25,7 +25,11 @@ import {
 } from '../validations/video.validation';
 import { Split } from '../types/utils.types';
 import { VideoSortOptions } from '../types/validation.types';
-import { $lookupLikes, $lookupUserDetails } from '../db/aggregations';
+import {
+  $lookupLikes,
+  $lookupSubscriptions,
+  $lookupUserDetails,
+} from '../db/aggregations';
 
 const uploadVideo = asyncHandler(async (req, res) => {
   const {
@@ -159,6 +163,7 @@ const getVideo = asyncHandler(async (req, res) => {
               ],
             },
           },
+          $lookupSubscriptions(),
           {
             $addFields: {
               isSubscribed: {
@@ -175,12 +180,16 @@ const getVideo = asyncHandler(async (req, res) => {
                   else: false,
                 },
               },
+              totalSubscribers: {
+                $size: '$subscribers',
+              },
             },
           },
           {
             $project: {
               ...$lookupUserDetails().$lookup.pipeline[0]?.$project,
               isSubscribed: 1,
+              totalSubscribers: 1,
             },
           },
         ],
