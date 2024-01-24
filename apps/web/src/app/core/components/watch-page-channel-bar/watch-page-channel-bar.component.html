@@ -14,7 +14,10 @@
       </p>
     </div>
     <div>
-      <app-subscribe-button [channelId]="video.owner._id" />
+      <app-subscribe-button
+        [channelId]="video.owner._id"
+        [isSubscribed]="video.owner.isSubscribed"
+      />
     </div>
   </div>
 </div>
