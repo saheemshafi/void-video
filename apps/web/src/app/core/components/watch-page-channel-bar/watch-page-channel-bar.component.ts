@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Video } from '../../../shared/interfaces/video';
+import { VideoWithSubscriptionInfo } from '../../../shared/interfaces/api-response';
 
 @Component({
   selector: 'app-watch-page-channel-bar',
@@ -7,5 +8,5 @@ import { Video } from '../../../shared/interfaces/video';
   styleUrl: './watch-page-channel-bar.component.scss',
 })
 export class WatchPageChannelBarComponent {
-  @Input() video!: Video;
+  @Input() video!: VideoWithSubscriptionInfo;
 }

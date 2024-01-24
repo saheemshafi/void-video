@@ -29,8 +29,9 @@
     </a>
   </div>
   <div>
-    <button class="button ghost">
-      <i class="bx bxs-bell-ring xs"></i> Subscribed
-    </button>
+    <app-subscribe-button
+      [channelId]="subscription._id"
+      [isSubscribed]="true"
+    />
   </div>
 </div>

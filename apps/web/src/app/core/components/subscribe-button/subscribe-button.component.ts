@@ -1,21 +1,29 @@
-import { Component, Input, inject } from '@angular/core';
-import { Observable, of, take } from 'rxjs';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+} from '@angular/core';
+import { BehaviorSubject, take } from 'rxjs';
 import { SubscriptionService } from '../../../shared/services/subscription.service';
 
 @Component({
   selector: 'app-subscribe-button',
   templateUrl: './subscribe-button.component.html',
   styleUrl: './subscribe-button.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SubscribeButtonComponent {
+export class SubscribeButtonComponent implements OnInit, OnDestroy {
   @Input({ required: true }) channelId!: string;
-  private subscriptionService = inject(SubscriptionService);
-  subscriptionStatus$!: Observable<{ isSubscribed: boolean }> | undefined;
+  @Input({ required: true }) isSubscribed!: boolean;
 
-  ngOnInit() {
-    this.subscriptionStatus$ = this.subscriptionService.getSubscriptionStatus(
-      this.channelId
-    );
+  isSubscribed$ = new BehaviorSubject<boolean>(this.isSubscribed);
+  private subscriptionService = inject(SubscriptionService);
+
+  ngOnInit(): void {
+    this.isSubscribed$.next(this.isSubscribed);
   }
 
   toggleSubscription(): void {
@@ -23,7 +31,11 @@ export class SubscribeButtonComponent {
       .toggleSubscription(this.channelId)
       .pipe(take(1))
       .subscribe((response) => {
-        this.subscriptionStatus$ = of(response);
+        this.isSubscribed$.next(response.isSubscribed);
       });
+  }
+
+  ngOnDestroy(): void {
+    this.isSubscribed$.complete();
   }
 }
