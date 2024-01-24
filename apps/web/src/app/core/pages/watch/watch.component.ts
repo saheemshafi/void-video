@@ -10,6 +10,7 @@ import {
 import { Observable, of } from 'rxjs';
 import { Video } from '../../../shared/interfaces/video';
 import { VideoService } from '../../../shared/services/video.service';
+import { VideoWithSubscriptionInfo } from '../../../shared/interfaces/api-response';
 
 @Component({
   selector: 'app-watch',
@@ -19,7 +20,7 @@ import { VideoService } from '../../../shared/services/video.service';
 export class WatchComponent implements OnInit {
   private videoService = inject(VideoService);
   @Input() videoId: string = '';
-  video$: Observable<Video> = of();
+  video$: Observable<VideoWithSubscriptionInfo> = of();
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 

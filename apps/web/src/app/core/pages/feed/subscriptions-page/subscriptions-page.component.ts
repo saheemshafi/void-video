@@ -19,6 +19,6 @@ export class SubscriptionsPageComponent implements OnInit {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
   ngOnInit(): void {
     if (isPlatformServer(this.platformId)) return;
-    this.subscriptions$ = this.userService.subscribedChannels$;
+    this.subscriptions$ = this.userService.getSubscribedChannels();
   }
 }

@@ -13,5 +13,5 @@ export class SidebarSubscriptionListComponent {
   private authService = inject(AuthService);
 
   session$ = this.authService.session$;
-  subscriptions$ = this.userService.subscribedChannels$;
+  subscriptions$ = this.userService.getSubscribedChannels();
 }

@@ -10,6 +10,5 @@ import { map } from 'rxjs';
 })
 export class HomeComponent {
   private videoService = inject(VideoService);
-  videosResponse$ = this.videoService.videos$;
-  videos$ = this.videosResponse$.pipe(map((data) => data.videos));
+  videos$ = this.videoService.getVideos().pipe(map((data) => data.videos));
 }

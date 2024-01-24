@@ -16,43 +16,25 @@ export class UserService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
 
-  subscribedChannels$ = this.authService.session$.pipe(
-    switchMap((session) =>
-      session
-        ? this.http
-            .get<SubscriptionsResponse>(
-              `${environment.serverUrl}/users/channels-subscribed`,
-              {
-                withCredentials: true,
-              }
-            )
-            .pipe(map((response) => response.data))
-        : of([])
-    )
-  );
+  getWatchHistory() {
+    return this.http
+      .get<WatchHistoryResponse>(
+        `${environment.serverUrl}/users/watch-history`,
+        {
+          withCredentials: true,
+        }
+      )
+      .pipe(map((response) => response.data));
+  }
 
-  watchHistory$ = this.authService.session$.pipe(
-    switchMap((session) =>
-      session
-        ? this.http
-            .get<WatchHistoryResponse>(
-              `${environment.serverUrl}/users/watch-history`,
-              {
-                withCredentials: true,
-              }
-            )
-            .pipe(map((response) => response.data))
-        : of(null)
-    ),
-    shareReplay(1)
-  );
-
-  getSubscribedChannels(): Observable<SubscriptionsResponse> {
-    return this.http.get<SubscriptionsResponse>(
-      `${environment.serverUrl}/users/channels-subscribed`,
-      {
-        withCredentials: true,
-      }
-    );
+  getSubscribedChannels() {
+    return this.http
+      .get<SubscriptionsResponse>(
+        `${environment.serverUrl}/users/channels-subscribed`,
+        {
+          withCredentials: true,
+        }
+      )
+      .pipe(map((response) => response.data));
   }
 }
