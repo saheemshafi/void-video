@@ -12,38 +12,115 @@
 }
 .watch-layout {
   display: flex;
+  gap: variables.$spacing-normal;
 
   .player {
     width: 100%;
-    max-width: 656px;
+    max-width: 600px;
+
+    .video-title {
+      font-size: calc(variables.$fs-normal * 1.2);
+      margin-block: variables.$spacing-normal;
+    }
+
+    .video-description {
+      margin-block: variables.$spacing-normal;
+      padding: variables.$spacing-normal;
+      border-radius: calc(variables.$radius-round / 1.5);
+      background-color: rgba(variables.$clr-dusty-gray, 0.05);
+      font-size: variables.$fs-sm;
+      border: 1px solid rgba(variables.$clr-dusty-gray, 0.1);
+      line-height: 1.5;
+      box-shadow: var(--shadow);
+
+      .video-info {
+        @include mixins.flex-cv;
+        justify-content: space-between;
+        font-weight: variables.$fw-semibold;
+        gap: variables.$spacing-sm;
+
+        margin-bottom: variables.$spacing-sm;
+        > div {
+          display: inherit;
+          gap: inherit;
+        }
+      }
+    }
   }
 
-  .video-title {
-    font-size: calc(variables.$fs-normal * 1.2);
-    margin-block: variables.$spacing-normal;
+  .recommendations {
+    h2 {
+      font-size: calc(variables.$fs-normal * 1.2);
+      font-weight: variables.$fw-semibold;
+      margin-top: 0;
+      margin-bottom: variables.$spacing-lg;
+    }
+
+    .recommendation-item {
+      margin-bottom: variables.$spacing-normal;
+      display: flex;
+      gap: variables.$spacing-sm;
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .recommendation-img {
+        border-radius: calc(variables.$radius-round / 2);
+        flex-shrink: 0;
+
+        > img {
+          border-radius: inherit;
+        }
+      }
+
+      .recommendation-title {
+        font-weight: variables.$fw-semibold;
+        margin-bottom: calc(variables.$spacing-sm / 2);
+        display: inline-block;
+      }
+
+      .recommendation-owner {
+        font-size: variables.$fs-xs;
+        font-weight: variables.$fw-semibold;
+        color: variables.$clr-dusty-gray;
+        margin-bottom: calc(variables.$spacing-sm / 2.5);
+        display: inline-block;
+      }
+
+      .recommendation-info {
+        font-size: variables.$fs-xs;
+        color: variables.$clr-dusty-gray;
+        @include mixins.flex-cv;
+        gap: variables.$spacing-sm;
+        flex-wrap: wrap;
+      }
+    }
   }
 }
 
-.video-description {
-  margin-block: variables.$spacing-normal;
-  padding: variables.$spacing-normal;
-  border-radius: calc(variables.$radius-round / 1.5);
-  background-color: rgba(variables.$clr-dusty-gray, 0.05);
-  font-size: variables.$fs-sm;
-  border: 1px solid rgba(variables.$clr-dusty-gray, 0.1);
-  line-height: 1.5;
-  box-shadow: var(--shadow);
+@media screen and (max-width: calc(variables.$breakpoint-lg + 200px)) {
+  .watch-layout {
+    display: grid;
 
-  .video-info {
-    @include mixins.flex-cv;
-    justify-content: space-between;
-    font-weight: variables.$fw-semibold;
-    gap: variables.$spacing-sm;
+    .player {
+      max-width: none;
+    }
+  }
+}
 
-    margin-bottom: variables.$spacing-sm;
-    > div {
-      display: inherit;
-      gap: inherit;
+@media screen and (min-width: variables.$breakpoint-xl) {
+  .watch-layout {
+    max-width: 1400px;
+    margin-inline: auto;
+    justify-content: center;
+
+    .player {
+      app-video-player {
+        max-width: 800px;
+        margin-inline: auto;
+        display: block;
+      }
     }
   }
 }

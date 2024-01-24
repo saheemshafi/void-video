@@ -1,12 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Subject, map, shareReplay } from 'rxjs';
+import { map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { VideoResponse, VideosResponse } from '../interfaces/api-response';
-import { Video } from '../interfaces/video';
 
-type DeepPartial<T> = {
-  [P in keyof T]?: DeepPartial<P>;
+type VideosQueryList = {
+  userId: string;
+  sort: 'views.asc' | 'views.desc' | 'title.asc' | 'title.desc';
+  page: number;
+  limit: number;
+  query: string;
 };
 
 @Injectable({
@@ -15,9 +18,15 @@ type DeepPartial<T> = {
 export class VideoService {
   private http = inject(HttpClient);
 
-  getVideos() {
+  getVideos(queryParams?: Partial<VideosQueryList>) {
+    const url = new URL(`${environment.serverUrl}/videos`);
+
+    for (let [param, value] of Object.entries(queryParams || {})) {
+      url.searchParams.set(param, String(value));
+    }
+
     return this.http
-      .get<VideosResponse>(`${environment.serverUrl}/videos`)
+      .get<VideosResponse>(url.toString())
       .pipe(map((response) => response.data));
   }
 
