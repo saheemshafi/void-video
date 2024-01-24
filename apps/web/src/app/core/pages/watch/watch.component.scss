@@ -13,10 +13,13 @@
 .watch-layout {
   display: flex;
   gap: variables.$spacing-normal;
+  max-width: 1400px;
+  margin-inline: auto;
 
   .player {
     width: 100%;
-    max-width: 600px;
+    flex-basis: 60%;
+    max-width: 1000px;
 
     .video-title {
       font-size: calc(variables.$fs-normal * 1.2);
@@ -70,6 +73,8 @@
         flex-shrink: 0;
 
         > img {
+          aspect-ratio: 16 / 9;
+          object-fit: cover;
           border-radius: inherit;
         }
       }
@@ -99,28 +104,8 @@
   }
 }
 
-@media screen and (max-width: calc(variables.$breakpoint-lg + 200px)) {
-  .watch-layout {
+@media screen and (max-width:variables.$breakpoint-lg) {
+  .watch-layout{
     display: grid;
-
-    .player {
-      max-width: none;
-    }
-  }
-}
-
-@media screen and (min-width: variables.$breakpoint-xl) {
-  .watch-layout {
-    max-width: 1400px;
-    margin-inline: auto;
-    justify-content: center;
-
-    .player {
-      app-video-player {
-        max-width: 800px;
-        margin-inline: auto;
-        display: block;
-      }
-    }
   }
 }
