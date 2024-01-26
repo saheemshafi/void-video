@@ -9,6 +9,9 @@ import { SvgLoaderComponent } from './components/svg-loader/svg-loader.component
 import { AbbreviateNumberPipe } from './pipes/abbreviate-number.pipe';
 import { FullscreenInfoComponent } from './components/fullscreen-info/fullscreen-info.component';
 import { ItemGridComponent } from './components/item-grid/item-grid.component';
+import { ExpandableTextComponent } from './components/expandable-text/expandable-text.component';
+
+import { CdkAccordionModule } from '@angular/cdk/accordion';
 
 const exports = [
   SvgLoaderComponent,
@@ -17,11 +20,18 @@ const exports = [
   AbbreviateNumberPipe,
   FullscreenInfoComponent,
   ItemGridComponent,
+  ExpandableTextComponent,
 ];
 
 @NgModule({
   declarations: [AppearanceMenuComponent, ItemGridComponent, ...exports],
-  imports: [CommonModule, CdkMenuModule, RouterModule, NgOptimizedImage],
+  imports: [
+    CommonModule,
+    CdkMenuModule,
+    RouterModule,
+    NgOptimizedImage,
+    CdkAccordionModule,
+  ],
   exports: exports,
 })
 export class SharedModule {}
