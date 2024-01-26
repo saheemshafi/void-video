@@ -6,6 +6,7 @@
     tabindex="0"
     [attr.id]="'accordion-header-' + id"
     [attr.aria-expanded]="accordionItem.expanded"
+    [expanded]="!canExpand"
     [attr.aria-controls]="'accordion-body-' + id"
   >
     <div
@@ -16,13 +17,15 @@
     >
       <p>{{ text }}</p>
     </div>
-    <div>
-      <p>
-        {{ accordionItem.expanded ? '' : collapsedText }}
-        <span (click)="accordionItem.toggle()" class="more-toggle">
-          see {{ accordionItem.expanded ? 'less' : 'more...' }}
-        </span>
-      </p>
-    </div>
+    @if (canExpand) {
+      <div>
+        <p>
+          {{ accordionItem.expanded ? '' : collapsedText + '...' }}
+          <span (click)="accordionItem.toggle()" class="more-toggle">
+            see {{ accordionItem.expanded ? 'less' : 'more' }}
+          </span>
+        </p>
+      </div>
+    }
   </cdk-accordion-item>
 </cdk-accordion>

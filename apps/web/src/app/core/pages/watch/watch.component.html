@@ -12,13 +12,7 @@
               <span>Uploaded {{ video.createdAt | date }}</span>
             </div>
           </div>
-          <app-expandable-text
-            [text]="
-              video.description +
-              'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sint amet libero ab adipisci illum esse temporibus impedit cumque nisi exercitationem vitae qui omnis, voluptas alias odit veritatis! Corrupti, doloremque illo?'
-            "
-            [id]="video._id"
-          />
+          <app-expandable-text [text]="video.description" [id]="video._id" />
         </div>
       </div>
     </div>

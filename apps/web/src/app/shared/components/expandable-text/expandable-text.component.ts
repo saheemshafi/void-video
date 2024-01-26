@@ -1,7 +1,4 @@
-import {
-  Component,
-  Input
-} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-expandable-text',
@@ -14,8 +11,12 @@ export class ExpandableTextComponent {
   @Input({ required: true }) id: string = '';
 
   collapsedText: string = '';
+  canExpand: boolean = false;
 
   ngOnInit() {
-    this.collapsedText = this.text.slice(0, this.maxLength);
+    if (this.text.length > this.maxLength) {
+      this.canExpand = true;
+      this.collapsedText = this.text.slice(0, this.maxLength);
+    }
   }
 }
