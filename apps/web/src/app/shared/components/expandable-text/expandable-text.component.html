@@ -1,0 +1,31 @@
+<cdk-accordion class="example-accordion">
+  <cdk-accordion-item
+    #accordionItem="cdkAccordionItem"
+    class="example-accordion-item"
+    role="button"
+    tabindex="0"
+    [attr.id]="'accordion-header-' + id"
+    [attr.aria-expanded]="accordionItem.expanded"
+    [expanded]="!canExpand"
+    [attr.aria-controls]="'accordion-body-' + id"
+  >
+    <div
+      role="region"
+      [style.display]="accordionItem.expanded ? '' : 'none'"
+      [attr.id]="'accordion-body-' + id"
+      [attr.aria-labelledby]="'accordion-header-' + id"
+    >
+      <p>{{ text }}</p>
+    </div>
+    @if (canExpand) {
+      <div>
+        <p>
+          {{ accordionItem.expanded ? '' : collapsedText + '...' }}
+          <span (click)="accordionItem.toggle()" class="more-toggle">
+            see {{ accordionItem.expanded ? 'less' : 'more' }}
+          </span>
+        </p>
+      </div>
+    }
+  </cdk-accordion-item>
+</cdk-accordion>

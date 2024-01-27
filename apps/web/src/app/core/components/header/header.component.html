@@ -1,20 +1,5 @@
 <header>
-  <div class="search-container">
-    <div class="search-box">
-      <input
-        type="text"
-        name="search"
-        autocomplete="off"
-        aria-autocomplete="list"
-        id="search"
-        placeholder="Search for users, videos and playlists"
-      />
-      <i class="bx bx-search sm"></i>
-    </div>
-    <button aria-label="Search with voice" class="button icon primary ghost">
-      <i class="bx bxs-microphone sm"></i>
-    </button>
-  </div>
+  <app-searchbar />
   <div class="user-actions">
     @if ((session$ | async) !== undefined) {
       @if (session$ | async) {

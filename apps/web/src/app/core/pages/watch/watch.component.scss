@@ -12,38 +12,113 @@
 }
 .watch-layout {
   display: flex;
+  gap: variables.$spacing-normal;
+  max-width: 1400px;
+  margin-inline: auto;
 
   .player {
     width: 100%;
-    max-width: 656px;
+    flex-basis: 60%;
+    max-width: 1000px;
+
+    .video-title {
+      font-size: calc(variables.$fs-normal * 1.2);
+      margin-block: variables.$spacing-normal;
+    }
+
+    .video-description {
+      margin-block: variables.$spacing-normal;
+      padding: variables.$spacing-normal;
+      border-radius: calc(variables.$radius-round / 1.5);
+      background-color: rgba(variables.$clr-dusty-gray, 0.05);
+      font-size: variables.$fs-sm;
+      border: 1px solid rgba(variables.$clr-dusty-gray, 0.1);
+      line-height: 1.5;
+      box-shadow: var(--shadow);
+
+      .video-info {
+        @include mixins.flex-cv;
+        justify-content: space-between;
+        font-weight: variables.$fw-semibold;
+        gap: variables.$spacing-sm;
+
+        margin-bottom: variables.$spacing-sm;
+        > div {
+          display: inherit;
+          gap: inherit;
+        }
+      }
+    }
   }
 
-  .video-title {
-    font-size: calc(variables.$fs-normal * 1.2);
-    margin-block: variables.$spacing-normal;
+  .recommendations {
+    h2 {
+      font-size: calc(variables.$fs-normal * 1.2);
+      font-weight: variables.$fw-semibold;
+      margin-top: 0;
+      margin-bottom: variables.$spacing-lg;
+    }
+
+    .recommendation-item {
+      margin-bottom: variables.$spacing-normal;
+      display: flex;
+      gap: variables.$spacing-sm;
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .recommendation-img {
+        border-radius: calc(variables.$radius-round / 2);
+        flex-shrink: 0;
+        position: relative;
+
+        > img {
+          aspect-ratio: 16 / 9;
+          object-fit: cover;
+          border-radius: inherit;
+        }
+
+        > span.video-duration {
+          position: absolute;
+          right: calc(variables.$spacing-sm / 2);
+          bottom: calc(variables.$spacing-sm / 2);
+          background-color: rgba(variables.$clr-dark-void, 0.8);
+          font-size: variables.$fs-xs;
+          padding: 1px 4px;
+          border-radius: 3px;
+          font-weight: variables.$fw-semibold;
+          color: variables.$clr-snow;
+        }
+      }
+
+      .recommendation-title {
+        font-weight: variables.$fw-semibold;
+        margin-bottom: calc(variables.$spacing-sm / 2);
+        display: inline-block;
+      }
+
+      .recommendation-owner {
+        font-size: variables.$fs-xs;
+        font-weight: variables.$fw-semibold;
+        color: variables.$clr-dusty-gray;
+        margin-bottom: calc(variables.$spacing-sm / 2.5);
+        display: inline-block;
+      }
+
+      .recommendation-info {
+        font-size: variables.$fs-xs;
+        color: variables.$clr-dusty-gray;
+        @include mixins.flex-cv;
+        gap: variables.$spacing-sm;
+        flex-wrap: wrap;
+      }
+    }
   }
 }
 
-.video-description {
-  margin-block: variables.$spacing-normal;
-  padding: variables.$spacing-normal;
-  border-radius: calc(variables.$radius-round / 1.5);
-  background-color: rgba(variables.$clr-dusty-gray, 0.05);
-  font-size: variables.$fs-sm;
-  border: 1px solid rgba(variables.$clr-dusty-gray, 0.1);
-  line-height: 1.5;
-  box-shadow: var(--shadow);
-
-  .video-info {
-    @include mixins.flex-cv;
-    justify-content: space-between;
-    font-weight: variables.$fw-semibold;
-    gap: variables.$spacing-sm;
-
-    margin-bottom: variables.$spacing-sm;
-    > div {
-      display: inherit;
-      gap: inherit;
-    }
+@media screen and (max-width: variables.$breakpoint-lg) {
+  .watch-layout {
+    display: grid;
   }
 }

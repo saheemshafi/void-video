@@ -8,7 +8,7 @@
       [alt]="video.title"
     />
     @if (video.source.duration) {
-      <span class="video-views" aria-label="Total video views">{{
+      <span class="video-duration" aria-label="Video duration">{{
         video.source.duration / 60 | number: '1.2-2'
       }}</span>
     }

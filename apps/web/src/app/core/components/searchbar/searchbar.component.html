@@ -1,0 +1,37 @@
+<div class="search-container">
+  <div class="search-box">
+    <input
+      type="text"
+      name="search"
+      autocomplete="off"
+      aria-autocomplete="list"
+      (keyup)="onKeypress($event)"
+      id="search"
+      [(ngModel)]="search"
+      (ngModelChange)="onModelChange()"
+      placeholder="Search for users, videos and playlists"
+    />
+    <i class="bx bx-search sm"></i>
+    @if (items$ | async; as items) {
+      @if (items.length > 0) {
+        <div class="combobox">
+          <hr />
+          <ul
+            cdkListbox
+            aria-label="Search suggestions"
+            (cdkListboxValueChange)="onAutocompleteSelect($event.value[0])"
+          >
+            @for (item of items; track item) {
+              <li [cdkOption]="item" #option="cdkOption" [value]="item">
+                {{ item }}
+              </li>
+            }
+          </ul>
+        </div>
+      }
+    }
+  </div>
+  <button aria-label="Search with voice" class="button icon primary ghost">
+    <i class="bx bxs-microphone sm"></i>
+  </button>
+</div>

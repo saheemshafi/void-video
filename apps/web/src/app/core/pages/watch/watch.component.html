@@ -12,10 +12,58 @@
               <span>Uploaded {{ video.createdAt | date }}</span>
             </div>
           </div>
-          {{ video.description }}
+          <app-expandable-text [text]="video.description" [id]="video._id" />
         </div>
       </div>
     </div>
-    <div></div>
+    <div class="recommendations">
+      <h2>Others from Same Owner</h2>
+      @for (
+        recommendation of recommendation$ | async;
+        track recommendation._id
+      ) {
+        <div class="recommendation-item">
+          <a
+            [routerLink]="['/watch', recommendation._id]"
+            class="recommendation-img"
+            [attr.aria-label]="recommendation.title"
+          >
+            <img
+              [ngSrc]="recommendation.owner.avatar.public_id"
+              width="150"
+              height="84.5"
+              [alt]="recommendation.title"
+            />
+            @if (recommendation.source.duration) {
+              <span class="video-duration" aria-label="Video duration">{{
+                recommendation.source.duration / 60 | number: '1.2-2'
+              }}</span>
+            }
+          </a>
+          <div>
+            <a
+              [routerLink]="['/watch', recommendation._id]"
+              class="recommendation-title"
+            >
+              {{ recommendation.title }}
+            </a>
+            <div>
+              <a
+                class="recommendation-owner"
+                [routerLink]="['/c', recommendation.owner.username]"
+              >
+                {{ recommendation.owner.displayName }}
+              </a>
+            </div>
+            <div class="recommendation-info">
+              <span> {{ recommendation.views | abbreviateNumber }} views </span>
+              <span>
+                {{ recommendation.createdAt | date }}
+              </span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
   </section>
 }

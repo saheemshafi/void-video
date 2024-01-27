@@ -1,0 +1,25 @@
+@use '../../../../styles/variables';
+
+:host {
+  --more-toggle-hovered: #{variables.$clr-slate-gray};
+}
+
+.dark {
+    :host {
+      --more-toggle-hovered: #{variables.$clr-snow};
+  }
+}
+
+.more-toggle {
+  color: variables.$clr-dusty-gray;
+  font-weight: variables.$fw-semibold;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--more-toggle-hovered);
+  }
+}
+
+.p {
+  margin-top: 0;
+}
