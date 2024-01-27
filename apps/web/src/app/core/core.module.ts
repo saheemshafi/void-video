@@ -1,7 +1,4 @@
-import {
-  CommonModule,
-  NgOptimizedImage
-} from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { HeaderComponent } from './components/header/header.component';
@@ -25,6 +22,10 @@ import { SubscriptionsPageComponent } from './pages/feed/subscriptions-page/subs
 import { YouPageComponent } from './pages/feed/you-page/you-page.component';
 import { WatchComponent } from './pages/watch/watch.component';
 import { SubscribeButtonComponent } from './components/subscribe-button/subscribe-button.component';
+import { SearchbarComponent } from './components/searchbar/searchbar.component';
+import { FormsModule } from '@angular/forms';
+
+import { CdkListboxModule } from '@angular/cdk/listbox';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { SubscribeButtonComponent } from './components/subscribe-button/subscrib
     VideoPlayerComponent,
     WatchPageChannelBarComponent,
     SubscribeButtonComponent,
+    SearchbarComponent,
   ],
   imports: [
     CommonModule,
@@ -52,6 +54,8 @@ import { SubscribeButtonComponent } from './components/subscribe-button/subscrib
     NgOptimizedImage,
     SharedModule,
     CdkMenuModule,
+    FormsModule,
+    CdkListboxModule,
   ],
   providers: [],
 })

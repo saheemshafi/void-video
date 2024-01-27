@@ -2,13 +2,11 @@
 @use '../../../../styles/mixins';
 
 :host {
-  --search-input-background: #{variables.$clr-snow};
   --header-background: #{variables.$clr-gray-smooth};
 }
 
 .dark {
   :host {
-    --search-input-background: #{variables.$clr-slate-gray};
     --header-background: #{variables.$clr-gluon-gray};
   }
 }
@@ -20,38 +18,12 @@ header {
   @include mixins.flex-cv;
   justify-content: space-between;
 
-  > .search-container {
-    // background-color: red;
-    @include mixins.flex-cvh;
-    gap: variables.$spacing-sm;
-    width: 100%;
-    max-width: 450px;
-
-    .search-box {
-      flex: 1;
-      position: relative;
-      @include mixins.flex-cvh;
-
-      > input {
-        padding-right: calc(variables.$fs-icon-sm + variables.$spacing-normal);
-        background-color: var(--search-input-background);
-
-        &:focus {
-          outline: none;
-          border-color: transparent;
-        }
-      }
-
-      > i {
-        color: variables.$clr-dusty-gray;
-        position: absolute;
-        right: variables.$spacing-sm;
-      }
-    }
-  }
-
   > .user-actions {
     @include mixins.flex-cv;
     gap: variables.$spacing-sm;
+  }
+
+  app-searchbar {
+    max-width: 450px;
   }
 }

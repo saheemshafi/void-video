@@ -26,3 +26,5 @@ export type VideoWithSubscriptionInfo = Video & {
 export type VideoResponse = ApiResponse<VideoWithSubscriptionInfo>;
 
 export type VideosResponse = ApiResponse<Paginated<Array<Video>, 'videos'>>;
+
+export type AutocompleteResponse = ApiResponse<string[]>;
