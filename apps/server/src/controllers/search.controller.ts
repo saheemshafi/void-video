@@ -49,9 +49,11 @@ const suggestSearchTerms = asyncHandler(async (req, res) => {
     usersAggregation,
   ]);
 
-  const suggestions = playlists
-    .concat(videos, users)
-    .map((item) => item.displayName || item.title);
+  const suggestions = new Set(
+    playlists
+      .concat(videos, users)
+      .map((item) => item.displayName || item.title)
+  );
 
   res
     .status(STATUS_CODES.OK)
@@ -59,7 +61,7 @@ const suggestSearchTerms = asyncHandler(async (req, res) => {
       new ApiResponse(
         STATUS_CODES.OK,
         'Search suggestions retrieved.',
-        suggestions
+        Array.from(suggestions)
       )
     );
 });
