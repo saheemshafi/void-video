@@ -9,6 +9,7 @@ export interface IPlaylist {
   videos: Types.ObjectId[];
   private: boolean;
   thumbnail: IFileObject;
+  views: number;
 }
 
 type IPlaylistModel = AggregatePaginateModel<IPlaylist>;
@@ -34,6 +35,10 @@ const playlistSchema = new Schema<IPlaylist, IPlaylistModel>(
       default: false,
     },
     thumbnail: fileSchema,
+    views: {
+      type: Number,
+      default: 0,
+    },
     videos: [
       {
         type: Schema.Types.ObjectId,

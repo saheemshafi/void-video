@@ -1,6 +1,10 @@
 import z from 'zod';
 import fileSchema from './multer.validation';
-import { objectIdSchema, paginationSchema } from './utils.validation';
+import {
+  objectIdSchema,
+  paginationSchema,
+  sortOptions,
+} from './utils.validation';
 
 export const videoIdSchema = objectIdSchema('Video');
 
@@ -53,16 +57,12 @@ export const getVideoCommentsSchema = z.object({
   query: paginationSchema,
 });
 
-export const videoSortOptions = z
-  .enum(['views.asc', 'views.desc', 'title.asc', 'title.desc'])
-  .default('title.asc');
-
 export const getVideosSchema = z.object({
   query: z
     .object({
-      sort: videoSortOptions,
+      sort: sortOptions,
       query: z.string().default(''),
-      userId: objectIdSchema('User').optional()
+      userId: objectIdSchema('User').optional(),
     })
     .merge(paginationSchema),
 });

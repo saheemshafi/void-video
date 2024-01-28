@@ -1,6 +1,10 @@
 import z from 'zod';
 import fileValidation from './multer.validation';
-import { objectIdSchema, paginationSchema } from './utils.validation';
+import {
+  objectIdSchema,
+  paginationSchema,
+  sortOptions,
+} from './utils.validation';
 import { videoIdSchema } from './video.validation';
 
 export const playlistSchema = z.object({
@@ -68,5 +72,11 @@ export const getPlaylistSchema = z.object({
 });
 
 export const getPlaylistsSchema = z.object({
-  query: paginationSchema,
+  query: z
+    .object({
+      sort: sortOptions,
+      query: z.string().default(''),
+      userId: objectIdSchema('User').optional(),
+    })
+    .merge(paginationSchema),
 });
