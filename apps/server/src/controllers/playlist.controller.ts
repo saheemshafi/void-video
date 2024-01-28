@@ -21,6 +21,8 @@ import {
   updatePlaylistSchema,
 } from '../validations/playlist.validation';
 import { $lookupUserDetails, $lookupVideoDetails } from '../db/aggregations';
+import { Split } from '../types/utils.types';
+import { SortOptions } from '../types/validation.types';
 
 const createPlaylist = asyncHandler(async (req, res) => {
   const {
@@ -304,6 +306,7 @@ const getPlaylist = asyncHandler(async (req, res) => {
         owner: 1,
         title: 1,
         videos: 1,
+        views: 1,
         totalVideos: 1,
         description: 1,
         private: 1,
@@ -324,7 +327,7 @@ const getPlaylist = asyncHandler(async (req, res) => {
 
 const getPlaylists = asyncHandler(async (req, res) => {
   const {
-    query: { page, limit },
+    query: { page, limit, sort, query, userId },
   } = validateRequest(req, getPlaylistsSchema);
 
   const options: PaginateOptions = {
@@ -332,10 +335,34 @@ const getPlaylists = asyncHandler(async (req, res) => {
     limit,
   };
 
+  const [sortByKey, sortType] = <Split<SortOptions>>sort.split('.');
+
   const playlistsAggregation = Playlist.aggregate([
     {
       $match: {
         private: false,
+        owner: userId
+          ? new Types.ObjectId(userId)
+          : {
+              $exists: true,
+            },
+      },
+    },
+    {
+      $match: {
+        $or: [
+          {
+            title: {
+              $regex: query,
+              $options: 'i',
+            },
+          },
+        ],
+      },
+    },
+    {
+      $sort: {
+        [sortByKey]: sortType == 'asc' ? 1 : -1,
       },
     },
     $lookupUserDetails(),
@@ -355,6 +382,7 @@ const getPlaylists = asyncHandler(async (req, res) => {
         totalVideos: 1,
         title: 1,
         description: 1,
+        views: 1,
         createdAt: 1,
         updatedAt: 1,
       },

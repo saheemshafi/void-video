@@ -1,8 +1,15 @@
 import { PaginateOptions, Types } from 'mongoose';
 import { STATUS_CODES } from '../constants';
+import {
+  $lookupLikes,
+  $lookupSubscriptions,
+  $lookupUserDetails,
+} from '../db/aggregations';
 import { Comment } from '../models/comment.model';
 import { Like } from '../models/like.model';
 import { Video } from '../models/video.model';
+import { Split } from '../types/utils.types';
+import { SortOptions } from '../types/validation.types';
 import { validateRequest } from '../utils';
 import ApiError from '../utils/api-error';
 import ApiResponse from '../utils/api-response';
@@ -23,13 +30,6 @@ import {
   updateVideoSchema,
   uploadVideoSchema,
 } from '../validations/video.validation';
-import { Split } from '../types/utils.types';
-import { VideoSortOptions } from '../types/validation.types';
-import {
-  $lookupLikes,
-  $lookupSubscriptions,
-  $lookupUserDetails,
-} from '../db/aggregations';
 
 const uploadVideo = asyncHandler(async (req, res) => {
   const {
@@ -396,7 +396,7 @@ const getVideos = asyncHandler(async (req, res) => {
     limit,
   };
 
-  const [sortByKey, sortType] = <Split<VideoSortOptions>>sort.split('.');
+  const [sortByKey, sortType] = <Split<SortOptions>>sort.split('.');
 
   const aggregation = Video.aggregate([
     {

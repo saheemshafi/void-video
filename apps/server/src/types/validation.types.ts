@@ -1,5 +1,5 @@
 import z from 'zod';
-import { videoSortOptions } from '../validations/video.validation';
+import { sortOptions } from '../validations/utils.validation';
 
 export interface ValidationError {
   field: z.ZodIssue['path'][number] | undefined;
@@ -14,6 +14,6 @@ export type Models =
   | 'Subscription'
   | 'Comment';
 
-export type VideoSortOptions = z.infer<typeof videoSortOptions>;
+export type SortOptions = z.infer<typeof sortOptions>;
 
 export type ValidateRequestResult<T extends z.ZodSchema> = z.infer<T>;
