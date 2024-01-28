@@ -28,7 +28,7 @@ export class YouPageComponent implements OnInit {
     this.uploads$ = this.authService.session$.pipe(
       switchMap((session) =>
         this.videoService
-          .getVideos({ userId: session?._id })
+          .getVideos({ userId: session?._id, limit: 6 })
           .pipe(map((data) => data.videos))
       )
     );

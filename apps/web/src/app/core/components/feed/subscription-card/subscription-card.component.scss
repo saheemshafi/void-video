@@ -2,7 +2,7 @@
 @use '../../../../../styles/mixins';
 
 :host {
-  --card-hovered-background: #f1efee;
+  --card-hovered-background: #{variables.$clr-snow};
   --card-shadow: #{variables.$shadow-smooth};
   --card-border: #e5e5e5;
 }

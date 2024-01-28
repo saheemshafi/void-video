@@ -1,3 +1,11 @@
-<div class="item-grid">
+<div
+  class="item-grid"
+  [ngStyle]="{
+    '--columns-sm': columns.sm || DEFAULT_COLUMNS.sm,
+    '--columns-md': columns.md || DEFAULT_COLUMNS.md,
+    '--columns-lg': columns.lg || DEFAULT_COLUMNS.lg,
+    '--columns-xl': columns.xl || DEFAULT_COLUMNS.xl
+  }"
+>
   <ng-content />
 </div>
