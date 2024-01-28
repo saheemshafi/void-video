@@ -5,18 +5,23 @@
   gap: variables.$spacing-normal variables.$spacing-sm;
   align-content: start;
   height: fit-content;
-  @include mixins.even-columns(1);
+  @include mixins.even-columns(var(--columns-sm));
 }
 
 @media screen and (min-width: variables.$breakpoint-md) {
   .item-grid {
-    @include mixins.even-columns(2);
+    @include mixins.even-columns(var(--columns-md));
+  }
+}
+
+@media screen and (min-width: variables.$breakpoint-lg) {
+  .item-grid {
+    @include mixins.even-columns(var(--columns-lg));
   }
 }
 
 @media screen and (min-width: variables.$breakpoint-xl) {
   .item-grid {
-    @include mixins.even-columns(3);
+    @include mixins.even-columns(var(--columns-xl));
   }
 }
-
