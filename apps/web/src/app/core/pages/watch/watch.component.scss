@@ -18,8 +18,9 @@
 
   .player {
     width: 100%;
-    flex-basis: 60%;
+    flex-basis: 65%;
     max-width: 1000px;
+    flex-shrink: 0;
 
     .video-title {
       font-size: calc(variables.$fs-normal * 1.2);
@@ -65,6 +66,13 @@
       gap: variables.$spacing-sm;
       a {
         color: inherit;
+        font-size: variables.$fs-sm;
+        line-height: 1.4;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
         text-decoration: none;
       }
 
@@ -72,6 +80,7 @@
         border-radius: calc(variables.$radius-round / 2);
         flex-shrink: 0;
         position: relative;
+        height: fit-content;
 
         > img {
           aspect-ratio: 16 / 9;
