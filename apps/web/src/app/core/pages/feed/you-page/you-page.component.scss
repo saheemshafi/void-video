@@ -22,6 +22,10 @@ section {
   &:first-child {
     .section-header {
       border-top: 0;
+
+      .section-heading {
+        margin-top: 0;
+      }
     }
   }
 }
