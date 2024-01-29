@@ -380,9 +380,11 @@ const getPlaylists = asyncHandler(async (req, res) => {
       $project: {
         owner: 1,
         totalVideos: 1,
+        videos: 1,
         title: 1,
         description: 1,
         views: 1,
+        thumbnail: 1,
         createdAt: 1,
         updatedAt: 1,
       },
