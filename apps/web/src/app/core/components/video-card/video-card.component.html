@@ -1,8 +1,10 @@
 <div class="video-card">
   <div class="thumbnail-container" (click)="navigateToVideo()">
+    <!-- IMPORTANT: change secure_url to public id later with 
+      ngsrc for using cloudinary loader -->
     <img
       class="thumbnail"
-      [ngSrc]="video.thumbnail.public_id"
+      [src]="video.thumbnail.secure_url"
       width="600"
       height="338"
       [alt]="video.title"
@@ -20,12 +22,12 @@
         [attr.aria-label]="video.owner.username"
         [title]="video.owner.displayName"
       >
-        <img [ngSrc]="video.owner.avatar.public_id" width="80" height="80"/>
+        <img [ngSrc]="video.owner.avatar.public_id" width="80" height="80" />
       </a>
     </div>
     <div>
       <a [routerLink]="['/watch', video._id]" class="video-title">{{
-        video.title
+        video.title.split("[")[0]
       }}</a>
       <div class="video-extra-info">
         <a [routerLink]="['/c', video.owner.username]"

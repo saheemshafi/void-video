@@ -5,6 +5,7 @@
   --card-focused-background: #e8e8e85f;
   --card-focused-border: #e5e5e5;
   --link-hovered: #{variables.$clr-slate-gray};
+  isolation: isolate;
 }
 
 .dark {
@@ -15,7 +16,7 @@
   }
 }
 
-.video-card {
+.playlist-card {
   a {
     color: inherit;
     text-decoration: none;
@@ -37,7 +38,7 @@
     position: relative;
     cursor: pointer;
 
-    .video-duration {
+    .playlist-total-videos {
       position: absolute;
       right: variables.$spacing-sm;
       bottom: variables.$spacing-sm;
@@ -49,21 +50,54 @@
       color: variables.$clr-snow;
     }
 
+    .playlist-thumbnail-icon {
+      position: absolute;
+      right: 50%;
+      bottom: 50%;
+      transform: translate(50%, 50%);
+      background-color: rgba(variables.$clr-dark-void, 0.6);
+      font-size: variables.$fs-xs;
+      padding: 1px variables.$spacing-sm;
+      border-radius: variables.$radius-round;
+      font-weight: variables.$fw-semibold;
+      color: variables.$clr-snow;
+      @include mixins.flex-cv;
+
+      > p {
+        margin: 0;
+      }
+    }
+
     > .thumbnail {
       width: 100%;
       object-fit: cover;
-      aspect-ratio: 16/9;
+      aspect-ratio: 16 / 9;
       margin-bottom: variables.$spacing-normal;
       border-radius: calc(variables.$radius-round / 2);
     }
+
+    &::before {
+      background-color: rgba(variables.$clr-dusty-gray, 0.1);
+      content: '';
+      z-index: -1;
+      transform: translateY(min(3%, 10px)) translateX(-50%);
+      margin: auto;
+      border-radius: inherit;
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      border-radius: calc(variables.$radius-round / 2);
+      width: 95%;
+      aspect-ratio: 16 / 9;
+    }
   }
-  > .video-card-info {
+  > .playlist-card-info {
     display: flex;
     gap: variables.$spacing-sm;
     align-items: flex-start;
     padding-right: variables.$spacing-lg;
 
-    .video-card-img {
+    .playlist-card-img {
       flex-shrink: 0;
       width: 2.25rem;
       aspect-ratio: 1/1;
@@ -78,7 +112,7 @@
       }
     }
 
-    .video-title {
+    .playlist-title {
       font-weight: variables.$fw-semibold;
       line-height: 1.4;
       text-overflow: ellipsis;
@@ -89,12 +123,13 @@
       -webkit-box-orient: vertical;
     }
 
-    .video-extra-info {
+    .playlist-extra-info,
+    .playlist-link {
       font-size: variables.$fs-xs;
       @include mixins.flex-cv;
       gap: variables.$spacing-sm;
       color: variables.$clr-dusty-gray;
-      margin-top: calc(variables.$spacing-sm/2);
+      margin-top: calc(variables.$spacing-sm / 2);
 
       > :first-child {
         font-weight: variables.$fw-semibold;
@@ -102,6 +137,14 @@
         &:hover {
           color: var(--link-hovered);
         }
+      }
+    }
+
+    .playlist-link {
+      margin-top: variables.$spacing-sm;
+      color: variables.$clr-snow;
+      &:hover {
+        text-decoration: underline;
       }
     }
   }

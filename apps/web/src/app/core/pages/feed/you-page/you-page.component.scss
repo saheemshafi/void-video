@@ -14,6 +14,7 @@
 section {
   &:not(:first-child) {
     border-bottom: 1px solid var(--section-header-border);
+    padding-bottom: calc(variables.$spacing-sm * 2);
     .section-header {
       margin-top: calc(variables.$spacing-lg * 2);
     }

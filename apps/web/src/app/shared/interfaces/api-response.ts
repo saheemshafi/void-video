@@ -1,6 +1,7 @@
-import { Paginated } from './paginated';
+import { Paginated, Populated } from './utils';
 import { Session } from './session';
 import { Video } from './video';
+import { Playlist } from './playlist';
 
 export interface ApiResponse<T> {
   success: true;
@@ -26,5 +27,9 @@ export type VideoWithSubscriptionInfo = Video & {
 export type VideoResponse = ApiResponse<VideoWithSubscriptionInfo>;
 
 export type VideosResponse = ApiResponse<Paginated<Array<Video>, 'videos'>>;
+
+export type PlaylistsResponse = ApiResponse<
+  Paginated<Array<Playlist>, 'playlists'>
+>;
 
 export type AutocompleteResponse = ApiResponse<string[]>;
