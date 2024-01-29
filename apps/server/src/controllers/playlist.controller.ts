@@ -383,6 +383,7 @@ const getPlaylists = asyncHandler(async (req, res) => {
         title: 1,
         description: 1,
         views: 1,
+        thumbnail: 1,
         createdAt: 1,
         updatedAt: 1,
       },
