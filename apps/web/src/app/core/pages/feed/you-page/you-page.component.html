@@ -15,15 +15,22 @@
   </section>
 }
 
-<section>
-  <div class="section-header">
-    <div class="section-heading">
-      <div class="icon"><i class="bx bxs-playlist sm"></i></div>
-      <h2>Playlists</h2>
+@if (playlists$ | async; as playlists) {
+  <section>
+    <div class="section-header">
+      <div class="section-heading">
+        <div class="icon"><i class="bx bxs-playlist sm"></i></div>
+        <h2>Playlists</h2>
+      </div>
+      <!-- <a routerLink="" class="button ghost">See all</a> -->
     </div>
-    <a routerLink="" class="button ghost">See all</a>
-  </div>
-</section>
+    <app-item-grid>
+      @for (playlist of playlists; track playlist._id) {
+        <app-playlist-card [playlist]="playlist" />
+      }
+    </app-item-grid>
+  </section>
+}
 
 <section>
   <div class="section-header">

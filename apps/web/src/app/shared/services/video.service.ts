@@ -3,14 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { VideoResponse, VideosResponse } from '../interfaces/api-response';
-
-type VideosQueryList = {
-  userId: string;
-  sort: 'views.asc' | 'views.desc' | 'title.asc' | 'title.desc';
-  page: number;
-  limit: number;
-  query: string;
-};
+import { QueryList } from '../interfaces/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +11,7 @@ type VideosQueryList = {
 export class VideoService {
   private http = inject(HttpClient);
 
-  getVideos(queryParams?: Partial<VideosQueryList>) {
+  getVideos(queryParams?: Partial<QueryList>) {
     const url = new URL(`${environment.serverUrl}/videos`);
 
     for (let [param, value] of Object.entries(queryParams || {})) {

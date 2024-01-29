@@ -28,8 +28,10 @@
             class="recommendation-img"
             [attr.aria-label]="recommendation.title"
           >
+            <!-- IMPORTANT: change secure_url to public id later with 
+      ngsrc for using cloudinary loader -->
             <img
-              [ngSrc]="recommendation.owner.avatar.public_id"
+              [src]="recommendation.thumbnail.secure_url"
               width="150"
               height="84.5"
               [alt]="recommendation.title"
@@ -45,7 +47,8 @@
               [routerLink]="['/watch', recommendation._id]"
               class="recommendation-title"
             >
-              {{ recommendation.title }}
+              <!-- IMPORTANT - remove split later -->
+              {{ recommendation.title.split('[')[0] }}
             </a>
             <div>
               <a

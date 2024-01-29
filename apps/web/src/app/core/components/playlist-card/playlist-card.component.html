@@ -1,0 +1,45 @@
+<div class="playlist-card">
+  <div class="thumbnail-container" (click)="navigateToPlaylist()">
+    <img
+      class="thumbnail"
+      [ngSrc]="playlist.thumbnail.public_id"
+      width="600"
+      height="338"
+      [alt]="playlist.title"
+    />
+    <span class="playlist-total-videos" aria-label="Total videos in playlist"
+      >{{ playlist.totalVideos | number }} videos</span
+    >
+    @if (playlist.totalVideos > 0) {
+      <div class="playlist-thumbnail-icon">
+        <i class="bx bx-play sm"></i>
+        <p>Play All</p>
+      </div>
+    }
+  </div>
+  <div class="playlist-card-info">
+    <div class="playlist-card-img">
+      <a
+        [routerLink]="['/c', playlist.owner.username]"
+        [attr.aria-label]="playlist.owner.username"
+        [title]="playlist.owner.displayName"
+      >
+        <img [ngSrc]="playlist.owner.avatar.public_id" width="80" height="80" />
+      </a>
+    </div>
+    <div>
+      <a [routerLink]="['/playlists', playlist._id]" class="playlist-title">{{
+        playlist.title
+      }}</a>
+      <div class="playlist-extra-info">
+        <a [routerLink]="['/c', playlist.owner.username]"
+          >&#64;{{ playlist.owner.username }}</a
+        >
+        <span>{{ playlist.views | abbreviateNumber }} views</span>
+      </div>
+      <a class="playlist-link" [routerLink]="['/playlists', playlist._id]">
+        View Playlist
+      </a>
+    </div>
+  </div>
+</div>

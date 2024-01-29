@@ -26,6 +26,7 @@ import { SearchbarComponent } from './components/searchbar/searchbar.component';
 import { FormsModule } from '@angular/forms';
 
 import { CdkListboxModule } from '@angular/cdk/listbox';
+import { PlaylistCardComponent } from './components/playlist-card/playlist-card.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { CdkListboxModule } from '@angular/cdk/listbox';
     WatchPageChannelBarComponent,
     SubscribeButtonComponent,
     SearchbarComponent,
+    PlaylistCardComponent,
   ],
   imports: [
     CommonModule,
