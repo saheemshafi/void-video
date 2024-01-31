@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, map, of, shareReplay, switchMap } from 'rxjs';
+import { map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
   ApiResponse,
@@ -8,9 +8,9 @@ import {
   VideosResponse,
   WatchHistoryResponse,
 } from '../interfaces/api-response';
-import { AuthService } from './auth.service';
 import { Paginated } from '../interfaces/utils';
 import { Video } from '../interfaces/video';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -43,12 +43,9 @@ export class UserService {
 
   getLikedVideos() {
     return this.http
-      .get<ApiResponse<Paginated<Array<Video>, 'videos'>>>(
-        `${environment.serverUrl}/users/liked-videos`,
-        {
-          withCredentials: true,
-        }
-      )
+      .get<VideosResponse>(`${environment.serverUrl}/users/liked-videos`, {
+        withCredentials: true,
+      })
       .pipe(map((response) => response.data));
   }
 }
