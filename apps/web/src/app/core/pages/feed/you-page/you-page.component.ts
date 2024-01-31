@@ -22,6 +22,7 @@ export class YouPageComponent implements OnInit {
   history$: Observable<Video[] | null> = of(null);
   uploads$: Observable<Video[] | null> = of(null);
   playlists$: Observable<Playlist[] | null> = of(null);
+  likedVideos$: Observable<Video[] | null> = of(null);
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
   ngOnInit(): void {
@@ -46,5 +47,9 @@ export class YouPageComponent implements OnInit {
           .pipe(map((data) => data.playlists))
       )
     );
+
+    this.likedVideos$ = this.userService
+      .getLikedVideos()
+      .pipe(map((data) => (data.videos.length > 0 ? data.videos : null)));
   }
 }

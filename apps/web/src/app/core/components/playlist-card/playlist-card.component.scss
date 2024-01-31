@@ -142,7 +142,7 @@
 
     .playlist-link {
       margin-top: variables.$spacing-sm;
-      color: variables.$clr-snow;
+      color: initial;
       &:hover {
         text-decoration: underline;
       }

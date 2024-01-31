@@ -32,15 +32,22 @@
   </section>
 }
 
-<section>
-  <div class="section-header">
-    <div class="section-heading">
-      <div class="icon"><i class="bx bxs-like sm"></i></div>
-      <h2>Liked Videos</h2>
+@if (likedVideos$ | async; as likedVideos) {
+  <section>
+    <div class="section-header">
+      <div class="section-heading">
+        <div class="icon"><i class="bx bxs-like sm"></i></div>
+        <h2>Liked Videos</h2>
+      </div>
+      <a routerLink="" class="button ghost">See all</a>
     </div>
-    <a routerLink="" class="button ghost">See all</a>
-  </div>
-</section>
+    <app-item-grid>
+      @for (video of likedVideos; track video._id) {
+        <app-video-card [video]="video" />
+      }
+    </app-item-grid>
+  </section>
+}
 
 @if (uploads$ | async; as uploads) {
   <section>

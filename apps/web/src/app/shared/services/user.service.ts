@@ -3,11 +3,14 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, map, of, shareReplay, switchMap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
+  ApiResponse,
   SubscriptionsResponse,
   VideosResponse,
   WatchHistoryResponse,
 } from '../interfaces/api-response';
 import { AuthService } from './auth.service';
+import { Paginated } from '../interfaces/utils';
+import { Video } from '../interfaces/video';
 
 @Injectable({
   providedIn: 'root',
@@ -31,6 +34,17 @@ export class UserService {
     return this.http
       .get<SubscriptionsResponse>(
         `${environment.serverUrl}/users/channels-subscribed`,
+        {
+          withCredentials: true,
+        }
+      )
+      .pipe(map((response) => response.data));
+  }
+
+  getLikedVideos() {
+    return this.http
+      .get<ApiResponse<Paginated<Array<Video>, 'videos'>>>(
+        `${environment.serverUrl}/users/liked-videos`,
         {
           withCredentials: true,
         }
