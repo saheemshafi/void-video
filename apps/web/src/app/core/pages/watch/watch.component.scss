@@ -25,6 +25,7 @@
     .video-title {
       font-size: calc(variables.$fs-normal * 1.2);
       margin-block: variables.$spacing-normal;
+      line-height: 27px;
     }
 
     .video-description {

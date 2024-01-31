@@ -5,6 +5,7 @@ export interface Video {
   _id: string;
   title: string;
   description: string;
+  likes: number;
   owner: User;
   source: IFile;
   thumbnail: IFile;
