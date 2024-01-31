@@ -20,4 +20,34 @@
       />
     </div>
   </div>
+  <div class="video-actions">
+    <div class="button-group">
+      <button
+        (click)="toggleLike()"
+        title="Like video"
+        aria-label="Like video"
+        class="button ghost"
+      >
+        @if ((isLiked$ | async) == undefined) {
+          <i class="bx bx-loader-alt sm bx-spin"></i>
+        } @else {
+          <i
+            class="bx sm"
+            [ngClass]="{
+              'bxs-like': isLiked$ | async,
+              'bx-like': !(isLiked$ | async)
+            }"
+          ></i>
+          <span>{{ video.likes | abbreviateNumber }}</span>
+        }
+      </button>
+      <button title="Share video" aria-label="Share video" class="button ghost">
+        <i class="bx bxs-share bx-flip-horizontal sm"></i>
+      </button>
+    </div>
+
+    <button class="button ghost options">
+      <i class="bx bx-dots-vertical-rounded sm"></i>
+    </button>
+  </div>
 </div>
