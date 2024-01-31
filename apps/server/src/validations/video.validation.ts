@@ -88,3 +88,9 @@ export const changeVideoThumbnailSchema = z.object({
   }),
   file: fileSchema,
 });
+
+export const getStatusSchema = z.object({
+  params: z.object({
+    videoId: videoIdSchema,
+  }),
+});

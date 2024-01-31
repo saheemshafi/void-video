@@ -23,6 +23,7 @@ import {
   addCommentToVideoSchema,
   changeVideoThumbnailSchema,
   deleteVideoSchema,
+  getStatusSchema,
   getVideoCommentsSchema,
   getVideoSchema,
   getVideosSchema,
@@ -468,6 +469,65 @@ const addCommentToVideo = asyncHandler(async (req, res) => {
     .json(new ApiResponse(STATUS_CODES.OK, 'Commented on the video.', comment));
 });
 
+const getStatus = asyncHandler(async (req, res) => {
+  const {
+    params: { videoId },
+  } = validateRequest(req, getStatusSchema);
+
+  const existingVideo = await Video.findById(videoId);
+
+  if (!existingVideo) {
+    throw new ApiError(STATUS_CODES.NOT_FOUND, 'Video not found');
+  }
+
+  const video = await Video.aggregate([
+    {
+      $match: {
+        _id: new Types.ObjectId(videoId),
+      },
+    },
+    {
+      $lookup: {
+        from: 'likes',
+        localField: '_id',
+        foreignField: 'video',
+        as: 'likes',
+      },
+    },
+    {
+      $addFields: {
+        isLiked: {
+          $cond: {
+            if: {
+              $in: [req.user?._id, '$likes.likedBy'],
+            },
+            then: true,
+            else: false,
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        isLiked: 1,
+      },
+    },
+  ]);
+
+  if (video.length === 0) {
+    throw new ApiError(
+      STATUS_CODES.INTERNAL_SERVER_ERROR,
+      'Status could not be retrieved'
+    );
+  }
+
+  res
+    .status(STATUS_CODES.OK)
+    .json(
+      new ApiResponse(STATUS_CODES.OK, 'Video status retrieved.', video[0])
+    );
+});
+
 export {
   addCommentToVideo,
   changeVideoThumbnail,
@@ -478,4 +538,5 @@ export {
   toggleVideoLike,
   updateVideo,
   uploadVideo,
+  getStatus,
 };
