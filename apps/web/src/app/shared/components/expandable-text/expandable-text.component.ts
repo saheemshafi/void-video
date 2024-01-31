@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { CdkAccordionItem } from '@angular/cdk/accordion';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-expandable-text',
@@ -9,14 +10,24 @@ export class ExpandableTextComponent implements OnInit {
   @Input({ required: true }) text: string = '';
   @Input() maxLength: number = 200;
   @Input({ required: true }) id: string = '';
-
-  collapsedText: string = '';
-  canExpand: boolean = false;
+  @ViewChild(CdkAccordionItem) accordionItem!: CdkAccordionItem;
 
   ngOnInit(): void {
-    if (this.text.length > this.maxLength) {
-      this.canExpand = true;
-      this.collapsedText = this.text.slice(0, this.maxLength);
+    console.log(this.text);
+    if (this.isExpandable() && this.accordionItem) {
+      this.accordionItem && this.accordionItem.close();
     }
+  }
+
+  ngOnChanges() {
+    if (this.isExpandable() && this.accordionItem) {
+      this.accordionItem.close();
+    } else if (this.accordionItem) {
+      this.accordionItem.open();
+    }
+  }
+
+  isExpandable() {
+    return this.text.length > this.maxLength;
   }
 }
