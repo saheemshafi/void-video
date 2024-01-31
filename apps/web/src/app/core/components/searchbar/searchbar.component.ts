@@ -23,7 +23,7 @@ export class SearchbarComponent {
   @ViewChild(CdkOption) cdkOption!: CdkOption;
 
   items$ = this.searchQuery$.pipe(
-    debounceTime(200),
+    debounceTime(250),
     distinctUntilChanged(),
     filter((query) => query.length > 0),
     switchMap((query) => this.searchService.autocomplete(query))
