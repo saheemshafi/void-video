@@ -486,14 +486,7 @@ const getStatus = asyncHandler(async (req, res) => {
         _id: new Types.ObjectId(videoId),
       },
     },
-    {
-      $lookup: {
-        from: 'likes',
-        localField: '_id',
-        foreignField: 'video',
-        as: 'likes',
-      },
-    },
+    $lookupLikes(),
     {
       $addFields: {
         isLiked: {
