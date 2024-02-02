@@ -24,13 +24,15 @@ export class YouPageComponent implements OnInit {
   playlists$: Observable<Playlist[] | null> = of(null);
   likedVideos$: Observable<Video[] | null> = of(null);
 
+  session$ = this.authService.session$;
+
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
   ngOnInit(): void {
     if (isPlatformServer(this.platformId)) return;
 
     this.history$ = this.userService.getWatchHistory();
 
-    this.uploads$ = this.authService.session$.pipe(
+    this.uploads$ = this.session$.pipe(
       filter((session) => !!session),
       switchMap((session) =>
         this.videoService
@@ -39,7 +41,7 @@ export class YouPageComponent implements OnInit {
       )
     );
 
-    this.playlists$ = this.authService.session$.pipe(
+    this.playlists$ = this.session$.pipe(
       filter((session) => !!session),
       switchMap((session) =>
         this.playlistService
@@ -49,7 +51,7 @@ export class YouPageComponent implements OnInit {
     );
 
     this.likedVideos$ = this.userService
-      .getLikedVideos()
+      .getLikedVideos({ limit: 6 })
       .pipe(map((data) => (data.videos.length > 0 ? data.videos : null)));
   }
 }

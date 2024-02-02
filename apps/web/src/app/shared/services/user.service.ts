@@ -8,7 +8,7 @@ import {
   VideosResponse,
   WatchHistoryResponse,
 } from '../interfaces/api-response';
-import { Paginated } from '../interfaces/utils';
+import { Paginated, QueryList } from '../interfaces/utils';
 import { Video } from '../interfaces/video';
 import { AuthService } from './auth.service';
 
@@ -41,12 +41,17 @@ export class UserService {
       .pipe(map((response) => response.data));
   }
 
-  getLikedVideos() {
+  getLikedVideos(queryParams?: Partial<QueryList>) {
+    const url = new URL(`${environment.serverUrl}/users/liked-videos`);
+
+    for (let [param, value] of Object.entries(queryParams || {})) {
+      url.searchParams.set(param, String(value));
+    }
+
     return this.http
-      .get<VideosResponse>(`${environment.serverUrl}/users/liked-videos`, {
+      .get<VideosResponse>(url.toString(), {
         withCredentials: true,
       })
       .pipe(map((response) => response.data));
   }
-  
 }
