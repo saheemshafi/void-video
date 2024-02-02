@@ -3,7 +3,7 @@
     <div class="section-header">
       <div class="section-heading">
         <div class="icon"><i class="bx bx-history sm"></i></div>
-        <h2>History</h2>
+        <h2>Recently Watched</h2>
       </div>
       <a routerLink="/feed/history" class="button ghost">See all</a>
     </div>
@@ -22,7 +22,11 @@
         <div class="icon"><i class="bx bxs-playlist sm"></i></div>
         <h2>Playlists</h2>
       </div>
-      <!-- <a routerLink="" class="button ghost">See all</a> -->
+      <a
+        [routerLink]="['/c', (session$ | async)?.username, 'playlists']"
+        class="button ghost"
+        >See all</a
+      >
     </div>
     <app-item-grid>
       @for (playlist of playlists; track playlist._id) {
@@ -39,7 +43,7 @@
         <div class="icon"><i class="bx bxs-like sm"></i></div>
         <h2>Liked Videos</h2>
       </div>
-      <a routerLink="" class="button ghost">See all</a>
+      <a routerLink="/feed/liked-videos" class="button ghost">See all</a>
     </div>
     <app-item-grid>
       @for (video of likedVideos; track video._id) {
