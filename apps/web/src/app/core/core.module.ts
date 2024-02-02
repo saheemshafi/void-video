@@ -27,6 +27,7 @@ import { FormsModule } from '@angular/forms';
 
 import { CdkListboxModule } from '@angular/cdk/listbox';
 import { PlaylistCardComponent } from './components/playlist-card/playlist-card.component';
+import { LikedVideosComponent } from './pages/feed/liked-videos/liked-videos.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { PlaylistCardComponent } from './components/playlist-card/playlist-card.
     SubscribeButtonComponent,
     SearchbarComponent,
     PlaylistCardComponent,
+    LikedVideosComponent,
   ],
   imports: [
     CommonModule,

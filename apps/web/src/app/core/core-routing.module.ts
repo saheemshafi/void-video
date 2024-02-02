@@ -8,6 +8,7 @@ import { SubscriptionsPageComponent } from './pages/feed/subscriptions-page/subs
 import { YouPageComponent } from './pages/feed/you-page/you-page.component';
 import { HomeComponent } from './pages/home/home.component';
 import { WatchComponent } from './pages/watch/watch.component';
+import { LikedVideosComponent } from './pages/feed/liked-videos/liked-videos.component';
 
 const routes: Routes = [
   {
@@ -39,6 +40,10 @@ const routes: Routes = [
       {
         path: 'feed/history',
         component: HistoryPageComponent,
+      },
+      {
+        path: 'feed/liked-videos',
+        component: LikedVideosComponent,
       },
       {
         path: 'watch/:videoId',
