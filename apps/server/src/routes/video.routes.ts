@@ -9,6 +9,7 @@ import {
   getVideos,
   addCommentToVideo,
   changeVideoThumbnail,
+  getStatus,
 } from '../controllers/video.controller';
 import { authorize } from '../middlewares/auth.middleware';
 import upload from '../middlewares/multer.middleware';
@@ -46,5 +47,6 @@ videoRouter
   .post(authorize(), addCommentToVideo);
 
 videoRouter.route('/:videoId/toggle-like').get(authorize(), toggleVideoLike);
+videoRouter.route('/:videoId/status').get(authorize(), getStatus);
 
 export default videoRouter;
