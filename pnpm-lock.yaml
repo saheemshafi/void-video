@@ -232,6 +232,9 @@ importers:
       '@angular/ssr':
         specifier: ^17.0.7
         version: 17.0.8(@angular/common@17.0.8)(@angular/core@17.0.8)
+      '@ngneat/hot-toast':
+        specifier: 6.1.0
+        version: 6.1.0(@angular/core@17.0.8)(@ngneat/overview@5.1.1)
       boxicons:
         specifier: ^2.1.4
         version: 2.1.4
@@ -2676,6 +2679,26 @@ packages:
     resolution: {integrity: sha512-t7c5K033joZZMspnHg/gWPE4kandgc2OxE74aYOtGKfgB9VPuVJPix0H6fhmm2erj5PBJ21mqcx34lpIGtUCsQ==}
     dependencies:
       sparse-bitfield: 3.0.3
+
+  /@ngneat/hot-toast@6.1.0(@angular/core@17.0.8)(@ngneat/overview@5.1.1):
+    resolution: {integrity: sha512-jF9LwuPG3N1EDwSkwPsmB0CqiwI94zbJBo5oSwj3dsTftmTo8hJw9Hr5spAQOa7mhoy4pbgACWOx8xspwSAXQA==}
+    peerDependencies:
+      '@angular/core': '>=16.0.0'
+      '@ngneat/overview': 5.1.1
+    dependencies:
+      '@angular/core': 17.0.8(rxjs@7.8.1)(zone.js@0.14.2)
+      '@ngneat/overview': 5.1.1(@angular/core@17.0.8)
+      tslib: 2.6.2
+    dev: false
+
+  /@ngneat/overview@5.1.1(@angular/core@17.0.8):
+    resolution: {integrity: sha512-Dz7yylhS08Mo+A8SXo7KyJBJMxD18Oq/G5v/ndvd5C8Gi3uOrAiXUjxvqRCPMxrg03FlkvEsD5/4TvMKtrUfAQ==}
+    peerDependencies:
+      '@angular/core': '>=16'
+    dependencies:
+      '@angular/core': 17.0.8(rxjs@7.8.1)(zone.js@0.14.2)
+      tslib: 2.6.2
+    dev: false
 
   /@ngtools/webpack@17.0.8(@angular/compiler-cli@17.0.8)(typescript@5.2.2)(webpack@5.89.0):
     resolution: {integrity: sha512-wx0XBMrbpDeailK2uIhp/ZVMC3GK3BWwJjUu5SbT4BFrcoi2Zd9/9m0RCBAY54UXLBCqKd+ih7pJ6JSvprZmWw==}
