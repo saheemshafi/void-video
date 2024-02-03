@@ -13,6 +13,8 @@ import { environment } from '~/environments/environment';
 
 import { ThemeService } from '~shared/services/theme.service';
 
+import { provideHotToastConfig } from '@ngneat/hot-toast';
+
 @NgModule({
   declarations: [AppComponent],
   imports: [BrowserModule, AppRoutingModule],
@@ -20,6 +22,13 @@ import { ThemeService } from '~shared/services/theme.service';
     provideClientHydration(),
     provideHttpClient(withFetch()),
     provideCloudinaryLoader(environment.cloudinaryUrl),
+    provideHotToastConfig({
+      position: 'bottom-right',
+      dismissible: true,
+      duration: 1500,
+      stacking: 'depth',
+      visibleToasts: 3,
+    }),
     {
       provide: APP_INITIALIZER,
       deps: [ThemeService],
