@@ -13,7 +13,6 @@ export class ExpandableTextComponent implements OnInit {
   @ViewChild(CdkAccordionItem) accordionItem!: CdkAccordionItem;
 
   ngOnInit(): void {
-    console.log(this.text);
     if (this.isExpandable() && this.accordionItem) {
       this.accordionItem && this.accordionItem.close();
     }
