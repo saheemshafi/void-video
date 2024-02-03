@@ -1,4 +1,4 @@
-import { IFile } from './file';
+import { IFile } from '~shared/interfaces/file';
 
 export interface Session {
   _id: string;

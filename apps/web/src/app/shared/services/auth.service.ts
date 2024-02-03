@@ -16,14 +16,16 @@ import {
   retry,
   tap,
 } from 'rxjs';
-import { environment } from '../../../environments/environment';
+
+import { environment } from '~/environments/environment';
+
 import {
   CreateAccountRequest,
   LoginRequest,
   LoginResponse,
   SessionResponse,
-} from '../interfaces/auth';
-import { Session } from '../interfaces/session';
+} from '~shared/interfaces/auth';
+import { Session } from '~shared/interfaces/session';
 
 @Injectable({
   providedIn: 'root',

@@ -1,17 +1,19 @@
 import { Injectable, inject } from '@angular/core';
-import { AuthService } from './auth.service';
-import { environment } from '../../../environments/environment';
-import { QueryList } from '../interfaces/utils';
-import { PlaylistsResponse } from '../interfaces/api-response';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs';
+
+import { AuthService } from '~shared/services/auth.service';
+
+import { QueryList } from '~shared/interfaces/utils';
+import { PlaylistsResponse } from '~shared/interfaces/api-response';
+
+import { environment } from '~/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PlaylistService {
   private http = inject(HttpClient);
-  private authService = inject(AuthService);
 
   constructor() {}
 

@@ -1,16 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { map } from 'rxjs';
-import { environment } from '../../../environments/environment';
+
 import {
-  ApiResponse,
   SubscriptionsResponse,
   VideosResponse,
   WatchHistoryResponse,
-} from '../interfaces/api-response';
-import { Paginated } from '../interfaces/utils';
-import { Video } from '../interfaces/video';
-import { AuthService } from './auth.service';
+} from '~shared/interfaces/api-response';
+import { QueryList } from '~shared/interfaces/utils';
+
+import { AuthService } from '~shared/services/auth.service';
+
+import { environment } from '~/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -41,12 +42,17 @@ export class UserService {
       .pipe(map((response) => response.data));
   }
 
-  getLikedVideos() {
+  getLikedVideos(queryParams?: Partial<QueryList>) {
+    const url = new URL(`${environment.serverUrl}/users/liked-videos`);
+
+    for (let [param, value] of Object.entries(queryParams || {})) {
+      url.searchParams.set(param, String(value));
+    }
+
     return this.http
-      .get<VideosResponse>(`${environment.serverUrl}/users/liked-videos`, {
+      .get<VideosResponse>(url.toString(), {
         withCredentials: true,
       })
       .pipe(map((response) => response.data));
   }
-  
 }

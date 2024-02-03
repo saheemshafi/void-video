@@ -1,7 +1,7 @@
-import { Paginated, Populated } from './utils';
-import { Session } from './session';
-import { Video } from './video';
-import { Playlist } from './playlist';
+import { Playlist } from '~shared/interfaces/playlist';
+import { Session } from '~shared/interfaces/session';
+import { Paginated } from '~shared/interfaces/utils';
+import { Video } from '~shared/interfaces/video';
 
 export interface ApiResponse<T> {
   success: true;

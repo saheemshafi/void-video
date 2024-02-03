@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { AuthService } from '../../../shared/services/auth.service';
-import { VideoService } from '../../../shared/services/video.service';
 import { map } from 'rxjs';
+
+import { VideoService } from '~shared/services/video.service';
 
 @Component({
   selector: 'app-home',

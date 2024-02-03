@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { UserService } from '../../../shared/services/user.service';
-import { map } from 'rxjs';
-import { AuthService } from '../../../shared/services/auth.service';
+
+import { AuthService } from '~shared/services/auth.service';
+import { UserService } from '~shared/services/user.service';
 
 @Component({
   selector: 'app-sidebar-subscription-list',

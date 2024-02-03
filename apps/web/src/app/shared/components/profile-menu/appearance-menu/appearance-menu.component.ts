@@ -5,7 +5,8 @@ import {
   ViewChild,
   inject,
 } from '@angular/core';
-import { Theme, ThemeService } from '../../../services/theme.service';
+
+import { Theme, ThemeService } from '~shared/services/theme.service';
 
 @Component({
   selector: 'app-appearance-menu',

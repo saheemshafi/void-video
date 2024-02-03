@@ -1,7 +1,8 @@
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { AuthService } from '../../../shared/services/auth.service';
-import { filter, map, startWith, tap } from 'rxjs';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter, map, startWith } from 'rxjs';
+
+import { AuthService } from '~shared/services/auth.service';
 
 @Component({
   selector: 'app-header',

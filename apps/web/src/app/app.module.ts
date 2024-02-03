@@ -3,13 +3,15 @@ import {
   BrowserModule,
   provideClientHydration,
 } from '@angular/platform-browser';
-
-import { provideHttpClient, withFetch } from '@angular/common/http';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { ThemeService } from './shared/services/theme.service';
 import { provideCloudinaryLoader } from '@angular/common';
-import { environment } from '../environments/environment';
+import { provideHttpClient, withFetch } from '@angular/common/http';
+
+import { AppRoutingModule } from '~/app/app-routing.module';
+import { AppComponent } from '~/app/app.component';
+
+import { environment } from '~/environments/environment';
+
+import { ThemeService } from '~shared/services/theme.service';
 
 @NgModule({
   declarations: [AppComponent],

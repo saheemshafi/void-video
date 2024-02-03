@@ -2,8 +2,10 @@ import { isPlatformServer } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { NEVER, catchError, map, of } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { SubscriptionStatusResponse } from '../interfaces/api-response';
+
+import { SubscriptionStatusResponse } from '~shared/interfaces/api-response';
+
+import { environment } from '~/environments/environment';
 
 @Injectable({
   providedIn: 'root',

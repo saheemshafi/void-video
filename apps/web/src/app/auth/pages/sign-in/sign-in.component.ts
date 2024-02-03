@@ -1,8 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { AuthService } from '../../../shared/services/auth.service';
-import { LoginRequest } from '../../../shared/interfaces/auth';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { AuthService } from '~shared/services/auth.service';
+import { LoginRequest } from '~shared/interfaces/auth';
 
 @Component({
   selector: 'app-sign-in',

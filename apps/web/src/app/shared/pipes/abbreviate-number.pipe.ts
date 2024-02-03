@@ -1,11 +1,10 @@
 import { DecimalPipe } from '@angular/common';
-import { Pipe, PipeTransform, inject } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'abbreviateNumber',
 })
 export class AbbreviateNumberPipe implements PipeTransform {
-  
   decimalPipe: DecimalPipe = new DecimalPipe('en-us');
 
   transform(value: number): string | null {

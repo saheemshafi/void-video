@@ -1,13 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CoreComponent } from './core.component';
-import { ChannelHomePageComponent } from './pages/channel/channel-home-page/channel-home-page.component';
-import { ChannelLayoutComponent } from './pages/channel/channel-layout/channel-layout.component';
-import { HistoryPageComponent } from './pages/feed/history-page/history-page.component';
-import { SubscriptionsPageComponent } from './pages/feed/subscriptions-page/subscriptions-page.component';
-import { YouPageComponent } from './pages/feed/you-page/you-page.component';
-import { HomeComponent } from './pages/home/home.component';
-import { WatchComponent } from './pages/watch/watch.component';
+
+import { CoreComponent } from '~core/core.component';
+import { ChannelHomePageComponent } from '~core/pages/channel/channel-home-page/channel-home-page.component';
+import { ChannelLayoutComponent } from '~core/pages/channel/channel-layout/channel-layout.component';
+import { HomeComponent } from '~core/pages/home/home.component';
 
 const routes: Routes = [
   {
@@ -28,21 +25,16 @@ const routes: Routes = [
           },
         ],
       },
+
       {
-        path: 'feed/you',
-        component: YouPageComponent,
+        path: 'watch',
+        loadChildren: () =>
+          import('~watch/watch.module').then((m) => m.WatchModule),
       },
       {
-        path: 'feed/subscriptions',
-        component: SubscriptionsPageComponent,
-      },
-      {
-        path: 'feed/history',
-        component: HistoryPageComponent,
-      },
-      {
-        path: 'watch/:videoId',
-        component: WatchComponent,
+        path: 'feed',
+        loadChildren: () =>
+          import('~feed/feed.module').then((m) => m.FeedModule),
       },
     ],
   },

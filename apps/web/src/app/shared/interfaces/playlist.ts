@@ -1,5 +1,5 @@
-import { User } from './api-response';
-import { IFile } from './file';
+import { User } from '~shared/interfaces/api-response';
+import { IFile } from '~shared/interfaces/file';
 
 export interface Playlist {
   _id: string;
