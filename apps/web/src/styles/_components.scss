@@ -1,5 +1,6 @@
 @use './variables';
 @use './mixins';
+@use '@ngneat/hot-toast/src/styles/styles.scss';
 
 form {
   gap: variables.$spacing-normal;
@@ -205,5 +206,48 @@ i.bx.xs {
   .fullscreen-info-icon {
     --fullscreen-icon-bg: #{variables.$clr-gray-smooth-dark};
     --fullscreen-icon-clr: #{variables.$clr-snow};
+  }
+}
+
+.hot-toast-bar-base {
+  font-size: variables.$fs-xs;
+  --hot-toast-border-radius: calc(#{variables.$radius-round} / 2);
+  --hot-toast-width: 280px;
+  --hot-toast-message-justify-content: flex-start;
+  --hot-toast-close-btn-background-size: 1.25em;
+  --hot-toast-close-btn-width: 1em;
+  --hot-toast-close-btn-height: 1em;
+  --hot-toast-message-margin: calc(#{variables.$spacing-sm} / 2) #{variables.$spacing-sm}
+    calc(#{variables.$spacing-sm} / 2) calc(#{variables.$spacing-sm} / 2);
+
+  .hot-toast-message {
+    font-weight: variables.$fw-semibold;
+  }
+
+  .toast-description {
+    margin: 0;
+    margin-top: 2px;
+    color: variables.$clr-dusty-gray;
+    font-weight: variables.$fw-regular;
+    font-size: variables.$fs-xs;
+  }
+
+  // LIGHT MODE STYLES
+  --hot-toast-bg: #{variables.$clr-snow};
+  border: 1px solid rgba(variables.$clr-dusty-gray, 0.2);
+  --hot-toast-color: #{variables.$clr-dark-void};
+  --hot-toast-close-btn-background-color: #{variables.$clr-gray-smooth};
+  --hot-toast-shadow: 0 0.25rem 0.2rem rgba(189, 186, 186, 0.2);
+  --hot-toast-close-btn-background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' style='fill: rgba(0, 0, 0);transform: ;msFilter:;'%3E%3Cpath d='m16.192 6.344-4.243 4.242-4.242-4.242-1.414 1.414L10.535 12l-4.242 4.242 1.414 1.414 4.242-4.242 4.243 4.242 1.414-1.414L13.364 12l4.242-4.242z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+.dark {
+  .hot-toast-bar-base {
+    --hot-toast-bg: #{variables.$clr-dark-void};
+    border: 1px solid rgba(variables.$clr-dusty-gray, 0.2);
+    --hot-toast-color: #{variables.$clr-snow};
+    --hot-toast-close-btn-background-color: #{variables.$clr-gluon-gray};
+    --hot-toast-shadow: 0 0.25rem 0.3rem rgba(0, 0, 0, 0.3);
+    --hot-toast-close-btn-background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' style='fill: rgb(255, 255, 255);transform: ;msFilter:;'%3E%3Cpath d='m16.192 6.344-4.243 4.242-4.242-4.242-1.414 1.414L10.535 12l-4.242 4.242 1.414 1.414 4.242-4.242 4.243 4.242 1.414-1.414L13.364 12l4.242-4.242z'%3E%3C/path%3E%3C/svg%3E");
   }
 }
