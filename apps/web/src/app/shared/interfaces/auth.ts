@@ -1,5 +1,5 @@
-import { ApiResponse } from './api-response';
-import { Session } from './session';
+import { ApiResponse } from '~shared/interfaces/api-response';
+import { Session } from '~shared/interfaces/session';
 
 export interface LoginRequest {
   email: string;

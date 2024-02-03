@@ -1,4 +1,6 @@
-import { Component, TemplateRef, ViewChild, inject } from '@angular/core';
+import { CdkOption } from '@angular/cdk/listbox';
+import { Component, ViewChild, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   Subject,
   debounceTime,
@@ -6,9 +8,8 @@ import {
   filter,
   switchMap,
 } from 'rxjs';
-import { SearchService } from '../../../shared/services/search.service';
-import { Router } from '@angular/router';
-import { CdkOption } from '@angular/cdk/listbox';
+
+import { SearchService } from '~shared/services/search.service';
 
 @Component({
   selector: 'app-searchbar',

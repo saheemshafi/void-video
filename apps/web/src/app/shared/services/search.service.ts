@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { environment } from '../../../environments/environment';
-import { AutocompleteResponse } from '../interfaces/api-response';
 import { NEVER, catchError, map } from 'rxjs';
+
+import { AutocompleteResponse } from '~shared/interfaces/api-response';
+
+import { environment } from '~/environments/environment';
 
 @Injectable({
   providedIn: 'root',

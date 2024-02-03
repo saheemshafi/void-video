@@ -6,11 +6,11 @@ import {
   PLATFORM_ID,
   inject,
 } from '@angular/core';
-import { Video } from '../../../shared/interfaces/video';
-import { VideoWithSubscriptionInfo } from '../../../shared/interfaces/api-response';
+import { Video } from '~shared/interfaces/video';
+import { VideoWithSubscriptionInfo } from '~shared/interfaces/api-response';
 import { isPlatformServer } from '@angular/common';
 import { BehaviorSubject, Observable, map, of, take } from 'rxjs';
-import { VideoService } from '../../../shared/services/video.service';
+import { VideoService } from '~shared/services/video.service';
 
 @Component({
   selector: 'app-watch-page-channel-bar',

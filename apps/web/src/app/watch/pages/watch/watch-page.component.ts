@@ -1,16 +1,11 @@
 import { isPlatformServer } from '@angular/common';
-import {
-  Component,
-  Inject,
-  OnInit,
-  PLATFORM_ID,
-  inject
-} from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, map, switchMap } from 'rxjs';
-import { VideoWithSubscriptionInfo } from '../../../shared/interfaces/api-response';
-import { Video } from '../../../shared/interfaces/video';
-import { VideoService } from '../../../shared/services/video.service';
+
+import { VideoWithSubscriptionInfo } from '~shared/interfaces/api-response';
+import { Video } from '~shared/interfaces/video';
+import { VideoService } from '~shared/services/video.service';
 
 @Component({
   selector: 'app-watch',

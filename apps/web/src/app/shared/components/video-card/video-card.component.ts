@@ -1,6 +1,7 @@
 import { Component, Input, inject } from '@angular/core';
-import { Video } from '../../../shared/interfaces/video';
 import { Router } from '@angular/router';
+
+import { Video } from '~shared/interfaces/video';
 
 @Component({
   selector: 'app-video-card',

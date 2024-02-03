@@ -1,14 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { map } from 'rxjs';
-import { environment } from '../../../environments/environment';
+
 import {
   ApiResponse,
   VideoResponse,
   VideosResponse,
-} from '../interfaces/api-response';
-import { QueryList } from '../interfaces/utils';
-import { response } from 'express';
+} from '~shared/interfaces/api-response';
+import { QueryList } from '~shared/interfaces/utils';
+
+import { environment } from '~/environments/environment';
 
 @Injectable({
   providedIn: 'root',

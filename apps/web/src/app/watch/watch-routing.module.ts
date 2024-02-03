@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { WatchComponent } from './watch.component';
-import { WatchPageComponent } from './pages/watch/watch-page.component';
+
+import { WatchComponent } from '~watch/watch.component';
+import { WatchPageComponent } from '~watch/pages/watch/watch-page.component';
 
 const routes: Routes = [
   {

@@ -1,7 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { CreateAccountRequest } from '../../../shared/interfaces/auth';
-import { AuthService } from '../../../shared/services/auth.service';
+
+import { CreateAccountRequest } from '~shared/interfaces/auth';
+import { AuthService } from '~shared/services/auth.service';
 
 @Component({
   selector: 'app-sign-up',

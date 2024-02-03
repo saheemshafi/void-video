@@ -7,7 +7,8 @@ import {
   inject,
 } from '@angular/core';
 import { BehaviorSubject, take } from 'rxjs';
-import { SubscriptionService } from '../../../shared/services/subscription.service';
+
+import { SubscriptionService } from '~shared/services/subscription.service';
 
 @Component({
   selector: 'app-subscribe-button',
