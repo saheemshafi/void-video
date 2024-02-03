@@ -1,0 +1,14 @@
+@use '../../../../styles/variables';
+
+.options {
+  border-radius: variables.$radius-rounded;
+  aspect-ratio: 1 / 1;
+}
+
+.menu {
+  width: 150px;
+
+  i.bx-share {
+    padding-left: 0;
+  }
+}
