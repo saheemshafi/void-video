@@ -25,7 +25,7 @@ import { provideHotToastConfig } from '@ngneat/hot-toast';
     provideHotToastConfig({
       position: 'bottom-right',
       dismissible: true,
-      duration: 1500,
+      duration: 1800,
       stacking: 'depth',
       visibleToasts: 3,
     }),
