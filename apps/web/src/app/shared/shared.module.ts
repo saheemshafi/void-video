@@ -12,8 +12,11 @@ import { ItemGridComponent } from './components/item-grid/item-grid.component';
 import { ExpandableTextComponent } from './components/expandable-text/expandable-text.component';
 
 import { CdkAccordionModule } from '@angular/cdk/accordion';
+import { SubscribeButtonComponent } from './components/subscribe-button/subscribe-button.component';
+import { VideoCardComponent } from './components/video-card/video-card.component';
+import { PlaylistCardComponent } from './components/playlist-card/playlist-card.component';
 
-const exports = [
+const declarations = [
   SvgLoaderComponent,
   FieldErrorComponent,
   UserProfileComponent,
@@ -21,17 +24,20 @@ const exports = [
   FullscreenInfoComponent,
   ItemGridComponent,
   ExpandableTextComponent,
+  SubscribeButtonComponent,
+  VideoCardComponent,
+  PlaylistCardComponent,
 ];
 
 @NgModule({
-  declarations: [AppearanceMenuComponent, ItemGridComponent, ...exports],
+  declarations: [AppearanceMenuComponent, ItemGridComponent, ...declarations],
   imports: [
     CommonModule,
-    CdkMenuModule,
     RouterModule,
-    NgOptimizedImage,
+    CdkMenuModule,
     CdkAccordionModule,
+    NgOptimizedImage,
   ],
-  exports: exports,
+  exports: [NgOptimizedImage, ...declarations],
 })
 export class SharedModule {}

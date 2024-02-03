@@ -2,23 +2,22 @@ import { isPlatformServer } from '@angular/common';
 import {
   Component,
   Inject,
-  Input,
   OnInit,
   PLATFORM_ID,
-  inject,
+  inject
 } from '@angular/core';
-import { Observable, map, of, switchMap } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { Observable, map, switchMap } from 'rxjs';
+import { VideoWithSubscriptionInfo } from '../../../shared/interfaces/api-response';
 import { Video } from '../../../shared/interfaces/video';
 import { VideoService } from '../../../shared/services/video.service';
-import { VideoWithSubscriptionInfo } from '../../../shared/interfaces/api-response';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-watch',
-  templateUrl: './watch.component.html',
-  styleUrl: './watch.component.scss',
+  templateUrl: './watch-page.component.html',
+  styleUrl: './watch-page.component.scss',
 })
-export class WatchComponent implements OnInit {
+export class WatchPageComponent implements OnInit {
   private videoService = inject(VideoService);
   private activatedRoute = inject(ActivatedRoute);
 

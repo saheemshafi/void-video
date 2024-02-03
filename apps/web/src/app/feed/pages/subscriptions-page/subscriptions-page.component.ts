@@ -1,9 +1,9 @@
 import { Component, Inject, OnInit, PLATFORM_ID, inject } from '@angular/core';
-import { UserService } from '../../../../shared/services/user.service';
-import { AuthService } from '../../../../shared/services/auth.service';
 import { isPlatformServer } from '@angular/common';
 import { Observable, of } from 'rxjs';
-import { Subscription } from '../../../../shared/interfaces/api-response';
+import { UserService } from '../../../shared/services/user.service';
+import { AuthService } from '../../../shared/services/auth.service';
+import { Subscription } from '../../../shared/interfaces/api-response';
 
 @Component({
   selector: 'app-subscriptions-page',

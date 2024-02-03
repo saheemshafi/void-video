@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Subscription } from '../../../../shared/interfaces/api-response';
+import { Subscription } from '../../../shared/interfaces/api-response';
 
 @Component({
   selector: 'app-subscription-list',

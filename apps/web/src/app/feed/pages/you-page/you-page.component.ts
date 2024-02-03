@@ -1,12 +1,13 @@
 import { isPlatformServer } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID, inject } from '@angular/core';
 import { Observable, filter, map, of, switchMap } from 'rxjs';
-import { Video } from '../../../../shared/interfaces/video';
-import { AuthService } from '../../../../shared/services/auth.service';
-import { UserService } from '../../../../shared/services/user.service';
-import { VideoService } from '../../../../shared/services/video.service';
-import { PlaylistService } from '../../../../shared/services/playlist.service';
-import { Playlist } from '../../../../shared/interfaces/playlist';
+
+import { UserService } from '~shared/services/user.service';
+import { VideoService } from '~shared/services/video.service';
+import { AuthService } from '~shared/services/auth.service';
+import { PlaylistService } from '~shared/services/playlist.service';
+import { Video } from '~shared/interfaces/video';
+import { Playlist } from '~shared/interfaces/playlist';
 
 @Component({
   selector: 'app-you-page',

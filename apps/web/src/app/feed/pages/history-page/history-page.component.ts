@@ -1,8 +1,8 @@
 import { Component, Inject, PLATFORM_ID, inject } from '@angular/core';
-import { UserService } from '../../../../shared/services/user.service';
 import { Observable } from 'rxjs';
-import { Video } from '../../../../shared/interfaces/video';
 import { isPlatformServer } from '@angular/common';
+import { UserService } from '../../../shared/services/user.service';
+import { Video } from '../../../shared/interfaces/video';
 
 @Component({
   selector: 'app-history-page',
