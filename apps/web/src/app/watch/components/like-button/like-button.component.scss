@@ -1,0 +1,9 @@
+@use '../../../../styles/variables';
+
+button {
+  border-radius: 0;
+  gap: 5px;
+  padding: variables.$spacing-sm variables.$spacing-normal;
+  border-top-left-radius: variables.$radius-rounded;
+  border-bottom-left-radius: variables.$radius-rounded;
+}
