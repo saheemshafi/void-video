@@ -103,7 +103,6 @@ export class AuthService implements OnDestroy {
         withCredentials: true,
       })
       .pipe(
-        retry(1),
         map((response) => response.data),
         tap({ next: (response) => this.sessionSubject.next(response) })
       );
