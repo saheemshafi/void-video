@@ -1,0 +1,30 @@
+@use '../../../../styles/variables';
+@use '../../../../styles/mixins';
+
+:host {
+  --input-background: #{variables.$clr-snow};
+  width: 100%;
+}
+
+.dark {
+  :host {
+    --input-background: #{variables.$clr-slate-gray};
+  }
+}
+
+form {
+  label {
+    color: inherit;
+    font-weight: variables.$fw-semibold;
+    margin-bottom: calc(variables.$spacing-sm / 2);
+  }
+
+  input {
+    margin-bottom: variables.$spacing-sm;
+    background-color: var(--input-background);
+  }
+
+  button {
+    gap: variables.$spacing-sm;
+  }
+}
