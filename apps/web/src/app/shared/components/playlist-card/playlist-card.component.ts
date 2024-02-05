@@ -1,7 +1,7 @@
 import { Component, Input, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Playlist } from '~shared/interfaces/playlist';
+import { Playlist } from '~/app/shared/interfaces/playlist.interface';
 
 @Component({
   selector: 'app-playlist-card',

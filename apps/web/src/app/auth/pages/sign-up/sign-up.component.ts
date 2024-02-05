@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
-import { CreateAccountRequest } from '~shared/interfaces/auth';
+import { CreateAccountRequest } from '~/app/shared/interfaces/auth.interface';
 import { AuthService } from '~shared/services/auth.service';
 
 @Component({

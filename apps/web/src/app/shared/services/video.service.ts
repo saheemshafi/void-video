@@ -1,15 +1,17 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID, inject } from '@angular/core';
-import { EMPTY, catchError, map, of } from 'rxjs';
+import { EMPTY, Observable, catchError, map, of } from 'rxjs';
+
+import { HotToastService } from '@ngneat/hot-toast';
 
 import {
   ApiResponse,
   VideoResponse,
-  VideosResponse,
-} from '~shared/interfaces/api-response';
-import { QueryList } from '~shared/interfaces/utils';
+} from '~shared/interfaces/api-response.interface';
+import { QueryList } from '~shared/interfaces/query-list.interface';
+import { Video } from '~shared/interfaces/video.interface';
+import { Paginated } from '~shared/interfaces/utils.interface';
 
-import { HotToastService } from '@ngneat/hot-toast';
 import { environment } from '~/environments/environment';
 
 @Injectable({
@@ -21,7 +23,9 @@ export class VideoService {
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
-  getVideos(queryParams?: Partial<QueryList>) {
+  getVideos(
+    queryParams?: Partial<QueryList>
+  ): Observable<Paginated<Video[], 'videos'>> {
     const url = new URL(`${environment.serverUrl}/videos`);
 
     for (let [param, value] of Object.entries(queryParams || {})) {
@@ -29,7 +33,7 @@ export class VideoService {
     }
 
     return this.http
-      .get<VideosResponse>(url.toString())
+      .get<ApiResponse<Paginated<Video[], 'videos'>>>(url.toString())
       .pipe(map((response) => response.data));
   }
 

@@ -3,7 +3,7 @@ import { isPlatformServer } from '@angular/common';
 import { Observable } from 'rxjs';
 
 import { UserService } from '~shared/services/user.service';
-import { Video } from '~shared/interfaces/video';
+import { Video } from '~/app/shared/interfaces/video.interface';
 
 @Component({
   selector: 'app-history-page',

@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { EMPTY, NEVER, catchError, map, of, tap } from 'rxjs';
 
-import { SubscriptionStatusResponse } from '~shared/interfaces/api-response';
+import { SubscriptionStatusResponse } from '~/app/shared/interfaces/api-response.interface';
 
 import { environment } from '~/environments/environment';
 import { HotToastService } from '@ngneat/hot-toast';

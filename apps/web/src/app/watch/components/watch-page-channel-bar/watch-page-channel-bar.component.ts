@@ -2,7 +2,7 @@ import {
   Component,
   Input
 } from '@angular/core';
-import { VideoWithSubscriptionInfo } from '~shared/interfaces/api-response';
+import { VideoWithSubscriptionInfo } from '~/app/shared/interfaces/api-response.interface';
 
 @Component({
   selector: 'app-watch-page-channel-bar',

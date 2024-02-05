@@ -1,11 +1,11 @@
-import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
 import { map } from 'rxjs';
 
-import { AuthService } from '~shared/services/auth.service';
-
-import { QueryList } from '~shared/interfaces/utils';
-import { PlaylistsResponse } from '~shared/interfaces/api-response';
+import { ApiResponse } from '~shared/interfaces/api-response.interface';
+import { Playlist } from '~shared/interfaces/playlist.interface';
+import { QueryList } from '~shared/interfaces/query-list.interface';
+import { Paginated } from '~shared/interfaces/utils.interface';
 
 import { environment } from '~/environments/environment';
 
@@ -25,7 +25,7 @@ export class PlaylistService {
     }
 
     return this.http
-      .get<PlaylistsResponse>(url.toString())
+      .get<ApiResponse<Paginated<Playlist[], 'playlists'>>>(url.toString())
       .pipe(map((response) => response.data));
   }
 }

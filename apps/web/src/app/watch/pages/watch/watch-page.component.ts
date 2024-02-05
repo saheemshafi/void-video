@@ -3,8 +3,8 @@ import { Component, Inject, OnInit, PLATFORM_ID, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, map, switchMap } from 'rxjs';
 
-import { VideoWithSubscriptionInfo } from '~shared/interfaces/api-response';
-import { Video } from '~shared/interfaces/video';
+import { VideoWithSubscriptionInfo } from '~/app/shared/interfaces/api-response.interface';
+import { Video } from '~/app/shared/interfaces/video.interface';
 import { VideoService } from '~shared/services/video.service';
 
 @Component({
