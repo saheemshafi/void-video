@@ -7,7 +7,14 @@ import {
   PLATFORM_ID,
   inject,
 } from '@angular/core';
-import { BehaviorSubject, NEVER, catchError, map, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  NEVER,
+  catchError,
+  map,
+  shareReplay,
+  tap,
+} from 'rxjs';
 
 import { environment } from '~/environments/environment';
 
@@ -16,8 +23,8 @@ import {
   LoginRequest,
   LoginResponse,
   UserResponse,
-} from '~/app/shared/interfaces/auth.interface';
-import { User } from '~/app/shared/interfaces/user.interface';
+} from '~shared/interfaces/auth.interface';
+import { User } from '~shared/interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +35,7 @@ export class AuthService implements OnDestroy {
     undefined
   );
 
-  session$ = this.sessionSubject.asObservable();
+  session$ = this.sessionSubject.asObservable().pipe(shareReplay(1));
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     if (isPlatformServer(this.platformId)) return;
