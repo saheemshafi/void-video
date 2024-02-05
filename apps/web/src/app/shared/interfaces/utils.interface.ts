@@ -12,16 +12,16 @@ export type Paginated<TDocumentType, TPropertyName extends PropertyKey> = {
   [P in TPropertyName]: TDocumentType;
 };
 
-export type QueryList = {
-  userId: string;
-  sort: 'views.asc' | 'views.desc' | 'title.asc' | 'title.desc';
-  page: number;
-  limit: number;
-  query: string;
-};
-
-export type Populated<T, TFieldName extends PropertyKey, TFieldType> = {
-  [P in keyof T]: T[P];
+export type Populated<T, TFieldName extends keyof T, TFieldType> = {
+  [P in keyof Omit<T, TFieldName>]: T[P];
 } & {
   [P in TFieldName]: TFieldType;
 };
+
+export type Prettify<T> = {
+  [P in keyof T]: T[P];
+};
+
+export type AddFields<T, U extends Record<PropertyKey, unknown>> = {
+  [P in keyof T]: T[P];
+} & U;

@@ -1,0 +1,35 @@
+<button
+  [cdkMenuTriggerFor]="videoOptions"
+  [cdkMenuPosition]="[
+    {
+      originX: 'center',
+      originY: 'bottom',
+      overlayX: 'center',
+      overlayY: 'top'
+    }
+  ]"
+  class="button ghost options"
+>
+  <i class="bx bx-dots-vertical-rounded sm"></i>
+</button>
+
+<ng-template #videoOptions>
+  <div cdkMenu class="menu">
+    <div class="menu-group">
+      <button class="menu-item">
+        <i class="bx bxs-playlist sm"></i>
+        <span>Save to Playlist</span>
+      </button>
+      <button class="menu-item">
+        <i class="bx bxs-add-to-queue sm"></i>
+        <span>Add to Queue</span>
+      </button>
+    </div>
+    <div class="menu-group">
+      <button class="menu-item">
+        <i class="bx bxs-download sm"></i>
+        <span>Download</span>
+      </button>
+    </div>
+  </div>
+</ng-template>

@@ -1,5 +1,5 @@
-import { IFile } from '~shared/interfaces/file';
-import { User } from '~shared/interfaces/api-response';
+import { IFile } from '~shared/interfaces/file.interface';
+import { User } from '~shared/interfaces/user.interface';
 
 export interface Video {
   _id: string;

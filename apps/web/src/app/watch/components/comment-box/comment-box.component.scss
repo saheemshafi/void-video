@@ -1,0 +1,45 @@
+@use '../../../../styles/variables';
+@use '../../../../styles/mixins';
+
+.comment-box {
+  margin-block: variables.$spacing-normal;
+  padding: variables.$spacing-normal;
+  border-radius: calc(variables.$radius-round / 1.5);
+  font-size: variables.$fs-sm;
+  border: 1px solid rgba(variables.$clr-dusty-gray, 0.1);
+  line-height: 24px;
+  box-shadow: var(--shadow);
+
+  .comment-box-heading {
+    @include mixins.flex-cv;
+    border-bottom: 1px solid rgba(variables.$clr-dusty-gray, 0.2);
+    gap: variables.$spacing-sm;
+    align-items: baseline;
+    margin-bottom: variables.$spacing-normal;
+
+    h3 {
+      margin-top: 0;
+    }
+
+    .badge {
+      font-size: variables.$fs-xs;
+      font-weight: variables.$fw-semibold;
+      border: 1px solid rgba(variables.$clr-dusty-gray, 0.05);
+      padding: 0 variables.$spacing-sm;
+      border-radius: 5px;
+      background-color: rgba(variables.$clr-dusty-gray, 0.2);
+    }
+  }
+
+  .comments {
+    margin-top: variables.$spacing-lg;
+    margin-inline: calc(variables.$spacing-normal * -1);
+    padding: variables.$spacing-normal;
+    background-color: rgba(variables.$clr-dusty-gray, 0.05);
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+  }
+}

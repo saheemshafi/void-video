@@ -10,10 +10,9 @@ import {
 import {
   BehaviorSubject,
   NEVER,
-  Observable,
   catchError,
   map,
-  retry,
+  shareReplay,
   tap,
 } from 'rxjs';
 
@@ -23,20 +22,20 @@ import {
   CreateAccountRequest,
   LoginRequest,
   LoginResponse,
-  SessionResponse,
-} from '~shared/interfaces/auth';
-import { Session } from '~shared/interfaces/session';
+  UserResponse,
+} from '~shared/interfaces/auth.interface';
+import { User } from '~shared/interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService implements OnDestroy {
   private http = inject(HttpClient);
-  private sessionSubject = new BehaviorSubject<Session | null | undefined>(
+  private sessionSubject = new BehaviorSubject<User | null | undefined>(
     undefined
   );
 
-  session$ = this.sessionSubject.asObservable();
+  session$ = this.sessionSubject.asObservable().pipe(shareReplay(1));
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     if (isPlatformServer(this.platformId)) return;
@@ -63,10 +62,6 @@ export class AuthService implements OnDestroy {
       });
   }
 
-  ngOnDestroy(): void {
-    this.sessionSubject.complete();
-  }
-
   createAccount(userDetails: CreateAccountRequest) {
     const formData = new FormData();
     Object.entries(userDetails).forEach((entry) =>
@@ -79,7 +74,7 @@ export class AuthService implements OnDestroy {
     );
   }
 
-  login(credentials: LoginRequest): Observable<LoginResponse> {
+  login(credentials: LoginRequest) {
     return this.http
       .post<LoginResponse>(
         `${environment.serverUrl}/users/login`,
@@ -97,13 +92,12 @@ export class AuthService implements OnDestroy {
       );
   }
 
-  getSession(): Observable<Session> {
+  getSession() {
     return this.http
-      .get<SessionResponse>(`${environment.serverUrl}/users/session`, {
+      .get<UserResponse>(`${environment.serverUrl}/users/session`, {
         withCredentials: true,
       })
       .pipe(
-        retry(1),
         map((response) => response.data),
         tap({ next: (response) => this.sessionSubject.next(response) })
       );
@@ -117,26 +111,22 @@ export class AuthService implements OnDestroy {
       .pipe(tap({ next: () => this.sessionSubject.next(null) }));
   }
 
-  changePassword() {
-    return this.http.get(`${environment.serverUrl}/users/session`, {
-      withCredentials: true,
-    });
-  }
-
-  revalidateSession(): Observable<Session> {
+  revalidateSession() {
     return this.http
-      .get<SessionResponse>(
-        `${environment.serverUrl}/users/session/revalidate`,
-        {
-          withCredentials: true,
-        }
-      )
+      .get<UserResponse>(`${environment.serverUrl}/users/session/revalidate`, {
+        withCredentials: true,
+      })
       .pipe(
         map((response) => response.data),
         tap({ next: (response) => this.sessionSubject.next(response) })
       );
   }
 
+  changePassword() {}
   resetPassword() {}
   sendResetPasswordEmail() {}
+
+  ngOnDestroy(): void {
+    this.sessionSubject.complete();
+  }
 }

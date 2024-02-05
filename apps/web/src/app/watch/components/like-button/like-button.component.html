@@ -1,0 +1,19 @@
+<button
+  (click)="toggleLike()"
+  title="Like video"
+  aria-label="Like video"
+  class="button ghost"
+>
+  @if ((isLiked$ | async) == undefined) {
+    <i class="bx bx-loader-alt sm bx-spin"></i>
+  } @else {
+    <i
+      class="bx sm"
+      [ngClass]="{
+        'bxs-like': isLiked$ | async,
+        'bx-like': !(isLiked$ | async)
+      }"
+    ></i>
+    <span>{{ totalLikes | abbreviateNumber }}</span>
+  }
+</button>

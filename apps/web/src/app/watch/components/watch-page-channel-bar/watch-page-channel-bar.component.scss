@@ -59,28 +59,6 @@
 
     .button-group {
       flex-shrink: 0;
-
-      button {
-        border-radius: 0;
-        gap: 5px;
-        // border: 1px;
-        padding: variables.$spacing-sm variables.$spacing-normal;
-
-        &:first-child {
-          border-top-left-radius: variables.$radius-rounded;
-          border-bottom-left-radius: variables.$radius-rounded;
-        }
-        &:last-child {
-          border-left: 0;
-          border-top-right-radius: variables.$radius-rounded;
-          border-bottom-right-radius: variables.$radius-rounded;
-        }
-      }
-    }
-
-    .options {
-      border-radius: variables.$radius-rounded;
-      aspect-ratio: 1 / 1;
     }
   }
 }

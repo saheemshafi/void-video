@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 
 import { UserService } from '~shared/services/user.service';
 import { AuthService } from '~shared/services/auth.service';
-import { Subscription } from '~shared/interfaces/api-response';
+import { Subscription } from '~shared/interfaces/subscription.interface';
 
 @Component({
   selector: 'app-subscriptions-page',

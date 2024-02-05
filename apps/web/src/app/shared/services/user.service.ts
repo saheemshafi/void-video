@@ -2,14 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { map } from 'rxjs';
 
-import {
-  SubscriptionsResponse,
-  VideosResponse,
-  WatchHistoryResponse,
-} from '~shared/interfaces/api-response';
-import { QueryList } from '~shared/interfaces/utils';
-
-import { AuthService } from '~shared/services/auth.service';
+import { ApiResponse } from '~shared/interfaces/api-response.interface';
+import { QueryList } from '~shared/interfaces/query-list.interface';
+import { Subscription } from '~shared/interfaces/subscription.interface';
+import { Paginated } from '~shared/interfaces/utils.interface';
+import { Video } from '~shared/interfaces/video.interface';
 
 import { environment } from '~/environments/environment';
 
@@ -18,11 +15,10 @@ import { environment } from '~/environments/environment';
 })
 export class UserService {
   private http = inject(HttpClient);
-  private authService = inject(AuthService);
 
   getWatchHistory() {
     return this.http
-      .get<WatchHistoryResponse>(
+      .get<ApiResponse<Video[]>>(
         `${environment.serverUrl}/users/watch-history`,
         {
           withCredentials: true,
@@ -33,7 +29,7 @@ export class UserService {
 
   getSubscribedChannels() {
     return this.http
-      .get<SubscriptionsResponse>(
+      .get<ApiResponse<Array<Subscription>>>(
         `${environment.serverUrl}/users/channels-subscribed`,
         {
           withCredentials: true,
@@ -50,7 +46,7 @@ export class UserService {
     }
 
     return this.http
-      .get<VideosResponse>(url.toString(), {
+      .get<ApiResponse<Paginated<Video[], 'videos'>>>(url.toString(), {
         withCredentials: true,
       })
       .pipe(map((response) => response.data));

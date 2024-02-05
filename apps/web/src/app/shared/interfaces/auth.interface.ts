@@ -1,5 +1,5 @@
-import { ApiResponse } from '~shared/interfaces/api-response';
-import { Session } from '~shared/interfaces/session';
+import { ApiResponse } from '~shared/interfaces/api-response.interface';
+import { User } from '~shared/interfaces/user.interface';
 
 export interface LoginRequest {
   email: string;
@@ -8,7 +8,7 @@ export interface LoginRequest {
 export type LoginResponse = ApiResponse<{
   accessToken: string;
   refreshToken: string;
-  user: Session;
+  user: User;
 }>;
 
 export interface CreateAccountRequest {
@@ -19,6 +19,6 @@ export interface CreateAccountRequest {
   avatar: File;
   banner?: File;
 }
-export type CreateAccountResponse = ApiResponse<Session>;
+export type CreateAccountResponse = ApiResponse<User>;
 
-export type SessionResponse = ApiResponse<Session>;
+export type UserResponse = ApiResponse<User>;

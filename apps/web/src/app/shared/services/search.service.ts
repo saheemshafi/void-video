@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { NEVER, catchError, map } from 'rxjs';
 
-import { AutocompleteResponse } from '~shared/interfaces/api-response';
+import { ApiResponse } from '~shared/interfaces/api-response.interface';
 
 import { environment } from '~/environments/environment';
 
@@ -16,7 +16,7 @@ export class SearchService {
 
   autocomplete(query: string) {
     return this.http
-      .get<AutocompleteResponse>(
+      .get<ApiResponse<string[]>>(
         `${environment.serverUrl}/search/autocomplete-suggestions?searchTerm=${query}`
       )
       .pipe(

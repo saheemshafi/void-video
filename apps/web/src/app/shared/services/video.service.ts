@@ -1,13 +1,16 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import { map } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Inject, Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { EMPTY, Observable, catchError, map, of } from 'rxjs';
+
+import { HotToastService } from '@ngneat/hot-toast';
 
 import {
   ApiResponse,
   VideoResponse,
-  VideosResponse,
-} from '~shared/interfaces/api-response';
-import { QueryList } from '~shared/interfaces/utils';
+} from '~shared/interfaces/api-response.interface';
+import { QueryList } from '~shared/interfaces/query-list.interface';
+import { Video } from '~shared/interfaces/video.interface';
+import { Paginated } from '~shared/interfaces/utils.interface';
 
 import { environment } from '~/environments/environment';
 
@@ -16,8 +19,13 @@ import { environment } from '~/environments/environment';
 })
 export class VideoService {
   private http = inject(HttpClient);
+  private toast = inject(HotToastService);
 
-  getVideos(queryParams?: Partial<QueryList>) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+
+  getVideos(
+    queryParams?: Partial<QueryList>
+  ): Observable<Paginated<Video[], 'videos'>> {
     const url = new URL(`${environment.serverUrl}/videos`);
 
     for (let [param, value] of Object.entries(queryParams || {})) {
@@ -25,7 +33,7 @@ export class VideoService {
     }
 
     return this.http
-      .get<VideosResponse>(url.toString())
+      .get<ApiResponse<Paginated<Video[], 'videos'>>>(url.toString())
       .pipe(map((response) => response.data));
   }
 
@@ -38,12 +46,21 @@ export class VideoService {
   }
 
   toggleVideoLike(videoId: string) {
-    return this.http.get<ApiResponse<unknown>>(
-      `${environment.serverUrl}/videos/${videoId}/toggle-like`,
-      {
-        withCredentials: true,
-      }
-    );
+    return this.http
+      .get<ApiResponse<unknown>>(
+        `${environment.serverUrl}/videos/${videoId}/toggle-like`,
+        {
+          withCredentials: true,
+        }
+      )
+      .pipe(
+        catchError(({ error }: HttpErrorResponse) => {
+          this.toast.show(
+            `Failed to like <p class='toast-description'>${error.message}</p>`
+          );
+          return EMPTY;
+        })
+      );
   }
 
   getLikeStatus(videoId: string) {
@@ -54,6 +71,9 @@ export class VideoService {
           withCredentials: true,
         }
       )
-      .pipe(map((response) => response.data));
+      .pipe(
+        map((response) => response.data.isLiked),
+        catchError(() => of(false))
+      );
   }
 }
