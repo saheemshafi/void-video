@@ -27,5 +27,5 @@ export const cookieOptions: CookieOptions = {
   httpOnly: true,
   signed: true,
   secure: process.env.NODE_ENV === 'development' ? false : true,
-  sameSite: 'none',
+  sameSite: 'lax',
 };
