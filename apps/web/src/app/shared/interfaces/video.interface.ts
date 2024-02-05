@@ -1,5 +1,5 @@
-import { IFile } from '~/app/shared/interfaces/file.interface';
-import { User } from '~/app/shared/interfaces/user.interface';
+import { IFile } from '~shared/interfaces/file.interface';
+import { User } from '~shared/interfaces/user.interface';
 
 export interface Video {
   _id: string;

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { Subscription } from '~/app/shared/interfaces/subscription.interface';
+import { Subscription } from '~shared/interfaces/subscription.interface';
 
 @Component({
   selector: 'app-subscription-card',

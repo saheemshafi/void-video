@@ -6,8 +6,8 @@ import { UserService } from '~shared/services/user.service';
 import { VideoService } from '~shared/services/video.service';
 import { AuthService } from '~shared/services/auth.service';
 import { PlaylistService } from '~shared/services/playlist.service';
-import { Video } from '~/app/shared/interfaces/video.interface';
-import { Playlist } from '~/app/shared/interfaces/playlist.interface';
+import { Video } from '~shared/interfaces/video.interface';
+import { Playlist } from '~shared/interfaces/playlist.interface';
 
 @Component({
   selector: 'app-you-page',

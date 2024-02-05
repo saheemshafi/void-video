@@ -10,8 +10,8 @@ import {
 import { Router } from '@angular/router';
 import { Observable, of, shareReplay, tap, switchMap, take } from 'rxjs';
 
-import { AuthService } from '~/app/shared/services/auth.service';
-import { VideoService } from '~/app/shared/services/video.service';
+import { AuthService } from '~shared/services/auth.service';
+import { VideoService } from '~shared/services/video.service';
 
 @Component({
   selector: 'app-like-button',

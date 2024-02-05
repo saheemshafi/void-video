@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthService } from '~shared/services/auth.service';
-import { LoginRequest } from '~/app/shared/interfaces/auth.interface';
+import { LoginRequest } from '~shared/interfaces/auth.interface';
 
 @Component({
   selector: 'app-sign-in',
