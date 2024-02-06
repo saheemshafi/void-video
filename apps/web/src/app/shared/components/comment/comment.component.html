@@ -1,0 +1,54 @@
+<a
+  class="comment-avatar"
+  [routerLink]="['/c', comment.owner.username]"
+  [attr.aria-label]="comment.owner.displayName"
+>
+  <img
+    class="avatar"
+    [width]="35"
+    [height]="35"
+    [alt]="comment.owner.displayName"
+    [ngSrc]="comment.owner.avatar.public_id"
+  />
+</a>
+
+<div>
+  <div class="comment-bar">
+    <a
+      class="comment-owner"
+      [routerLink]="['/c', comment.owner.username]"
+      [attr.aria-label]="comment.owner.displayName"
+    >
+      {{ comment.owner.displayName }}
+    </a>
+    <span class="comment-date">
+      <span class="sr-only">Commented on</span>
+      {{ comment.createdAt | date }}</span
+    >
+  </div>
+
+  <div class="comment-content">
+    <app-expandable-text
+      [text]="comment.content"
+      id="comment-{{ comment._id }}"
+    />
+  </div>
+
+  <div class="comment-options">
+    <button
+      (click)="toggleCommentLike()"
+      class="button ghost"
+      aria-label="Like comment"
+    >
+      <i class="bx bx-like xs"></i> {{ comment.likes }}
+    </button>
+
+    <button class="button" aria-label="Reply to comment">
+      Reply <i class="bx bx-reply xs"></i>
+    </button>
+
+    <button aria-label="Open comment replies" class="button ghost reply-button">
+      12 Replies
+    </button>
+  </div>
+</div>

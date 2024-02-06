@@ -5,5 +5,15 @@
   </div>
   <app-comment-form [videoId]="videoId" />
 
-  <!-- <div class="comments"></div> -->
+  <div class="comments">
+    @if (comments$ | async; as comments) {
+      <ul>
+        @for (comment of comments.comments; track comment._id) {
+          <li>
+            <app-comment [comment]="comment" />
+          </li>
+        }
+      </ul>
+    }
+  </div>
 </section>

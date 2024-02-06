@@ -1,0 +1,50 @@
+@use '../../../../styles/variables';
+@use '../../../../styles/mixins';
+
+:host {
+  display: flex;
+  align-items: flex-start;
+  gap: variables.$spacing-normal;
+  text-wrap: pretty;
+
+  .comment-avatar {
+    flex-shrink: 0;
+  }
+  .comment-bar {
+    @include mixins.flex-cv;
+    gap: variables.$spacing-sm;
+    font-size: variables.$fs-xs;
+
+    .comment-owner {
+      font-weight: variables.$fw-semibold;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .comment-date {
+      color: variables.$clr-dusty-gray;
+    }
+  }
+
+  .comment-content {
+    margin-top: calc(variables.$spacing-normal * -1);
+  }
+
+  .comment-options {
+    @include mixins.flex-cv;
+    gap: variables.$spacing-sm;
+
+    button {
+      border-radius: variables.$radius-rounded;
+      height: 2rem;
+      gap: 2px;
+      font-size: variables.$fs-xs;
+      padding-inline: calc(variables.$spacing-normal / 2);
+
+      &.reply-button {
+        border: none;
+        color: inherit;
+      }
+    }
+  }
+}

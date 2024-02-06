@@ -12,6 +12,7 @@ import { CommentBoxComponent } from '~watch/components/comment-box/comment-box.c
 import { CommentFormComponent } from '~watch/components/comment-form/comment-form.component';
 
 import { SharedModule } from '~shared/shared.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,11 @@ import { SharedModule } from '~shared/shared.module';
     CommentBoxComponent,
     CommentFormComponent,
   ],
-  imports: [CommonModule, WatchRoutingModule, SharedModule],
+  imports: [
+    CommonModule,
+    WatchRoutingModule,
+    ReactiveFormsModule,
+    SharedModule,
+  ],
 })
 export class WatchModule {}
