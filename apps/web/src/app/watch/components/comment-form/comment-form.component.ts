@@ -1,7 +1,8 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { take } from 'rxjs';
 
+import { Comment } from '~shared/interfaces/comment.interface';
 import { VideoService } from '~shared/services/video.service';
 
 @Component({
@@ -13,6 +14,8 @@ export class CommentFormComponent {
   @Input({ required: true }) videoId: string = '';
   private fb = inject(FormBuilder);
   private videoService = inject(VideoService);
+  @Output() commentAdded = new EventEmitter<Comment | undefined>();
+
   commentForm = this.fb.group({
     comment: this.fb.control('', { validators: [Validators.minLength(2)] }),
   });
@@ -23,6 +26,11 @@ export class CommentFormComponent {
     this.videoService
       .comment(this.videoId, this.commentForm.value?.comment || '')
       .pipe(take(1))
-      .subscribe({ next: () => this.commentForm.reset() });
+      .subscribe({
+        next: (response) => {
+          this.commentForm.reset();
+          this.commentAdded.emit(response);
+        },
+      });
   }
 }
