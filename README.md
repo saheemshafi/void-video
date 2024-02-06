@@ -35,6 +35,6 @@ pnpm dev
 
 ### Applications and Packages
 
-- [Server](/apps/server/) - A [NodeJS](https://nodejs.org/en) application faciliating backend.
-- [Web](/apps/web/) - An [Angular](https://angular.dev/) application for the end users.
-- [Studio](/apps/studio/) - Another [Angular](https://angular.dev/) application for managing channel and tracking analytics.
+- [Server - `branch(main)`](/apps/server/) - A [NodeJS](https://nodejs.org/en) application faciliating backend.
+- [Web - `branch(web)`](/apps/web/) - An [Angular](https://angular.dev/) application for the end users.
+- [Studio - `branch(studio)`](/apps/studio/) - Another [Angular](https://angular.dev/) application for managing channel and tracking analytics.
