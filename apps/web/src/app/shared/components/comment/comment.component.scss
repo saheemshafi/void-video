@@ -26,10 +26,6 @@
     }
   }
 
-  .comment-content {
-    margin-top: calc(variables.$spacing-normal * -1);
-  }
-
   .comment-options {
     @include mixins.flex-cv;
     gap: variables.$spacing-sm;
