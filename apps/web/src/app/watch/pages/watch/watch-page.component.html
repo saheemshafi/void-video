@@ -12,7 +12,10 @@
               <span>Uploaded {{ video.createdAt | date }}</span>
             </div>
           </div>
-          <app-expandable-text [text]="video.description" [id]="video._id" />
+          <app-expandable-text
+            [text]="video.description | replaceLinks"
+            [id]="video._id"
+          />
         </div>
         @defer (on viewport) {
           <app-comment-box [videoId]="video._id" />

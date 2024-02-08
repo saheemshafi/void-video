@@ -17,3 +17,8 @@
   aspect-ratio: 1 / 1;
   object-fit: cover;
 }
+
+.external-link {
+  color: variables.$clr-liquid-lava;
+  text-decoration: none;
+}

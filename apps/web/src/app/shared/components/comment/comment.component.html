@@ -29,7 +29,7 @@
 
   <div class="comment-content">
     <app-expandable-text
-      [text]="comment.content"
+      [text]="comment.content | replaceLinks"
       id="comment-{{ comment._id }}"
     />
   </div>

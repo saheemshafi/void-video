@@ -6,7 +6,6 @@
     tabindex="0"
     [attr.id]="'accordion-header-' + id"
     [attr.aria-expanded]="accordionItem.expanded"
-    clic
     [expanded]="isExpandable() ? false : true"
     [attr.aria-controls]="'accordion-body-' + id"
   >
@@ -16,14 +15,15 @@
       [attr.id]="'accordion-body-' + id"
       [attr.aria-labelledby]="'accordion-header-' + id"
     >
-      <p [innerText]="text"></p>
+      <p class="content" [innerHTML]="sanitize(text)"></p>
     </div>
     @if (isExpandable()) {
       <div>
         <p>
-          {{
-            accordionItem.expanded ? '' : (text | slice: 0 : maxLength) + '...'
-          }}
+          @if (!accordionItem.expanded) {
+            <span [innerHTML]="(text | slice: 0 : maxLength) + '...'"></span>
+          }
+
           <span (click)="accordionItem.toggle()" class="more-toggle">
             see {{ accordionItem.expanded ? 'less' : 'more' }}
           </span>

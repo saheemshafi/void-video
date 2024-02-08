@@ -17,6 +17,7 @@ import { VideoCardComponent } from '~shared/components/video-card/video-card.com
 import { PlaylistCardComponent } from '~shared/components/playlist-card/playlist-card.component';
 import { VideoOptionsComponent } from '~shared/components/video-options/video-options.component';
 import { CommentComponent } from '~shared/components/comment/comment.component';
+import { ReplaceLinksPipe } from '~shared/pipes/replace-links.pipe';
 
 const declarations = [
   SvgLoaderComponent,
@@ -31,6 +32,7 @@ const declarations = [
   PlaylistCardComponent,
   VideoOptionsComponent,
   CommentComponent,
+  ReplaceLinksPipe,
 ];
 
 @NgModule({
