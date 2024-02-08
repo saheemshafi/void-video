@@ -1,9 +1,19 @@
-<section class="comment-box">
-  <div class="comment-box-heading">
-    <h3>Comments</h3>
-    <span class="badge">{{ 1200 | abbreviateNumber }}</span>
-  </div>
-  <app-comment-form [videoId]="videoId" />
+@if (comments$ | async; as comments) {
+  <section class="comment-box">
+    <div class="comment-box-heading">
+      <h3>Comments</h3>
+      <span class="badge">{{ comments.totalDocs }}</span>
+    </div>
+    <app-comment-form [videoId]="videoId" />
 
-  <!-- <div class="comments"></div> -->
-</section>
+    <div class="comments">
+      <ul>
+        @for (comment of comments.comments; track comment._id) {
+          <li>
+            <app-comment [comment]="comment" />
+          </li>
+        }
+      </ul>
+    </div>
+  </section>
+}

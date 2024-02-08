@@ -14,4 +14,6 @@
 
 .avatar {
   border-radius: variables.$radius-rounded;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
 }

@@ -14,7 +14,11 @@
           </div>
           <app-expandable-text [text]="video.description" [id]="video._id" />
         </div>
-        <app-comment-box [videoId]="video._id" />
+        @defer (on viewport) {
+          <app-comment-box [videoId]="video._id" />
+        } @placeholder {
+          <app-svg-loader />
+        }
       </div>
     </div>
     <div class="recommendations">

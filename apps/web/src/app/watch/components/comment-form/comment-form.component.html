@@ -1,8 +1,9 @@
-<form>
+<form [formGroup]="commentForm" (ngSubmit)="comment()">
   <label for="comment">Add a comment</label>
   <input
+    autocomplete="off"
+    formControlName="comment"
     type="text"
-    name="comment"
     id="comment"
     placeholder="Your thoughts on the video"
   />

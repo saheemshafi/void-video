@@ -15,7 +15,8 @@ import { ExpandableTextComponent } from '~shared/components/expandable-text/expa
 import { SubscribeButtonComponent } from '~shared/components/subscribe-button/subscribe-button.component';
 import { VideoCardComponent } from '~shared/components/video-card/video-card.component';
 import { PlaylistCardComponent } from '~shared/components/playlist-card/playlist-card.component';
-import { VideoOptionsComponent } from './components/video-options/video-options.component';
+import { VideoOptionsComponent } from '~shared/components/video-options/video-options.component';
+import { CommentComponent } from '~shared/components/comment/comment.component';
 
 const declarations = [
   SvgLoaderComponent,
@@ -29,6 +30,7 @@ const declarations = [
   VideoCardComponent,
   PlaylistCardComponent,
   VideoOptionsComponent,
+  CommentComponent,
 ];
 
 @NgModule({

@@ -35,11 +35,17 @@
     margin-top: variables.$spacing-lg;
     margin-inline: calc(variables.$spacing-normal * -1);
     padding: variables.$spacing-normal;
-    background-color: rgba(variables.$clr-dusty-gray, 0.05);
+    background-color: rgba(variables.$clr-dusty-gray, 0.04);
 
     ul {
       list-style: none;
       padding: 0;
+
+      li {
+        &:not(:last-child) {
+          margin-bottom: variables.$spacing-lg;
+        }
+      }
     }
   }
 }
