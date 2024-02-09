@@ -1,4 +1,5 @@
 <form [formGroup]="commentForm" (ngSubmit)="comment()">
+  <app-field-error fieldName="comment" [control]="commentForm.get('comment')" />
   <label for="comment">Add a comment</label>
   <input
     autocomplete="off"

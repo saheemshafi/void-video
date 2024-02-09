@@ -1,0 +1,18 @@
+<form [formGroup]="replyForm" class="reply-form" (ngSubmit)="reply()">
+  <input
+    type="text"
+    formControlName="reply-{{ commentId }}"
+    id="reply-{{ commentId }}"
+    placeholder="Write a reply"
+  />
+  <div class="button-group">
+    <app-field-error
+      fieldName="Reply"
+      [control]="replyForm.controls['reply-' + commentId]"
+    />
+    <button class="button ghost" type="button" (click)="cancel()">
+      Cancel
+    </button>
+    <button class="button">Reply</button>
+  </div>
+</form>

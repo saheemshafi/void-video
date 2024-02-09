@@ -1,4 +1,9 @@
-import { Component, Input, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  inject,
+} from '@angular/core';
 import { HotToastService } from '@ngneat/hot-toast';
 import { take } from 'rxjs';
 
@@ -9,11 +14,14 @@ import { CommentService } from '~shared/services/comment.service';
   selector: 'app-comment',
   templateUrl: './comment.component.html',
   styleUrl: './comment.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommentComponent {
   @Input({ required: true }) comment!: Comment;
   private commentService = inject(CommentService);
   private toast = inject(HotToastService);
+  showReplies: boolean = false;
+  isReplying: boolean = false;
 
   toggleCommentLike() {
     this.commentService
@@ -25,5 +33,23 @@ export class CommentComponent {
         },
         error: ({ error }) => this.toast.show(error?.message),
       });
+  }
+
+  toggleReplies() {
+    this.showReplies = !this.showReplies;
+  }
+
+  toggleIsReplying() {
+    this.isReplying = !this.isReplying;
+  }
+
+  onReplyFormClosed(comment: Comment | undefined) {
+    console.log(comment);
+    if (comment) {
+      this.comment.replies.push(comment);
+      this.showReplies = true;
+    }
+
+    this.isReplying = false;
   }
 }

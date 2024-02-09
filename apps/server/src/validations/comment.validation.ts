@@ -25,3 +25,10 @@ export const updateCommentSchema = z.object({
   }),
   body: commentSchema,
 });
+
+export const replyToCommentSchema = z.object({
+  params: z.object({
+    commentId: commentIdSchema,
+  }),
+  body: commentSchema,
+});
