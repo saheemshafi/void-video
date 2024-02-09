@@ -5,8 +5,8 @@
 }
 
 .dark {
-    :host {
-      --more-toggle-hovered: #{variables.$clr-snow};
+  :host {
+    --more-toggle-hovered: #{variables.$clr-snow};
   }
 }
 
@@ -20,6 +20,14 @@
   }
 }
 
-.p {
+p {
   margin-top: 0;
+}
+
+.content {
+  white-space: pre-wrap;
+
+  > * {
+    white-space: initial;
+  }
 }

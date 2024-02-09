@@ -1,5 +1,5 @@
 @if (control?.touched && control?.errors) {
-  <div class="alert" id="email-error">
+  <div class="alert" [id]="id" aria-live="polite">
     <i class="bx bxs-error"></i>
     <span>
       @if (control?.hasError('required')) {

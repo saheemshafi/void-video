@@ -15,11 +15,13 @@
       id="avatar"
     />
     @if (form.submitted) {
-      <app-field-error
-        [control]="signupForm.get('avatar')"
-        fieldName="Avatar"
-        id="avatar-error"
-      />
+      <div class="error">
+        <app-field-error
+          [control]="signupForm.get('avatar')"
+          fieldName="Avatar"
+          id="avatar-error"
+        />
+      </div>
     }
   </div>
   <div>
@@ -35,11 +37,13 @@
       "
     />
     @if (form.submitted) {
-      <app-field-error
-        [control]="signupForm.get('displayName')"
-        fieldName="Display name"
-        id="display-name-error"
-      />
+      <div class="error">
+        <app-field-error
+          [control]="signupForm.get('displayName')"
+          fieldName="Display name"
+          id="display-name-error"
+        />
+      </div>
     }
   </div>
   <div>
@@ -55,11 +59,13 @@
       "
     />
     @if (form.submitted) {
-      <app-field-error
-        [control]="signupForm.get('username')"
-        fieldName="Username"
-        id="username-error"
-      />
+      <div class="error">
+        <app-field-error
+          [control]="signupForm.get('username')"
+          fieldName="Username"
+          id="username-error"
+        />
+      </div>
     }
   </div>
 
@@ -76,11 +82,13 @@
       "
     />
     @if (form.submitted) {
-      <app-field-error
-        [control]="signupForm.get('email')"
-        fieldName="Email"
-        id="email-error"
-      />
+      <div class="error">
+        <app-field-error
+          [control]="signupForm.get('email')"
+          fieldName="Email"
+          id="email-error"
+        />
+      </div>
     }
   </div>
   <div>
@@ -96,11 +104,13 @@
       "
     />
     @if (form.submitted) {
-      <app-field-error
-        [control]="signupForm.get('password')"
-        fieldName="Password"
-        id="password-error"
-      />
+      <div class="error">
+        <app-field-error
+          [control]="signupForm.get('password')"
+          fieldName="Password"
+          id="password-error"
+        />
+      </div>
     }
   </div>
   <div>
