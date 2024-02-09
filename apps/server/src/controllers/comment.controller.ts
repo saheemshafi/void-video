@@ -1,4 +1,5 @@
 import { STATUS_CODES } from '../constants';
+import { $lookupLikes, $lookupUserDetails } from '../db/aggregations';
 import { Comment } from '../models/comment.model';
 import { Like } from '../models/like.model';
 import { validateRequest } from '../utils';
@@ -7,6 +8,7 @@ import ApiResponse from '../utils/api-response';
 import asyncHandler from '../utils/async-handler';
 import {
   deleteCommentSchema,
+  replyToCommentSchema,
   toggleCommentLikeSchema,
   updateCommentSchema,
 } from '../validations/comment.validation';
@@ -119,4 +121,48 @@ const deleteComment = asyncHandler(async (req, res) => {
     .json(new ApiResponse(STATUS_CODES.OK, 'Deleted comment.', commentExists));
 });
 
-export { toggleCommentLike, deleteComment, updateComment };
+const replyToComment = asyncHandler(async (req, res) => {
+  const {
+    params: { commentId },
+    body: { content },
+  } = validateRequest(req, replyToCommentSchema);
+
+  const commentExists = await Comment.findById(commentId);
+
+  if (!commentExists) {
+    throw new ApiError(STATUS_CODES.NOT_FOUND, 'Comment not found.');
+  }
+
+  const createdComment = await Comment.create({
+    owner: req.user?._id,
+    content,
+    video: commentExists.video,
+    inReplyTo: commentExists._id,
+  });
+
+  const comment = await Comment.aggregate([
+    { $match: { _id: createdComment._id } },
+    $lookupUserDetails(),
+    $lookupLikes({ foreignField: 'comment' }),
+    {
+      $addFields: {
+        owner: {
+          $first: '$owner',
+        },
+        replies: [],
+      },
+    },
+  ]);
+
+  if (comment.length === 0) {
+    throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, 'Failed to reply.');
+  }
+
+  res
+    .status(STATUS_CODES.CREATED)
+    .json(
+      new ApiResponse(STATUS_CODES.CREATED, 'Replied to comment.', comment[0])
+    );
+});
+
+export { toggleCommentLike, deleteComment, updateComment, replyToComment };

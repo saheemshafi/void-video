@@ -2,13 +2,16 @@
   <section class="comment-box">
     <div class="comment-box-heading">
       <h3>Comments</h3>
-      <span class="badge">{{ comments.totalDocs }}</span>
+      <span class="badge">{{ comments?.length }}</span>
     </div>
-    <app-comment-form [videoId]="videoId" />
+    <app-comment-form
+      (commentAdded)="onAddComment($event)"
+      [videoId]="videoId"
+    />
 
     <div class="comments">
       <ul>
-        @for (comment of comments.comments; track comment._id) {
+        @for (comment of comments; track comment._id) {
           <li>
             <app-comment [comment]="comment" />
           </li>

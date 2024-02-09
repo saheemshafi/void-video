@@ -12,7 +12,7 @@
   />
 </a>
 
-<div>
+<div class="comment-body">
   <div class="comment-bar">
     <a
       class="comment-owner"
@@ -43,12 +43,39 @@
       <i class="bx bx-like xs"></i> {{ comment.likes }}
     </button>
 
-    <button class="button" aria-label="Reply to comment">
+    <button
+      (click)="toggleIsReplying()"
+      class="button"
+      aria-label="Reply to comment"
+    >
       Reply <i class="bx bx-reply xs"></i>
     </button>
 
-    <button aria-label="Open comment replies" class="button ghost reply-button">
-      12 Replies
-    </button>
+    @if (comment.replies.length > 0) {
+      <button
+        (click)="toggleReplies()"
+        aria-label="Open comment replies"
+        class="button ghost reply-button"
+      >
+        {{ comment.replies.length }} replies
+      </button>
+    }
   </div>
+
+  @if (isReplying) {
+    <app-reply-form
+      (close)="onReplyFormClosed($event)"
+      [commentId]="comment._id"
+    />
+  }
+
+  @if (showReplies) {
+    <ul>
+      @for (reply of comment.replies; track reply._id) {
+        <li>
+          <app-comment [comment]="reply" />
+        </li>
+      }
+    </ul>
+  }
 </div>

@@ -6,6 +6,7 @@ import {
 import { Request } from 'express';
 import ApiError from './api-error';
 import { STATUS_CODES } from '../constants';
+import { IComment } from '../models/comment.model';
 
 export const formatZodIssue = (error: z.ZodIssue): ValidationError => {
   return {
@@ -34,3 +35,33 @@ export const validateRequest = <T extends z.ZodRawShape>(
     parsedRequest.error.errors?.map((error) => formatZodIssue(error))
   );
 };
+
+type Comment = IComment & { replies: Comment[] };
+
+export function buildCommentTree(comments: Comment[]) {
+  const commentMap = new Map();
+  const rootComments: Comment[] = [];
+
+  comments.forEach((commentData) => {
+    const comment = { ...commentData, replies: [] };
+    commentMap.set(comment._id.toString(), comment);
+    if (!comment.inReplyTo) {
+      rootComments.push(comment);
+    }
+  });
+
+  comments.forEach((commentData) => {
+    const { _id, inReplyTo } = commentData;
+    if (inReplyTo) {
+      const parentComment = commentMap.get(inReplyTo.toString());
+      if (parentComment) {
+        const comment = commentMap.get(_id.toString());
+        if (comment) {
+          parentComment.replies.push(comment);
+        }
+      }
+    }
+  });
+
+  return rootComments;
+}

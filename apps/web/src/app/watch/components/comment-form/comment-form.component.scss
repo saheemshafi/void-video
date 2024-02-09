@@ -16,7 +16,7 @@ form {
   label {
     color: inherit;
     font-weight: variables.$fw-semibold;
-    margin-bottom: calc(variables.$spacing-sm / 2);
+    margin-block: calc(variables.$spacing-sm / 2);
   }
 
   input {
