@@ -12,11 +12,13 @@
       placeholder="Email address"
     />
     @if (form.submitted) {
-      <app-field-error
-        [control]="loginForm.get('email')"
-        fieldName="Email"
-        id="email-error"
-      />
+      <div class="error">
+        <app-field-error
+          [control]="loginForm.get('email')"
+          fieldName="Email"
+          id="email-error"
+        />
+      </div>
     }
   </div>
   <div>

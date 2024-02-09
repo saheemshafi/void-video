@@ -159,7 +159,6 @@ i.bx.xs {
   width: 100%;
   padding: variables.$spacing-sm;
   border-radius: 5px;
-  margin-top: variables.$spacing-normal;
   @include mixins.flex-cv;
   color: variables.$clr-liquid-lava;
   animation: slide-up-fade-in 200ms ease-out forwards;
