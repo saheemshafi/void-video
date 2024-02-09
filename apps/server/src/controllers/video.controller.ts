@@ -10,7 +10,7 @@ import { Like } from '../models/like.model';
 import { Video } from '../models/video.model';
 import { Split } from '../types/utils.types';
 import { SortOptions } from '../types/validation.types';
-import { validateRequest } from '../utils';
+import { buildCommentTree, validateRequest } from '../utils';
 import ApiError from '../utils/api-error';
 import ApiResponse from '../utils/api-response';
 import asyncHandler from '../utils/async-handler';
@@ -336,55 +336,26 @@ const deleteVideo = asyncHandler(async (req, res) => {
     .json(new ApiResponse(STATUS_CODES.OK, 'Deleted video.', videoExists));
 });
 
-const getVideoComments = asyncHandler(async (req, res) => {
+export const getVideoComments = asyncHandler(async (req, res) => {
   const {
     params: { videoId },
-    query: { limit, page },
   } = validateRequest(req, getVideoCommentsSchema);
 
-  const options: PaginateOptions = {
-    page,
-    limit,
-  };
-
-  const commentsAggregation = Comment.aggregate([
+  const commentsAggregation = await Comment.aggregate([
     {
       $match: {
         video: new Types.ObjectId(videoId),
       },
     },
     $lookupUserDetails(),
-    $lookupLikes({ foreignField: 'comment' }),
-    {
-      $addFields: {
-        owner: {
-          $first: '$owner',
-        },
-        likes: {
-          $size: '$likes',
-        },
-      },
-    },
-    {
-      $project: {
-        owner: 1,
-        content: 1,
-        likes: 1,
-      },
-    },
+    { $unwind: '$owner' },
   ]);
 
-  const { docs, ...paginationData } = await Comment.aggregatePaginate(
-    commentsAggregation,
-    options
-  );
+  const comments = buildCommentTree(commentsAggregation);
 
-  res.status(STATUS_CODES.OK).json(
-    new ApiResponse(STATUS_CODES.OK, 'Retrieved comments.', {
-      comments: docs,
-      ...paginationData,
-    })
-  );
+  res
+    .status(STATUS_CODES.OK)
+    .json(new ApiResponse(STATUS_CODES.OK, 'Retrieved comments.', comments));
 });
 
 const getVideos = asyncHandler(async (req, res) => {
@@ -451,13 +422,27 @@ const addCommentToVideo = asyncHandler(async (req, res) => {
     body: { content },
   } = validateRequest(req, addCommentToVideoSchema);
 
-  const comment = await Comment.create({
+  const createdComment = await Comment.create({
     content,
     owner: req.user?._id,
     video: videoId,
   });
 
-  if (!comment) {
+  const comment = await Comment.aggregate([
+    { $match: { _id: createdComment._id } },
+    $lookupUserDetails(),
+    $lookupLikes({ foreignField: 'comment' }),
+    {
+      $addFields: {
+        owner: {
+          $first: '$owner',
+        },
+        replies: [],
+      },
+    },
+  ]);
+
+  if (comment.length === 0) {
     throw new ApiError(
       STATUS_CODES.INTERNAL_SERVER_ERROR,
       'Failed to comment.'
@@ -466,7 +451,9 @@ const addCommentToVideo = asyncHandler(async (req, res) => {
 
   res
     .status(STATUS_CODES.OK)
-    .json(new ApiResponse(STATUS_CODES.OK, 'Commented on the video.', comment));
+    .json(
+      new ApiResponse(STATUS_CODES.OK, 'Commented on the video.', comment[0])
+    );
 });
 
 const getStatus = asyncHandler(async (req, res) => {
@@ -525,11 +512,10 @@ export {
   addCommentToVideo,
   changeVideoThumbnail,
   deleteVideo,
+  getStatus,
   getVideo,
-  getVideoComments,
   getVideos,
   toggleVideoLike,
   updateVideo,
   uploadVideo,
-  getStatus,
 };

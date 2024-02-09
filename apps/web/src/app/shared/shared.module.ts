@@ -17,6 +17,8 @@ import { VideoCardComponent } from '~shared/components/video-card/video-card.com
 import { PlaylistCardComponent } from '~shared/components/playlist-card/playlist-card.component';
 import { VideoOptionsComponent } from '~shared/components/video-options/video-options.component';
 import { CommentComponent } from '~shared/components/comment/comment.component';
+import { ReplyFormComponent } from './components/reply-form/reply-form.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const declarations = [
   SvgLoaderComponent,
@@ -34,12 +36,18 @@ const declarations = [
 ];
 
 @NgModule({
-  declarations: [AppearanceMenuComponent, ItemGridComponent, ...declarations],
+  declarations: [
+    AppearanceMenuComponent,
+    ItemGridComponent,
+    ReplyFormComponent,
+    ...declarations,
+  ],
   imports: [
     CommonModule,
     RouterModule,
     CdkMenuModule,
     CdkAccordionModule,
+    ReactiveFormsModule,
     NgOptimizedImage,
   ],
   exports: [NgOptimizedImage, ...declarations],

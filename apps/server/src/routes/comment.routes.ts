@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { authorize } from '../middlewares/auth.middleware';
 import {
   deleteComment,
+  replyToComment,
   toggleCommentLike,
   updateComment,
 } from '../controllers/comment.controller';
@@ -16,5 +17,7 @@ commentRouter
   .route('/:commentId')
   .patch(updateComment)
   .delete(authorize(), deleteComment);
+
+commentRouter.route('/:commentId/reply').post(authorize(), replyToComment);
 
 export default commentRouter;

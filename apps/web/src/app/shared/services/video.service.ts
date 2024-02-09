@@ -8,10 +8,10 @@ import {
   ApiResponse,
   VideoResponse,
 } from '~shared/interfaces/api-response.interface';
-import { QueryList } from '~shared/interfaces/query-list.interface';
-import { Video } from '~shared/interfaces/video.interface';
-import { Paginated } from '~shared/interfaces/utils.interface';
 import { Comment } from '~shared/interfaces/comment.interface';
+import { QueryList } from '~shared/interfaces/query-list.interface';
+import { Paginated } from '~shared/interfaces/utils.interface';
+import { Video } from '~shared/interfaces/video.interface';
 
 import { environment } from '~/environments/environment';
 
@@ -22,7 +22,7 @@ export class VideoService {
   private http = inject(HttpClient);
   private toast = inject(HotToastService);
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor() {}
 
   getVideos(
     queryParams?: Partial<QueryList>
@@ -80,7 +80,7 @@ export class VideoService {
 
   getComments(videoId: string) {
     return this.http
-      .get<ApiResponse<Paginated<Comment[], 'comments'>>>(
+      .get<ApiResponse<Comment[]>>(
         `${environment.serverUrl}/videos/${videoId}/comments`,
         {
           withCredentials: true,

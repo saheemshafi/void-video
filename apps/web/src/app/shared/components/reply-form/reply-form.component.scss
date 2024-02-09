@@ -1,0 +1,18 @@
+@use '../../../../styles/variables';
+@use '../../../../styles/mixins';
+
+.reply-form {
+  margin-top: variables.$spacing-lg;
+
+  .button-group {
+    @include mixins.flex-cv;
+    justify-content: flex-end;
+    gap: variables.$spacing-sm;
+    margin-top: variables.$spacing-sm;
+    align-items: center;
+
+    button {
+      width: fit-content;
+    }
+  }
+}

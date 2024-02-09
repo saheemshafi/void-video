@@ -1,14 +1,25 @@
-export type Paginated<TDocumentType, TPropertyName extends PropertyKey> = {
+type NextPage =
+  | { hasNextPage: true; nextPage: number }
+  | { hasNextPage: false; nextPage: null };
+
+type PrevPage =
+  | { hasPrevPage: true; prevPage: number }
+  | { hasPrevPage: false; prevPage: null };
+
+type Pages = PrevPage & NextPage;
+
+type Pagination = {
   totalDocs: number;
   limit: number;
   page: number;
   totalPages: number;
   pagingCounter: number;
-  hasPrevPage: boolean;
-  hasNextPage: boolean;
-  prevPage: number | null;
-  nextPage: number | null;
-} & {
+} & Pages;
+
+export type Paginated<
+  TDocumentType,
+  TPropertyName extends PropertyKey,
+> = Pagination & {
   [P in TPropertyName]: TDocumentType;
 };
 
