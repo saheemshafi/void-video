@@ -1,3 +1,49 @@
-<!-- TODO: channel banner and all -->
-{{ username }}
-<router-outlet />
+@if (channel$ | async; as channel) {
+  <section>
+    <figure class="banner">
+      @if (channel.banner) {
+        <img
+          [ngSrc]="channel.banner.public_id"
+          width="1280"
+          height="211"
+          alt="{{ channel.displayName }}'s Banner"
+        />
+      }
+      <figcaption class="sr-only">
+        {{ channel.displayName }}'s Banner
+      </figcaption>
+    </figure>
+    <div class="channel-details">
+      <div class="avatar-wrapper">
+        <img
+          class="avatar"
+          [src]="channel.avatar.secure_url"
+          alt="{{ channel.displayName }}'s Avatar"
+        />
+      </div>
+      <div>
+        <h1>{{ channel.displayName }}</h1>
+        <p>&#64;{{ channel.username }}</p>
+        <div class="channel-stats">
+          <p>{{ channel.totalSubscribers | abbreviateNumber }} subscribers</p>
+          <app-subscribe-button
+            [channelId]="channel._id"
+            [isSubscribed]="channel.isSubscribed"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+}
+
+<section>
+  <nav class="channel-nav">
+    <ul class="channel-menu" cdkMenuBar>
+      <li><a class="active" href="http://" cdkMenuItem>Home</a></li>
+      <li><a href="http://" cdkMenuItem>Videos</a></li>
+      <li><a href="http://" cdkMenuItem>Playlists</a></li>
+      <li><a href="http://" cdkMenuItem>About</a></li>
+    </ul>
+  </nav>
+  <router-outlet />
+</section>

@@ -6,3 +6,10 @@ export interface User {
   displayName: string;
   username: string;
 }
+
+export type Channel = User & {
+  banner: IFile;
+  isSubscribed: boolean;
+  totalSubscribers: number;
+  totalSubscriptions: number;
+};
