@@ -149,38 +149,9 @@ const getVideo = asyncHandler(async (req, res) => {
       $lookup: {
         ...$lookupUserDetails().$lookup,
         pipeline: [
-          {
-            $lookup: {
-              from: 'subscriptions',
-              localField: '_id',
-              foreignField: 'channel',
-              as: 'subscriptionDetails',
-              pipeline: [
-                {
-                  $match: {
-                    subscriber: req.user?._id,
-                  },
-                },
-              ],
-            },
-          },
           $lookupSubscriptions(),
           {
             $addFields: {
-              isSubscribed: {
-                $cond: {
-                  if: {
-                    $gt: [
-                      {
-                        $size: '$subscriptionDetails',
-                      },
-                      0,
-                    ],
-                  },
-                  then: true,
-                  else: false,
-                },
-              },
               totalSubscribers: {
                 $size: '$subscribers',
               },
@@ -189,7 +160,6 @@ const getVideo = asyncHandler(async (req, res) => {
           {
             $project: {
               ...$lookupUserDetails().$lookup.pipeline[0]?.$project,
-              isSubscribed: 1,
               totalSubscribers: 1,
             },
           },
