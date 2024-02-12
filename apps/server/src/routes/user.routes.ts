@@ -46,14 +46,16 @@ userRouter
   .route('/change-banner')
   .patch(authorize(), upload.single('banner'), changeBanner);
 
-userRouter.route('/c/:username').get(authorize(), getChannelProfile);
+userRouter.route('/c/:username').get(authorize(true), getChannelProfile);
 
 userRouter
   .route('/watch-history')
   .get(authorize(), getUserWatchHistory)
   .post(authorize(), addVideoToWatchHistory);
 
-userRouter.route('/channels-subscribed').get(authorize(), getSubscribedChannels);
+userRouter
+  .route('/channels-subscribed')
+  .get(authorize(), getSubscribedChannels);
 userRouter.route('/liked-videos').get(authorize(), getLikedVideos);
 
 export default userRouter;
