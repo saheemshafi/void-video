@@ -2,8 +2,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
+  OnChanges,
   OnDestroy,
-  OnInit,
+  SimpleChanges,
   inject,
 } from '@angular/core';
 import { BehaviorSubject, take } from 'rxjs';
@@ -16,15 +17,15 @@ import { SubscriptionService } from '~shared/services/subscription.service';
   styleUrl: './subscribe-button.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SubscribeButtonComponent implements OnInit, OnDestroy {
+export class SubscribeButtonComponent implements OnChanges, OnDestroy {
   @Input({ required: true }) channelId!: string;
   @Input({ required: true }) isSubscribed!: boolean;
 
   isSubscribed$ = new BehaviorSubject<boolean>(this.isSubscribed);
   private subscriptionService = inject(SubscriptionService);
 
-  ngOnInit(): void {
-    this.isSubscribed$.next(this.isSubscribed);
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['isSubscribed']) this.isSubscribed$.next(this.isSubscribed);
   }
 
   toggleSubscription(): void {

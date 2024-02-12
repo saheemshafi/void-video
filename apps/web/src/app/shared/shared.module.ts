@@ -3,6 +3,7 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { FieldErrorComponent } from '~shared/components/field-error/field-error.component';
 import { AppearanceMenuComponent } from '~shared/components/profile-menu/appearance-menu/appearance-menu.component';
@@ -19,8 +20,7 @@ import { VideoOptionsComponent } from '~shared/components/video-options/video-op
 import { CommentComponent } from '~shared/components/comment/comment.component';
 
 import { ReplaceLinksPipe } from '~shared/pipes/replace-links.pipe';
-import { ReplyFormComponent } from './components/reply-form/reply-form.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReplyFormComponent } from '~shared/components/reply-form/reply-form.component';
 
 const declarations = [
   SvgLoaderComponent,
@@ -53,6 +53,6 @@ const declarations = [
     ReactiveFormsModule,
     NgOptimizedImage,
   ],
-  exports: [NgOptimizedImage, ...declarations],
+  exports: [NgOptimizedImage, CdkMenuModule, ...declarations],
 })
 export class SharedModule {}

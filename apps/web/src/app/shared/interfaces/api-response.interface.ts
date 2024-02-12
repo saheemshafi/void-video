@@ -10,8 +10,8 @@ export interface ApiResponse<T> {
 
 export type SubscriptionStatusResponse = ApiResponse<{ isSubscribed: boolean }>;
 
-export type VideoWithSubscriptionInfo = Video & {
-  owner: Subscription & { isSubscribed: boolean };
-};
-
-export type VideoResponse = ApiResponse<VideoWithSubscriptionInfo>;
+export type VideoResponse = ApiResponse<
+  Video & {
+    owner: Subscription;
+  }
+>;

@@ -9,6 +9,7 @@ import { Paginated } from '~shared/interfaces/utils.interface';
 import { Video } from '~shared/interfaces/video.interface';
 
 import { environment } from '~/environments/environment';
+import { Channel } from '../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -49,6 +50,15 @@ export class UserService {
       .get<ApiResponse<Paginated<Video[], 'videos'>>>(url.toString(), {
         withCredentials: true,
       })
+      .pipe(map((response) => response.data));
+  }
+
+  getChannel(username: string) {
+    return this.http
+      .get<ApiResponse<Channel>>(
+        `${environment.serverUrl}/users/c/${username}`,
+        { withCredentials: true }
+      )
       .pipe(map((response) => response.data));
   }
 }

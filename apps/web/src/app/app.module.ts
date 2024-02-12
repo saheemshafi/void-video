@@ -6,14 +6,16 @@ import {
 import { provideCloudinaryLoader } from '@angular/common';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 
+import { provideHotToastConfig } from '@ngneat/hot-toast';
+
 import { AppRoutingModule } from '~/app/app-routing.module';
 import { AppComponent } from '~/app/app.component';
 
-import { environment } from '~/environments/environment';
-
 import { ThemeService } from '~shared/services/theme.service';
 
-import { provideHotToastConfig } from '@ngneat/hot-toast';
+import { environment } from '~/environments/environment';
+
+
 
 @NgModule({
   declarations: [AppComponent],

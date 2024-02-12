@@ -1,0 +1,115 @@
+@use '../../styles/variables';
+@use '../../styles/mixins';
+
+:host {
+  --menu-bg: #{rgba(variables.$clr-dusty-gray, 0.05)};
+  --tab-active-bg: #{variables.$clr-snow};
+  --tab-hovered-bg: #{rgba(variables.$clr-dusty-gray, 0.1)};
+  --tab-hovered-color: #{variables.$clr-dark-void};
+  --tab-item-shadow: #{variables.$shadow-smooth};
+}
+
+.dark {
+  :host {
+    --menu-bg: #{rgba(variables.$clr-dark-void, 0.2)};
+    --tab-active-bg: #{variables.$clr-slate-gray};
+    --tab-hovered-bg: #{rgba(variables.$clr-slate-gray, 0.5)};
+    --tab-hovered-color: #{variables.$clr-snow};
+    --tab-item-shadow-color: #{variables.$shadow-smooth-dark};
+  }
+}
+
+figure {
+  margin: 0 0 variables.$spacing-normal 0;
+  aspect-ratio: 2560 / 423;
+  background-color: variables.$clr-slate-gray;
+  border-radius: variables.$radius-round;
+  position: relative;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: variables.$radius-round;
+  }
+}
+
+.avatar {
+  width: 100px;
+}
+
+.channel-details {
+  @include mixins.flex-cv;
+  align-items: flex-start;
+  gap: variables.$spacing-normal;
+
+  .avatar-wrapper {
+    flex-shrink: 0;
+  }
+
+  h1 {
+    margin-bottom: calc(variables.$spacing-sm / 2);
+  }
+
+  p {
+    margin-top: 0;
+  }
+
+  .channel-stats {
+    @include mixins.flex-cv;
+    gap: variables.$spacing-normal;
+    color: variables.$clr-dusty-gray;
+    font-size: variables.$fs-sm;
+
+    p {
+      margin: 0;
+    }
+  }
+}
+
+.channel-nav {
+  --radius: #{calc(variables.$radius-round / 2)};
+  border: 1px solid rgba(variables.$clr-dusty-gray, 0.1);
+  margin-top: variables.$spacing-lg;
+  margin-bottom: variables.$spacing-normal;
+  border-radius: var(--radius);
+  background-color: var(--menu-bg);
+  padding: 4px;
+
+  .channel-menu {
+    @include mixins.flex-cv;
+    list-style: none;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    color: variables.$clr-dusty-gray;
+
+    li {
+      a {
+        padding: calc(variables.$spacing-normal - 6px) variables.$spacing-normal;
+        min-width: 100px;
+        text-align: center;
+        color: inherit;
+        text-decoration: none;
+        display: inline-block;
+        font-size: variables.$fs-sm;
+        transition: 100ms ease-out;
+        font-weight: variables.$fw-semibold;
+        border-radius: calc(var(--radius) - 1px);
+
+        &.active {
+          background: var(--tab-active-bg) !important;
+          color: var(--tab-hovered-color);
+          box-shadow: var(--tab-item-shadow);
+        }
+
+        &:hover,
+        &:active,
+        &:focus-visible {
+          background-color: var(--tab-hovered-bg);
+          color: var(--tab-hovered-color);
+        }
+      }
+    }
+  }
+}

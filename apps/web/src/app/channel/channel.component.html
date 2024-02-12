@@ -1,0 +1,82 @@
+@if (channel$ | async; as channel) {
+  <section>
+    <figure class="banner">
+      @if (channel.banner) {
+        <img
+          [ngSrc]="channel.banner.public_id"
+          width="1280"
+          height="211"
+          priority
+          alt="{{ channel.displayName }}'s Banner"
+        />
+      }
+      <figcaption class="sr-only">
+        {{ channel.displayName }}'s Banner
+      </figcaption>
+    </figure>
+    <div class="channel-details">
+      <div class="avatar-wrapper">
+        <img
+          class="avatar"
+          [src]="channel.avatar.secure_url"
+          alt="{{ channel.displayName }}'s Avatar"
+        />
+      </div>
+      <div>
+        <h1>{{ channel.displayName }}</h1>
+        <p>&#64;{{ channel.username }}</p>
+        <div class="channel-stats">
+          <p>{{ channel.totalSubscribers | abbreviateNumber }} subscribers</p>
+          <app-subscribe-button
+            [channelId]="channel._id"
+            [isSubscribed]="isSubscribed"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+}
+
+<section>
+  <nav class="channel-nav">
+    <ul class="channel-menu" cdkMenuBar>
+      <li>
+        <a
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          [routerLink]="['/c', username]"
+          cdkMenuItem
+          >Home</a
+        >
+      </li>
+      <li>
+        <a
+          [routerLink]="['/c', username, 'videos']"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          cdkMenuItem
+          >Videos</a
+        >
+      </li>
+      <li>
+        <a
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          [routerLink]="['/c', username, 'playlists']"
+          cdkMenuItem
+          >Playlists</a
+        >
+      </li>
+      <li>
+        <a
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          [routerLink]="['/c', username, 'about']"
+          cdkMenuItem
+          >About</a
+        >
+      </li>
+    </ul>
+  </nav>
+  <router-outlet />
+</section>
