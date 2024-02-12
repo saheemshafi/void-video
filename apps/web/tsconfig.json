@@ -26,7 +26,8 @@
       "~core/*": ["./src/app/core/*"],
       "~feed/*": ["./src/app/feed/*"],
       "~shared/*": ["./src/app/shared/*"],
-      "~watch/*": ["./src/app/watch/*"]
+      "~watch/*": ["./src/app/watch/*"],
+      "~channel/*": ["./src/app/channel/*"]
     }
   },
   "angularCompilerOptions": {

@@ -1,12 +1,11 @@
-import { isPlatformServer } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Inject, Injectable, PLATFORM_ID, inject } from '@angular/core';
-import { EMPTY, NEVER, catchError, map, of, tap } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { EMPTY, catchError, map, of, tap } from 'rxjs';
 
 import { SubscriptionStatusResponse } from '~shared/interfaces/api-response.interface';
 
-import { environment } from '~/environments/environment';
 import { HotToastService } from '@ngneat/hot-toast';
+import { environment } from '~/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -15,10 +14,7 @@ export class SubscriptionService {
   private http = inject(HttpClient);
   private toast = inject(HotToastService);
 
-  constructor(@Inject(PLATFORM_ID) private _platformId: Object) {}
-
   getSubscriptionStatus(channelId: string) {
-    if (isPlatformServer(this._platformId)) return;
     return this.http
       .get<SubscriptionStatusResponse>(
         `${environment.serverUrl}/subscriptions/channels/${channelId}/status`,

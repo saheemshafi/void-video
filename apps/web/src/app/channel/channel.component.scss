@@ -1,5 +1,5 @@
-@use '../../../../../styles/variables';
-@use '../../../../../styles/mixins';
+@use '../../styles/variables';
+@use '../../styles/mixins';
 
 :host {
   --menu-bg: #{rgba(variables.$clr-dusty-gray, 0.05)};
@@ -68,19 +68,20 @@ figure {
 }
 
 .channel-nav {
-  --radius: #{calc(variables.$radius-round / 3)};
+  --radius: #{calc(variables.$radius-round / 2)};
   border: 1px solid rgba(variables.$clr-dusty-gray, 0.1);
   margin-top: variables.$spacing-lg;
   margin-bottom: variables.$spacing-normal;
   border-radius: var(--radius);
+  background-color: var(--menu-bg);
+  padding: 4px;
 
   .channel-menu {
     @include mixins.flex-cv;
     list-style: none;
+    gap: 4px;
     margin: 0;
     padding: 0;
-    background-color: var(--menu-bg);
-    padding: 1px;
     color: variables.$clr-dusty-gray;
 
     li {
@@ -102,7 +103,9 @@ figure {
           box-shadow: 0 2px 6px var(--tab-item-shadow-color);
         }
 
-        &:hover {
+        &:hover,
+        &:active,
+        &:focus-visible {
           background-color: var(--tab-hovered-bg);
           color: var(--tab-hovered-color);
         }
