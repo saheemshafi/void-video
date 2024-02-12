@@ -6,7 +6,7 @@
   --tab-active-bg: #{variables.$clr-snow};
   --tab-hovered-bg: #{rgba(variables.$clr-dusty-gray, 0.1)};
   --tab-hovered-color: #{variables.$clr-dark-void};
-  --tab-item-shadow-color: #{rgba(variables.$clr-dusty-gray, 0.2)};
+  --tab-item-shadow: #{variables.$shadow-smooth};
 }
 
 .dark {
@@ -15,7 +15,7 @@
     --tab-active-bg: #{variables.$clr-slate-gray};
     --tab-hovered-bg: #{rgba(variables.$clr-slate-gray, 0.5)};
     --tab-hovered-color: #{variables.$clr-snow};
-    --tab-item-shadow-color: #{rgba(variables.$clr-dark-void, 0.2)};
+    --tab-item-shadow-color: #{variables.$shadow-smooth-dark};
   }
 }
 
@@ -100,7 +100,7 @@ figure {
         &.active {
           background: var(--tab-active-bg) !important;
           color: var(--tab-hovered-color);
-          box-shadow: 0 2px 6px var(--tab-item-shadow-color);
+          box-shadow: var(--tab-item-shadow);
         }
 
         &:hover,

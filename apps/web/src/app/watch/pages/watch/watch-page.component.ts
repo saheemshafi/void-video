@@ -1,9 +1,8 @@
-import { isPlatformServer } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, map, switchMap } from 'rxjs';
+import { Observable, map, shareReplay, switchMap } from 'rxjs';
 
-import { VideoWithSubscriptionInfo } from '~shared/interfaces/api-response.interface';
+import { Subscription } from '~shared/interfaces/subscription.interface';
 import { Video } from '~shared/interfaces/video.interface';
 import { VideoService } from '~shared/services/video.service';
 
@@ -14,21 +13,20 @@ import { VideoService } from '~shared/services/video.service';
 })
 export class WatchPageComponent implements OnInit {
   private videoService = inject(VideoService);
+
   private activatedRoute = inject(ActivatedRoute);
 
-  video$!: Observable<VideoWithSubscriptionInfo>;
+  video$!: Observable<Video & { owner: Subscription }>;
   recommendation$!: Observable<Video[]>;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
-
   ngOnInit(): void {
-    if (isPlatformServer(this.platformId)) return;
-
-    this.video$ = this.activatedRoute.paramMap.pipe(
-      switchMap((params) =>
-        this.videoService.getVideo(<string>params.get('videoId'))
+    this.video$ = this.activatedRoute.paramMap
+      .pipe(
+        switchMap((params) =>
+          this.videoService.getVideo(<string>params.get('videoId'))
+        )
       )
-    );
+      .pipe(shareReplay(1));
 
     this.recommendation$ = this.video$.pipe(
       switchMap((video) =>
