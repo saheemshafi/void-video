@@ -46,7 +46,7 @@ userRouter
   .route('/change-banner')
   .patch(authorize(), upload.single('banner'), changeBanner);
 
-userRouter.route('/c/:username').get(authorize(true), getChannelProfile);
+userRouter.route('/c/:username').get(getChannelProfile);
 
 userRouter
   .route('/watch-history')
