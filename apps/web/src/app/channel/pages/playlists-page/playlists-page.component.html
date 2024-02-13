@@ -1,1 +1,6 @@
-<h2>Playlists</h2>
+<h2 class="sr-only">Playlists</h2>
+<app-item-grid>
+  @for (playlist of playlists | async; track playlist._id) {
+    <app-playlist-card [playlist]="playlist" />
+  }
+</app-item-grid>
