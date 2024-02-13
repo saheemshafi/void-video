@@ -330,7 +330,7 @@ export const getVideoComments = asyncHandler(async (req, res) => {
 
 const getVideos = asyncHandler(async (req, res) => {
   const {
-    query: { page, limit, sort, query, userId },
+    query: { page, limit, sort, query, username },
   } = validateRequest(req, getVideosSchema);
 
   const options: PaginateOptions = {
@@ -344,11 +344,6 @@ const getVideos = asyncHandler(async (req, res) => {
     {
       $match: {
         isPublished: true,
-        owner: userId
-          ? new Types.ObjectId(userId)
-          : {
-              $exists: true,
-            },
       },
     },
     {
@@ -363,14 +358,21 @@ const getVideos = asyncHandler(async (req, res) => {
         ],
       },
     },
+    $lookupUserDetails(),
+    {
+      $unwind: '$owner',
+    },
+    {
+      $match: {
+        'owner.username': username || {
+          $exists: true,
+        },
+      },
+    },
     {
       $sort: {
         [sortByKey]: sortType == 'asc' ? 1 : -1,
       },
-    },
-    $lookupUserDetails(),
-    {
-      $unwind: '$owner',
     },
   ]);
   const { docs, ...paginationData } = await Video.aggregatePaginate(

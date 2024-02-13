@@ -327,7 +327,7 @@ const getPlaylist = asyncHandler(async (req, res) => {
 
 const getPlaylists = asyncHandler(async (req, res) => {
   const {
-    query: { page, limit, sort, query, userId },
+    query: { page, limit, sort, query, username },
   } = validateRequest(req, getPlaylistsSchema);
 
   const options: PaginateOptions = {
@@ -341,11 +341,6 @@ const getPlaylists = asyncHandler(async (req, res) => {
     {
       $match: {
         private: false,
-        owner: userId
-          ? new Types.ObjectId(userId)
-          : {
-              $exists: true,
-            },
       },
     },
     {
@@ -360,11 +355,6 @@ const getPlaylists = asyncHandler(async (req, res) => {
         ],
       },
     },
-    {
-      $sort: {
-        [sortByKey]: sortType == 'asc' ? 1 : -1,
-      },
-    },
     $lookupUserDetails(),
     {
       $addFields: {
@@ -374,6 +364,18 @@ const getPlaylists = asyncHandler(async (req, res) => {
         totalVideos: {
           $size: '$videos',
         },
+      },
+    },
+    {
+      $match: {
+        'owner.username': username || {
+          $exists: true,
+        },
+      },
+    },
+    {
+      $sort: {
+        [sortByKey]: sortType == 'asc' ? 1 : -1,
       },
     },
     {

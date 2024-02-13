@@ -76,7 +76,7 @@ export const getPlaylistsSchema = z.object({
     .object({
       sort: sortOptions,
       query: z.string().default(''),
-      userId: objectIdSchema('User').optional(),
+      username: z.string().optional(),
     })
     .merge(paginationSchema),
 });
