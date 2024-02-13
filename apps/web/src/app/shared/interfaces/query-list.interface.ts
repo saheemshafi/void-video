@@ -4,7 +4,7 @@ export interface PaginationQueryList {
 }
 
 export interface QueryList extends PaginationQueryList {
-  userId: string;
+  username: string;
   sort: 'views.asc' | 'views.desc' | 'title.asc' | 'title.desc';
   query: string;
 }

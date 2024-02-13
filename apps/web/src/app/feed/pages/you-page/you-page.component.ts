@@ -37,7 +37,7 @@ export class YouPageComponent implements OnInit {
       filter((session) => !!session),
       switchMap((session) =>
         this.videoService
-          .getVideos({ userId: session?._id, limit: 6 })
+          .getVideos({ username: session?.username, limit: 6 })
           .pipe(map((data) => data.videos))
       )
     );
@@ -46,7 +46,7 @@ export class YouPageComponent implements OnInit {
       filter((session) => !!session),
       switchMap((session) =>
         this.playlistService
-          .getPlaylists({ userId: session?._id, limit: 6 })
+          .getPlaylists({ username: session?.username, limit: 6 })
           .pipe(map((data) => data.playlists))
       )
     );

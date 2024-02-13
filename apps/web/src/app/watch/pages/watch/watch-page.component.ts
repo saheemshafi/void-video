@@ -31,7 +31,7 @@ export class WatchPageComponent implements OnInit {
     this.recommendation$ = this.video$.pipe(
       switchMap((video) =>
         this.videoService
-          .getVideos({ userId: video.owner._id })
+          .getVideos({ username: video.owner.username })
           .pipe(map((data) => data.videos))
       )
     );
