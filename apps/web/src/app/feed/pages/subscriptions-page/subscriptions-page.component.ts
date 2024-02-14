@@ -1,10 +1,10 @@
-import { Component, Inject, OnInit, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
+import { Component, OnInit, PLATFORM_ID, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
-import { UserService } from '~shared/services/user.service';
-import { AuthService } from '~shared/services/auth.service';
 import { Subscription } from '~shared/interfaces/subscription.interface';
+import { AuthService } from '~shared/services/auth.service';
+import { UserService } from '~shared/services/user.service';
 
 @Component({
   selector: 'app-subscriptions-page',
@@ -14,10 +14,10 @@ import { Subscription } from '~shared/interfaces/subscription.interface';
 export class SubscriptionsPageComponent implements OnInit {
   private userService = inject(UserService);
   private authService = inject(AuthService);
+  private platformId = inject(PLATFORM_ID);
   session$ = this.authService.session$;
   subscriptions$: Observable<Subscription[]> = of();
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
   ngOnInit(): void {
     if (isPlatformServer(this.platformId)) return;
     this.subscriptions$ = this.userService.getSubscribedChannels();

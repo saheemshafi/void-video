@@ -1,5 +1,5 @@
 import { isPlatformServer } from '@angular/common';
-import { Inject, Injectable, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { Injectable, OnDestroy, PLATFORM_ID, inject } from '@angular/core';
 import {
   BehaviorSubject,
   Subscription,
@@ -16,11 +16,12 @@ export type Theme = 'system' | 'dark' | 'light';
 export class ThemeService implements OnDestroy {
   private themeSubject = new BehaviorSubject<Theme>('system');
   private themeSubscription!: Subscription;
+  private platformId = inject(PLATFORM_ID);
 
   theme$ = this.themeSubject.asObservable();
 
-  constructor(@Inject(PLATFORM_ID) private _platformId: Object) {
-    if (isPlatformServer(this._platformId)) return;
+  constructor() {
+    if (isPlatformServer(this.platformId)) return;
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 

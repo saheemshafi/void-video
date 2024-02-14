@@ -1,13 +1,13 @@
 import { isPlatformServer } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID, inject } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, inject } from '@angular/core';
 import { Observable, filter, map, of, switchMap } from 'rxjs';
 
-import { UserService } from '~shared/services/user.service';
-import { VideoService } from '~shared/services/video.service';
+import { Playlist } from '~shared/interfaces/playlist.interface';
+import { Video } from '~shared/interfaces/video.interface';
 import { AuthService } from '~shared/services/auth.service';
 import { PlaylistService } from '~shared/services/playlist.service';
-import { Video } from '~shared/interfaces/video.interface';
-import { Playlist } from '~shared/interfaces/playlist.interface';
+import { UserService } from '~shared/services/user.service';
+import { VideoService } from '~shared/services/video.service';
 
 @Component({
   selector: 'app-you-page',
@@ -19,6 +19,7 @@ export class YouPageComponent implements OnInit {
   private videoService = inject(VideoService);
   private authService = inject(AuthService);
   private playlistService = inject(PlaylistService);
+  private platformId = inject(PLATFORM_ID);
 
   history$: Observable<Video[] | null> = of(null);
   uploads$: Observable<Video[] | null> = of(null);
@@ -27,7 +28,6 @@ export class YouPageComponent implements OnInit {
 
   session$ = this.authService.session$;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
   ngOnInit(): void {
     if (isPlatformServer(this.platformId)) return;
 

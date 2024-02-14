@@ -1,12 +1,6 @@
 import { isPlatformServer } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import {
-  Inject,
-  Injectable,
-  OnDestroy,
-  PLATFORM_ID,
-  inject,
-} from '@angular/core';
+import { Injectable, OnDestroy, PLATFORM_ID, inject } from '@angular/core';
 import {
   BehaviorSubject,
   NEVER,
@@ -31,13 +25,14 @@ import { User } from '~shared/interfaces/user.interface';
 })
 export class AuthService implements OnDestroy {
   private http = inject(HttpClient);
+  private platformId = inject(PLATFORM_ID);
   private sessionSubject = new BehaviorSubject<User | null | undefined>(
     undefined
   );
 
   session$ = this.sessionSubject.asObservable().pipe(shareReplay(1));
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+  constructor() {
     if (isPlatformServer(this.platformId)) return;
 
     this.getSession()

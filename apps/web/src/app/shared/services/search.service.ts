@@ -12,8 +12,6 @@ import { environment } from '~/environments/environment';
 export class SearchService {
   private http = inject(HttpClient);
 
-  constructor() {}
-
   autocomplete(query: string) {
     return this.http
       .get<ApiResponse<string[]>>(

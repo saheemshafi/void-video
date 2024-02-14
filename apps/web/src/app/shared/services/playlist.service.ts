@@ -15,8 +15,6 @@ import { environment } from '~/environments/environment';
 export class PlaylistService {
   private http = inject(HttpClient);
 
-  constructor() {}
-
   getPlaylists(queryParams?: Partial<QueryList>) {
     const url = new URL(`${environment.serverUrl}/playlists`);
 

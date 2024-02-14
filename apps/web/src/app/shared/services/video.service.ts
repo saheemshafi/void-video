@@ -22,8 +22,6 @@ export class VideoService {
   private http = inject(HttpClient);
   private toast = inject(HotToastService);
 
-  constructor() {}
-
   getVideos(
     queryParams?: Partial<QueryList>
   ): Observable<Paginated<Video[], 'videos'>> {
