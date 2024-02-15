@@ -15,8 +15,6 @@ export class CommentService {
   private http = inject(HttpClient);
   private toast = inject(HotToastService);
 
-  constructor() {}
-
   toggleCommentLike(commentId: string) {
     return this.http.get<ApiResponse<null>>(
       `${environment.serverUrl}/comments/${commentId}/toggle-like`,

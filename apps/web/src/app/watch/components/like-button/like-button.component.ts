@@ -1,14 +1,13 @@
 import { isPlatformServer } from '@angular/common';
 import {
   Component,
-  Inject,
   Input,
   PLATFORM_ID,
   SimpleChanges,
-  inject,
+  inject
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of, shareReplay, tap, switchMap, take } from 'rxjs';
+import { Observable, of, shareReplay, switchMap, take, tap } from 'rxjs';
 
 import { AuthService } from '~shared/services/auth.service';
 import { VideoService } from '~shared/services/video.service';
@@ -25,12 +24,11 @@ export class LikeButtonComponent {
   private videoService = inject(VideoService);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private platformId = inject(PLATFORM_ID);
 
   session$ = this.authService.session$;
 
   isLiked$: Observable<boolean | undefined> = of(undefined);
-
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngOnInit() {
     if (isPlatformServer(this.platformId)) return;
