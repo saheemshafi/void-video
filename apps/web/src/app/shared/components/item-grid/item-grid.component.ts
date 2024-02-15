@@ -18,7 +18,7 @@ export class ItemGridComponent {
   protected readonly DEFAULT_COLUMNS: GridColumns = {
     sm: 1,
     md: 2,
-    lg: 2,
+    lg: 3,
     xl: 3,
   };
 }

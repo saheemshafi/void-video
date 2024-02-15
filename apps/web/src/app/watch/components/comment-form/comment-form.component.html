@@ -8,5 +8,11 @@
     id="comment"
     placeholder="Your thoughts on the video"
   />
-  <button class="button">Comment<i class="bx bxs-send xs"></i></button>
+  <button class="button" [disabled]="submitting">
+    @if (submitting) {
+      Commenting...
+    } @else {
+      Comment <i class="bx bxs-send xs"></i>
+    }
+  </button>
 </form>

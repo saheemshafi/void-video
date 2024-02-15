@@ -14,12 +14,11 @@ import { AppComponent } from '~/app/app.component';
 import { ThemeService } from '~shared/services/theme.service';
 
 import { environment } from '~/environments/environment';
-
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule],
+  imports: [BrowserModule, BrowserAnimationsModule, AppRoutingModule],
   providers: [
     provideClientHydration(),
     provideHttpClient(withFetch()),

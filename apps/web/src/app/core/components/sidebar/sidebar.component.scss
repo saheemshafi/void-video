@@ -6,6 +6,14 @@
   --active-menu-btn-clr: #{variables.$clr-dark-void};
   --sidebar-scrollbar-clr: #{variables.$clr-dusty-gray};
   --menu-item-focused-bg: #{variables.$clr-gray-smooth};
+
+  width: variables.$sidebar-width;
+  flex-shrink: 0;
+  flex-grow: 0;
+  align-self: flex-start;
+  height: 100dvh;
+  position: sticky;
+  top: 0;
 }
 
 .dark {
@@ -18,6 +26,7 @@
 
 ::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -57,7 +66,12 @@ aside {
 
       > svg {
         width: 2.5rem;
+        flex-shrink: 0;
       }
+    }
+
+    .toggle-button {
+      display: none;
     }
 
     > div {
@@ -116,5 +130,22 @@ aside {
         }
       }
     }
+  }
+}
+
+@media screen and (max-width: variables.$breakpoint-sm) {
+  :host {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+  }
+
+  .toggle-button {
+    display: inline-flex !important;
+    position: absolute;
+    top: variables.$spacing-normal;
+    right: variables.$spacing-sm;
   }
 }
