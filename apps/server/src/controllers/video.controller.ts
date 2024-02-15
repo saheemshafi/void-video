@@ -318,7 +318,15 @@ export const getVideoComments = asyncHandler(async (req, res) => {
       },
     },
     $lookupUserDetails(),
+    $lookupLikes({ foreignField: 'comment' }),
     { $unwind: '$owner' },
+    {
+      $addFields: {
+        likes: {
+          $size: '$likes',
+        },
+      },
+    },
   ]);
 
   const comments = buildCommentTree(commentsAggregation);
