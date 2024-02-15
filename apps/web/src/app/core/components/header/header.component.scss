@@ -18,6 +18,12 @@ header {
   @include mixins.flex-cv;
   justify-content: space-between;
 
+  .left-side {
+    @include mixins.flex-cv;
+    flex: 1;
+    gap: variables.$spacing-sm;
+  }
+
   > .user-actions {
     @include mixins.flex-cv;
     gap: variables.$spacing-sm;

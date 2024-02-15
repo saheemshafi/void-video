@@ -1,7 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { filter, map, startWith } from 'rxjs';
+import { Subject, filter, map, startWith, switchMap, tap } from 'rxjs';
 
+import { UiService } from '~shared/services/ui.service';
 import { AuthService } from '~shared/services/auth.service';
 
 @Component({
@@ -11,7 +12,10 @@ import { AuthService } from '~shared/services/auth.service';
 })
 export class HeaderComponent {
   private authService = inject(AuthService);
+  private uiService = inject(UiService);
   private router = inject(Router);
+
+  sidebarState = this.uiService.sidebarState;
 
   currentPageUrl$ = this.router.events.pipe(
     filter((event) => event instanceof NavigationEnd),
@@ -20,4 +24,8 @@ export class HeaderComponent {
   );
 
   session$ = this.authService.session$;
+
+  toggleSidebar() {
+    this.uiService.toggleSidebar();
+  }
 }

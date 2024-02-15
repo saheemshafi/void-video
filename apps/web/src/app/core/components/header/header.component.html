@@ -1,5 +1,17 @@
 <header>
-  <app-searchbar />
+  <div class="left-side">
+    <button
+      (click)="toggleSidebar()"
+      aria-label="Toggle sidebar"
+      class="button icon"
+      [ngClass]="{ ghost: sidebarState() == 'collapsed' }"
+      [attr.aria-expanded]="sidebarState()"
+    >
+      <i class="bx bxs-dock-left sm"></i>
+    </button>
+
+    <app-searchbar />
+  </div>
   <div class="user-actions">
     @if ((session$ | async) !== undefined) {
       @if (session$ | async) {
