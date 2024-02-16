@@ -23,12 +23,13 @@
   <div>
     <div class="menu-group">
       <p class="menu-title">Menu</p>
-      <ul>
+      <ul cdkMenu>
         <li>
           <a
             routerLink="/"
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
+            cdkMenuItem
             [routerLinkActiveOptions]="{ exact: true }"
             class="menu-button"
           >
@@ -41,6 +42,7 @@
             routerLink="/feed/subscriptions"
             [routerLinkActiveOptions]="{ exact: true }"
             routerLinkActive="active"
+            cdkMenuItem
             ariaCurrentWhenActive="page"
             class="menu-button"
           >
@@ -52,12 +54,13 @@
     </div>
     <div class="menu-group">
       <p class="menu-title">You</p>
-      <ul>
+      <ul cdkMenu>
         <li>
           <a
             routerLink="/feed/you"
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
+            cdkMenuItem
             [routerLinkActiveOptions]="{ exact: true }"
             class="menu-button"
           >
@@ -70,6 +73,7 @@
             routerLink="/feed/history"
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
+            cdkMenuItem
             [routerLinkActiveOptions]="{ exact: true }"
             class="menu-button"
           >
