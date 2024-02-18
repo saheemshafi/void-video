@@ -39,9 +39,9 @@ figure {
 }
 
 .channel-details {
-  @include mixins.flex-cv;
-  align-items: flex-start;
-  gap: variables.$spacing-normal;
+  gap: 0 variables.$spacing-normal;
+  display: grid;
+  grid-template-columns: 76px 1fr;
 
   .avatar-wrapper {
     flex-shrink: 0;
@@ -60,9 +60,24 @@ figure {
     gap: variables.$spacing-normal;
     color: variables.$clr-dusty-gray;
     font-size: variables.$fs-sm;
+    grid-column: 2;
 
     p {
       margin: 0;
+    }
+
+    @media screen and (max-width: variables.$breakpoint-sm) {
+      grid-column: span 2;
+      display: grid;
+      grid-template-columns: 1fr;
+
+      p {
+        margin-top: variables.$spacing-normal;
+      }
+
+      app-subscribe-button {
+        width: 100%;
+      }
     }
   }
 }
@@ -75,6 +90,15 @@ figure {
   border-radius: var(--radius);
   background-color: var(--menu-bg);
   padding: 4px;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    height: 2px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(variables.$clr-dusty-gray, 0.1);
+  }
 
   .channel-menu {
     @include mixins.flex-cv;
@@ -83,6 +107,7 @@ figure {
     margin: 0;
     padding: 0;
     color: variables.$clr-dusty-gray;
+    max-width: 0;
 
     li {
       a {

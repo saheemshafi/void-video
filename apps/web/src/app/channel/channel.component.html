@@ -22,16 +22,16 @@
           alt="{{ channel.displayName }}'s Avatar"
         />
       </div>
-      <div>
+      <div class="channel-meta">
         <h1>{{ channel.displayName }}</h1>
         <p>&#64;{{ channel.username }}</p>
-        <div class="channel-stats">
-          <p>{{ channel.totalSubscribers | abbreviateNumber }} subscribers</p>
-          <app-subscribe-button
-            [channelId]="channel._id"
-            [isSubscribed]="isSubscribed"
-          />
-        </div>
+      </div>
+      <div class="channel-stats">
+        <p>{{ channel.totalSubscribers | abbreviateNumber }} subscribers</p>
+        <app-subscribe-button
+          [channelId]="channel._id"
+          [isSubscribed]="isSubscribed"
+        />
       </div>
     </div>
   </section>

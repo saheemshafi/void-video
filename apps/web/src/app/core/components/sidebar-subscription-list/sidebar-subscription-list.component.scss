@@ -1,16 +1,6 @@
 @use '../../../../styles/variables';
 @use '../../../../styles/mixins';
 
-:host {
-  --menu-item-focused-bg: #{variables.$clr-gray-smooth};
-}
-
-.dark {
-  :host {
-    --menu-item-focused-bg: #{variables.$clr-gray-smooth-dark};
-  }
-}
-
 ul {
   list-style: none;
   padding: 0;
@@ -55,7 +45,7 @@ ul {
     }
 
     &:focus-visible {
-      background-color: var(--menu-item-focused-bg);
+      background-color: rgba(variables.$clr-dusty-gray, 0.1);
       outline: none;
     }
   }
