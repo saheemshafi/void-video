@@ -14,7 +14,7 @@ type SidebarState = 'expanded' | 'collapsed';
   providedIn: 'root',
 })
 export class UiService implements OnDestroy {
-  sidebarState = signal<SidebarState>('expanded');
+  sidebarState = signal<SidebarState>('collapsed');
   private destroy$ = new Subject<void>();
   private platformId = inject(PLATFORM_ID);
 
@@ -27,18 +27,24 @@ export class UiService implements OnDestroy {
   constructor() {
     if (isPlatformServer(this.platformId)) return;
 
+    this.handleSidebarState();
+
     fromEvent(window, 'resize')
       .pipe(debounceTime(100), takeUntil(this.destroy$))
       .subscribe(() => {
-        const SMALL_SCREEN_WIDTH = 640;
-        const isSmallScreen = window.innerWidth < SMALL_SCREEN_WIDTH;
-
-        if (isSmallScreen && this.sidebarState() == 'expanded') {
-          this.sidebarState.set('collapsed');
-        } else if (!isSmallScreen && this.sidebarState() == 'collapsed') {
-          this.sidebarState.set('expanded');
-        }
+        this.handleSidebarState();
       });
+  }
+
+  private handleSidebarState() {
+    const SMALL_SCREEN_WIDTH = 640;
+    const isSmallScreen = window.innerWidth < SMALL_SCREEN_WIDTH;
+
+    if (isSmallScreen && this.sidebarState() == 'expanded') {
+      this.sidebarState.set('collapsed');
+    } else if (!isSmallScreen && this.sidebarState() == 'collapsed') {
+      this.sidebarState.set('expanded');
+    }
   }
 
   ngOnDestroy(): void {
