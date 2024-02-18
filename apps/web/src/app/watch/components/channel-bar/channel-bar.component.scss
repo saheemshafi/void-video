@@ -50,6 +50,10 @@
         margin-top: calc(variables.$spacing-sm + 4px);
       }
     }
+
+    app-subscribe-button{
+      margin-left: variables.$spacing-normal;
+    }
   }
 
   .video-actions {
