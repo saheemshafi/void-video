@@ -7,8 +7,8 @@
     <img
       class="avatar"
       [ngSrc]="session.avatar.public_id"
-      width="36"
-      height="36"
+      width="80"
+      height="80"
       [alt]="session.displayName"
     />
   </button>
@@ -18,9 +18,9 @@
       <div class="menu-header">
         <img
           class="avatar"
-          [src]="session.avatar.secure_url"
-          width="40"
-          height="40"
+          [ngSrc]="session.avatar.public_id"
+          width="80"
+          height="80"
           [alt]="session.displayName"
         />
         <div class="avatar-details">
