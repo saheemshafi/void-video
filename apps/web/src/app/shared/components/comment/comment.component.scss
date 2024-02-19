@@ -9,6 +9,11 @@
 
   .comment-avatar {
     flex-shrink: 0;
+
+    .avatar {
+      width: 35px;
+      height: 35px;
+    }
   }
 
   .comment-body {
@@ -29,7 +34,7 @@
         color: variables.$clr-dusty-gray;
       }
     }
-    
+
     .comment-options {
       @include mixins.flex-cv;
       gap: variables.$spacing-sm;
