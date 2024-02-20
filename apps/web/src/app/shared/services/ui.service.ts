@@ -6,7 +6,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { Subject, debounceTime, fromEvent, takeUntil } from 'rxjs';
+import { Subject, debounceTime, fromEvent, takeUntil, timer } from 'rxjs';
 
 type SidebarState = 'expanded' | 'collapsed';
 
@@ -27,12 +27,19 @@ export class UiService implements OnDestroy {
   constructor() {
     if (isPlatformServer(this.platformId)) return;
 
-    this.handleSidebarState();
-
-    fromEvent(window, 'resize')
-      .pipe(debounceTime(100), takeUntil(this.destroy$))
+    timer(500)
+      .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.handleSidebarState();
+      });
+
+    const initialWindowWidth = window.innerWidth;
+    fromEvent(window, 'resize')
+      .pipe(debounceTime(100), takeUntil(this.destroy$))
+      .subscribe((e) => {
+        if (initialWindowWidth !== window.innerWidth) {
+          this.handleSidebarState();
+        }
       });
   }
 
