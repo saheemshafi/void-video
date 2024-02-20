@@ -1,0 +1,40 @@
+<nav class="channel-nav" #nav [@onStick]="isSticking">
+  <ul class="channel-menu" cdkMenuBar>
+    <li>
+      <a
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        [routerLink]="['/c', username]"
+        cdkMenuItem
+        >Home</a
+      >
+    </li>
+    <li>
+      <a
+        [routerLink]="['/c', username, 'videos']"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        cdkMenuItem
+        >Videos</a
+      >
+    </li>
+    <li>
+      <a
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        [routerLink]="['/c', username, 'playlists']"
+        cdkMenuItem
+        >Playlists</a
+      >
+    </li>
+    <li>
+      <a
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        [routerLink]="['/c', username, 'about']"
+        cdkMenuItem
+        >About</a
+      >
+    </li>
+  </ul>
+</nav>
