@@ -1,0 +1,82 @@
+@use '../../../../styles/variables';
+@use '../../../../styles/mixins';
+
+:host {
+  --menu-bg: #{variables.$clr-gray-smooth};
+  --tab-active-bg: #{variables.$clr-snow};
+  --tab-hovered-bg: #{rgba(variables.$clr-dusty-gray, 0.1)};
+  --tab-hovered-color: #{variables.$clr-dark-void};
+  --tab-item-shadow: #{variables.$shadow-smooth};
+}
+
+.dark {
+  :host {
+    --menu-bg: #{variables.$clr-gluon-gray};
+    --tab-active-bg: #{variables.$clr-slate-gray};
+    --tab-hovered-bg: #{rgba(variables.$clr-slate-gray, 0.5)};
+    --tab-hovered-color: #{variables.$clr-snow};
+    --tab-item-shadow-color: #{variables.$shadow-smooth-dark};
+  }
+}
+
+.channel-nav {
+  --header-height: 76px;
+  border-bottom: 1px solid rgba(variables.$clr-dusty-gray, 0.1);
+  margin-top: variables.$spacing-lg;
+  margin-bottom: variables.$spacing-normal;
+  margin-inline: -(variables.$spacing-normal);
+  padding: 4px variables.$spacing-normal;
+  border-radius: 0;
+  background-color: var(--menu-bg);
+  overflow-x: auto;
+  position: sticky;
+  top: var(--header-height);
+  z-index: 2;
+
+  &::-webkit-scrollbar {
+    height: 2px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(variables.$clr-dusty-gray, 0.1);
+  }
+
+  .channel-menu {
+    @include mixins.flex-cv;
+    list-style: none;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    color: variables.$clr-dusty-gray;
+    max-width: 0;
+
+    li {
+      a {
+        --radius: #{calc(variables.$radius-round / 2)};
+        padding: calc(variables.$spacing-normal - 6px) variables.$spacing-normal;
+        min-width: 100px;
+        text-align: center;
+        color: inherit;
+        text-decoration: none;
+        display: inline-block;
+        font-size: variables.$fs-sm;
+        transition: 100ms ease-out;
+        font-weight: variables.$fw-semibold;
+        border-radius: var(--radius);
+
+        &.active {
+          background: var(--tab-active-bg) !important;
+          color: var(--tab-hovered-color);
+          box-shadow: var(--tab-item-shadow);
+        }
+
+        &:hover,
+        &:active,
+        &:focus-visible {
+          background-color: var(--tab-hovered-bg);
+          color: var(--tab-hovered-color);
+        }
+      }
+    }
+  }
+}
