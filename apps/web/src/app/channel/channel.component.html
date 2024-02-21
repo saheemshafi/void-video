@@ -15,15 +15,7 @@
       </figcaption>
     </figure>
     <div class="channel-details">
-      <div class="avatar-wrapper">
-        <img
-          class="avatar"
-          [ngSrc]="channel.avatar.public_id"
-          alt="{{ channel.displayName }}'s Avatar"
-          width="200"
-          height="200"
-        />
-      </div>
+      <app-channel-avatar [channel]="channel" />
       <div class="channel-meta">
         <h1>{{ channel.displayName }}</h1>
         <p>&#64;{{ channel.username }}</p>

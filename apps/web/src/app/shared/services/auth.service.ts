@@ -121,6 +121,17 @@ export class AuthService implements OnDestroy {
   resetPassword() {}
   sendResetPasswordEmail() {}
 
+  changeAvatar(avatar: File) {
+    const formData = new FormData();
+    formData.append('avatar', avatar);
+
+    return this.http.patch(
+      `${environment.serverUrl}/users/change-avatar`,
+      formData,
+      { withCredentials: true, reportProgress: true, observe: 'events' }
+    );
+  }
+
   ngOnDestroy(): void {
     this.sessionSubject.complete();
   }
