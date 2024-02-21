@@ -12,7 +12,11 @@ figure {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: variables.$radius-round;
+    border-radius: inherit;
+  }
+
+  @media screen and (max-width: variables.$breakpoint-sm) {
+    border-radius: calc(variables.$radius-round / 2);
   }
 }
 

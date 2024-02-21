@@ -3,13 +3,16 @@
     type="text"
     formControlName="reply-{{ commentId }}"
     id="reply-{{ commentId }}"
+    #replyInput
     placeholder="Write a reply"
   />
   <div class="button-group">
-    <app-field-error
-      fieldName="Reply"
-      [control]="replyForm.controls['reply-' + commentId]"
-    />
+    @if (!replyForm.get('reply-' + commentId)?.hasError('required')) {
+      <app-field-error
+        fieldName="Reply"
+        [control]="replyForm.controls['reply-' + commentId]"
+      />
+    }
     <button class="button ghost" type="button" (click)="cancel()">
       Cancel
     </button>

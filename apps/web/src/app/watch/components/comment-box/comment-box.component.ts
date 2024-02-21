@@ -2,6 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
+  OnChanges,
+  SimpleChanges,
   inject,
 } from '@angular/core';
 import { Observable, Subject, filter, map, startWith, switchMap } from 'rxjs';
@@ -16,13 +18,14 @@ import { VideoService } from '~shared/services/video.service';
   styleUrl: './comment-box.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CommentBoxComponent {
+export class CommentBoxComponent implements OnChanges {
   @Input({ required: true }) videoId: string = '';
   private videoService = inject(VideoService);
   private commentAdded = new Subject<Comment>();
   comments$!: Observable<Comment[]>;
 
-  ngOnInit() {
+  ngOnChanges(changes: SimpleChanges) {
+    if (!changes['videoId']) return;
     this.comments$ = this.commentAdded.pipe(
       startWith(null),
       switchMap(() => this.videoService.getComments(this.videoId))

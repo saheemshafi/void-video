@@ -1,9 +1,11 @@
 import {
   AfterViewInit,
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   Output,
+  ViewChild,
   inject,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -16,18 +18,19 @@ import { Comment } from '~shared/interfaces/comment.interface';
   templateUrl: './reply-form.component.html',
   styleUrl: './reply-form.component.scss',
 })
-export class ReplyFormComponent {
+export class ReplyFormComponent implements AfterViewInit {
   @Input({ required: true }) commentId: string = '';
   @Output() close = new EventEmitter<Comment | undefined>();
   private fb = inject(FormBuilder);
   private commentService = inject(CommentService);
+  @ViewChild('replyInput') replyInput!: ElementRef<HTMLInputElement>;
 
   replyForm!: FormGroup;
 
   ngOnInit() {
     this.replyForm = this.fb.group({
       [`reply-${this.commentId}`]: this.fb.control('', {
-        validators: [Validators.minLength(3)],
+        validators: [Validators.required, Validators.minLength(3)],
       }),
     });
   }
@@ -50,5 +53,9 @@ export class ReplyFormComponent {
 
   cancel(): void {
     this.close.emit();
+  }
+
+  ngAfterViewInit(): void {
+    this.replyInput.nativeElement?.focus();
   }
 }
