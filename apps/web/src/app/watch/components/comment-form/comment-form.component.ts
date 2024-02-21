@@ -30,7 +30,7 @@ export class CommentFormComponent {
 
   commentForm = this.fb.group({
     comment: this.fb.control('', {
-      validators: [Validators.minLength(3)],
+      validators: [Validators.required, Validators.minLength(3)],
     }),
   });
 
@@ -52,5 +52,7 @@ export class CommentFormComponent {
       });
 
     this.submitting = false;
+    // Async pipe not triggering change detection for some reason. CONFIRMATION NEEDED
+    this.cdr.detectChanges();
   }
 }

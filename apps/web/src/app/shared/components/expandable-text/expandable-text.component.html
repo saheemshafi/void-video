@@ -1,9 +1,7 @@
 <cdk-accordion class="example-accordion">
   <cdk-accordion-item
     #accordionItem="cdkAccordionItem"
-    class="example-accordion-item"
-    role="button"
-    tabindex="0"
+    tabindex="-1"
     [attr.id]="'accordion-header-' + id"
     [attr.aria-expanded]="accordionItem.expanded"
     [expanded]="isExpandable() ? false : true"
@@ -24,7 +22,14 @@
             <span [innerHTML]="(text | slice: 0 : maxLength) + '...'"></span>
           }
 
-          <span (click)="accordionItem.toggle()" class="more-toggle">
+          <span
+            [tabindex]="0"
+            role="button"
+            [attr.aria-controls]="'accordion-body-' + id"
+            (click)="accordionItem.toggle()"
+            (keyup)="$event.key == 'Enter' && accordionItem.toggle()"
+            class="more-toggle"
+          >
             see {{ accordionItem.expanded ? 'less' : 'more' }}
           </span>
         </p>

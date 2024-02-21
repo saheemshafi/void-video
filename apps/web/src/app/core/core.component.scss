@@ -9,6 +9,8 @@
     flex-grow: 1;
     @include mixins.flex-column;
     gap: variables.$spacing-sm;
+    max-width: 1050px;
+    margin-inline: auto;
 
     > app-header {
       position: sticky;

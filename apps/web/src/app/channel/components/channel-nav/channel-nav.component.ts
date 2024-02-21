@@ -44,8 +44,8 @@ export class ChannelNavComponent implements OnDestroy, AfterViewInit {
       .pipe(debounceTime(100))
       .subscribe((e) => {
         const { top } = this.nav.nativeElement.getBoundingClientRect();
-        const HEADER_HEIGHT = 76;
-        this.isSticking = top == HEADER_HEIGHT ? true : false;
+        const HEADER_HEIGHT = 75;
+        this.isSticking = top === HEADER_HEIGHT ? true : false;
       });
   }
 
