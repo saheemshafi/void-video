@@ -17,6 +17,7 @@ export class UiService implements OnDestroy {
   sidebarState = signal<SidebarState>('collapsed');
   private destroy$ = new Subject<void>();
   private platformId = inject(PLATFORM_ID);
+  private readonly SMALL_SCREEN_WIDTH: number = 640;
 
   toggleSidebar() {
     this.sidebarState.set(
@@ -44,8 +45,7 @@ export class UiService implements OnDestroy {
   }
 
   private handleSidebarState() {
-    const SMALL_SCREEN_WIDTH = 640;
-    const isSmallScreen = window.innerWidth < SMALL_SCREEN_WIDTH;
+    const isSmallScreen = window.innerWidth < this.SMALL_SCREEN_WIDTH;
 
     if (isSmallScreen && this.sidebarState() == 'expanded') {
       this.sidebarState.set('collapsed');
