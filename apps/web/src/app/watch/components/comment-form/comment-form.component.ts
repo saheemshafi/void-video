@@ -1,14 +1,13 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
   Output,
   inject,
 } from '@angular/core';
-import { FormBuilder, NgForm, Validators } from '@angular/forms';
-import { BehaviorSubject, Subject, take } from 'rxjs';
+import { FormBuilder, Validators } from '@angular/forms';
+import { take } from 'rxjs';
 
 import { Comment } from '~shared/interfaces/comment.interface';
 import { VideoService } from '~shared/services/video.service';
@@ -23,7 +22,6 @@ export class CommentFormComponent {
   @Input({ required: true }) videoId: string = '';
   private fb = inject(FormBuilder);
   private videoService = inject(VideoService);
-  private cdr = inject(ChangeDetectorRef);
   @Output() commentAdded = new EventEmitter<Comment>();
 
   submitting = false;
@@ -38,8 +36,6 @@ export class CommentFormComponent {
     if (this.commentForm.invalid) return;
 
     this.submitting = true;
-    // Async pipe not triggering change detection for some reason. CONFIRMATION NEEDED
-    this.cdr.detectChanges();
 
     this.videoService
       .comment(this.videoId, this.commentForm.value?.comment || '')
@@ -48,11 +44,8 @@ export class CommentFormComponent {
         next: (response) => {
           this.commentForm.reset();
           this.commentAdded.emit(response);
+          this.submitting = false;
         },
       });
-
-    this.submitting = false;
-    // Async pipe not triggering change detection for some reason. CONFIRMATION NEEDED
-    this.cdr.detectChanges();
   }
 }
