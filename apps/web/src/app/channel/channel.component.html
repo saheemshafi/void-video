@@ -18,8 +18,10 @@
       <div class="avatar-wrapper">
         <img
           class="avatar"
-          [src]="channel.avatar.secure_url"
+          [ngSrc]="channel.avatar.public_id"
           alt="{{ channel.displayName }}'s Avatar"
+          width="200"
+          height="200"
         />
       </div>
       <div class="channel-meta">
