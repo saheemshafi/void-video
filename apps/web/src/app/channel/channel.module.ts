@@ -8,6 +8,7 @@ import { PlaylistsPageComponent } from '~channel/pages/playlists-page/playlists-
 import { VideosPageComponent } from '~channel/pages/videos-page/videos-page.component';
 import { SharedModule } from '~shared/shared.module';
 import { ChannelNavComponent } from './components/channel-nav/channel-nav.component';
+import { ChannelAvatarComponent } from './components/channel-avatar/channel-avatar.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { ChannelNavComponent } from './components/channel-nav/channel-nav.compon
     PlaylistsPageComponent,
     AboutPageComponent,
     ChannelNavComponent,
+    ChannelAvatarComponent,
   ],
   imports: [CommonModule, ChannelRoutingModule, SharedModule],
 })

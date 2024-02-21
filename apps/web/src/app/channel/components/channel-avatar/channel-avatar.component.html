@@ -1,0 +1,24 @@
+<div class="avatar-wrapper">
+  @if (session$ | async; as session) {
+    @if (session._id === channel._id) {
+      <input
+        #avatarControl
+        type="file"
+        hidden
+        name="avatar"
+        accept="image/*"
+        (change)="changeAvatar($event)"
+      />
+      <button (click)="avatarControl.click()" class="button ghost icon">
+        <i class="bx bxs-edit sm"></i>
+      </button>
+    }
+  }
+  <img
+    class="avatar"
+    [ngSrc]="channel.avatar.public_id"
+    alt="{{ channel.displayName }}'s Avatar"
+    width="200"
+    height="200"
+  />
+</div>

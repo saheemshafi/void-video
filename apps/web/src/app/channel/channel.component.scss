@@ -20,18 +20,10 @@ figure {
   }
 }
 
-.avatar {
-  width: 100px;
-}
-
 .channel-details {
   gap: 0 variables.$spacing-normal;
   display: grid;
   grid-template-columns: 76px 1fr;
-
-  .avatar-wrapper {
-    flex-shrink: 0;
-  }
 
   h1 {
     margin-bottom: calc(variables.$spacing-sm / 2);
