@@ -1,17 +1,11 @@
 <div class="subscription">
   <div class="subscription-image">
-    <a
-      [routerLink]="['/c', subscription.username]"
-      [attr.aria-label]="subscription.displayName"
-    >
-      <img
-        class="subscription-avatar"
-        [ngSrc]="subscription.avatar.public_id"
-        [alt]="subscription.displayName"
-        width="80"
-        height="80"
-      />
-    </a>
+    <img
+      class="subscription-avatar"
+      [ngSrc]="subscription.avatar.public_id"
+      [alt]="subscription.displayName"
+      fill
+    />
   </div>
   <div class="subscription-details">
     <a [routerLink]="['/c', subscription.username]" class="subscription-info">
