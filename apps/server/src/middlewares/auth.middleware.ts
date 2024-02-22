@@ -29,7 +29,7 @@ export const authorize =
       let user: undefined | null | IUser;
 
       if (cachedUser) {
-        user = JSON.parse(cachedUser);
+        user = new User(JSON.parse(cachedUser));
       } else {
         user = await User.findById(userId);
         redis.set(`session:${userId}`, JSON.stringify(user));
