@@ -57,14 +57,31 @@
       list-style: none;
       padding: 0;
       width: 100%;
+      margin-left: -1rem;
 
       li {
+        position: relative;
+
         &:first-child {
           margin-top: variables.$spacing-normal;
         }
 
         &:not(:last-child) {
           margin-bottom: variables.$spacing-lg;
+
+          &::before {
+            --avatar-width: 34px;
+            content: '';
+            background-color: transparent;
+            width: var(--avatar-width);
+            height: 100%;
+            border-left: 1px solid rgba(variables.$clr-dusty-gray, 0.4);
+            transform: translateX(50%);
+            position: absolute;
+            top: var(--avatar-width);
+            left: 0;
+            z-index: -1;
+          }
         }
       }
     }
