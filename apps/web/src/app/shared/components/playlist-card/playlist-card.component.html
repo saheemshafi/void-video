@@ -24,7 +24,12 @@
         [attr.aria-label]="playlist.owner.username"
         [title]="playlist.owner.displayName"
       >
-        <img [ngSrc]="playlist.owner.avatar.public_id" width="80" height="80" />
+        <img
+          class="avatar"
+          [ngSrc]="playlist.owner.avatar.public_id"
+          width="80"
+          height="80"
+        />
       </a>
     </div>
     <div>
@@ -40,6 +45,11 @@
       <a class="playlist-link" [routerLink]="['/playlists', playlist._id]">
         View Playlist
       </a>
+    </div>
+    <div>
+      <button class="options-button button icon ghost">
+        <i class="bx bx-dots-vertical-rounded sm"></i>
+      </button>
     </div>
   </div>
 </div>
