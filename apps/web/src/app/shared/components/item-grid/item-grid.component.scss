@@ -2,7 +2,7 @@
 @use '../../../../styles/mixins';
 
 .item-grid {
-  gap: variables.$spacing-normal variables.$spacing-sm;
+  gap: variables.$spacing-lg variables.$spacing-sm;
   align-content: start;
   height: fit-content;
   @include mixins.even-columns(var(--columns-sm));

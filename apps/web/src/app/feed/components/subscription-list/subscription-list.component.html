@@ -1,71 +1,73 @@
 <section>
   @if (subscriptions$ | async; as subscriptions) {
-    @for (subscription of subscriptions; track subscription._id) {
-      <app-subscription-card [subscription]="subscription" />
-    } @empty {
-      <app-fullscreen-info
-        text="You are not subscribed to anyone"
-        [iconTemplate]="fullscreenInfoIcon"
-      />
-      <ng-template #fullscreenInfoIcon>
-        <svg
-          class="fullscreen-info-icon"
-          width="636"
-          height="735"
-          viewBox="0 0 636 735"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <g filter="url(#filter0_d_0_1)">
-            <rect
-              x="113.777"
-              y="6.78931"
-              width="515.853"
-              height="636.799"
-              rx="61"
-              transform="rotate(6.49375 113.777 6.78931)"
-              data-background
+    <app-item-grid>
+      @for (subscription of subscriptions; track subscription._id) {
+        <app-subscription-card [subscription]="subscription" />
+      } @empty {
+        <app-fullscreen-info
+          text="You are not subscribed to anyone"
+          [iconTemplate]="fullscreenInfoIcon"
+        />
+        <ng-template #fullscreenInfoIcon>
+          <svg
+            class="fullscreen-info-icon"
+            width="636"
+            height="735"
+            viewBox="0 0 636 735"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g filter="url(#filter0_d_0_1)">
+              <rect
+                x="113.777"
+                y="6.78931"
+                width="515.853"
+                height="636.799"
+                rx="61"
+                transform="rotate(6.49375 113.777 6.78931)"
+                data-background
+              />
+              <rect
+                x="114.217"
+                y="7.34265"
+                width="514.853"
+                height="635.799"
+                rx="60.5"
+                transform="rotate(6.49375 114.217 7.34265)"
+                stroke="#878787"
+                stroke-opacity="0.18"
+              />
+            </g>
+            <path
+              d="M215.333 338.167C250.74 338.167 284.696 352.232 309.732 377.268C334.768 402.304 348.833 436.26 348.833 471.667"
+              stroke="white"
+              stroke-opacity="0.38"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              data-foreground
             />
-            <rect
-              x="114.217"
-              y="7.34265"
-              width="514.853"
-              height="635.799"
-              rx="60.5"
-              transform="rotate(6.49375 114.217 7.34265)"
-              stroke="#878787"
-              stroke-opacity="0.18"
+            <path
+              d="M215.333 234.333C278.278 234.333 338.645 259.338 383.153 303.847C427.662 348.355 452.667 408.722 452.667 471.667"
+              stroke="white"
+              stroke-opacity="0.38"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              data-foreground
             />
-          </g>
-          <path
-            d="M215.333 338.167C250.74 338.167 284.696 352.232 309.732 377.268C334.768 402.304 348.833 436.26 348.833 471.667"
-            stroke="white"
-            stroke-opacity="0.38"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            data-foreground
-          />
-          <path
-            d="M215.333 234.333C278.278 234.333 338.645 259.338 383.153 303.847C427.662 348.355 452.667 408.722 452.667 471.667"
-            stroke="white"
-            stroke-opacity="0.38"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            data-foreground
-          />
-          <path
-            data-foreground
-            d="M230.167 471.667C238.359 471.667 245 465.026 245 456.833C245 448.641 238.359 442 230.167 442C221.974 442 215.333 448.641 215.333 456.833C215.333 465.026 221.974 471.667 230.167 471.667Z"
-            stroke="white"
-            stroke-opacity="0.38"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
-      </ng-template>
-    }
+            <path
+              data-foreground
+              d="M230.167 471.667C238.359 471.667 245 465.026 245 456.833C245 448.641 238.359 442 230.167 442C221.974 442 215.333 448.641 215.333 456.833C215.333 465.026 221.974 471.667 230.167 471.667Z"
+              stroke="white"
+              stroke-opacity="0.38"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </ng-template>
+      }
+    </app-item-grid>
   }
 </section>

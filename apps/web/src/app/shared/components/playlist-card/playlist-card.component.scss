@@ -73,7 +73,7 @@
       object-fit: cover;
       aspect-ratio: 16 / 9;
       margin-bottom: variables.$spacing-normal;
-      border-radius: calc(variables.$radius-round / 2);
+      border-radius: 12px;
     }
 
     &::before {
@@ -92,10 +92,9 @@
     }
   }
   > .playlist-card-info {
-    display: flex;
-    gap: variables.$spacing-sm;
-    align-items: flex-start;
-    padding-right: variables.$spacing-lg;
+    display: grid;
+    gap: calc(variables.$spacing-sm + 4px);
+    grid-template-columns: 36px 1fr 36px;
 
     .playlist-card-img {
       flex-shrink: 0;
@@ -146,6 +145,13 @@
       &:hover {
         text-decoration: underline;
       }
+    }
+
+    .options-button {
+      width: 34px;
+      height: 34px;
+      aspect-ratio: 1;
+      color: inherit;
     }
   }
 }

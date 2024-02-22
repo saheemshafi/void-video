@@ -5,6 +5,7 @@
   --card-hovered-background: #{variables.$clr-snow};
   --card-shadow: #{variables.$shadow-smooth};
   --card-border: #e5e5e5;
+  --card-image-gradient-clr: #{variables.$clr-snow};
 }
 
 .dark {
@@ -12,6 +13,7 @@
     --card-hovered-background: #{variables.$clr-gray-smooth-dark};
     --card-shadow: #{variables.$shadow-smooth-dark};
     --card-border: #{variables.$clr-slate-gray};
+    --card-image-gradient-clr: #{variables.$clr-slate-gray};
   }
 }
 
@@ -21,28 +23,40 @@
   border: 1px solid transparent;
   transition: 100ms;
   box-shadow: transparent;
-  @include mixins.flex-cv;
+  margin: 4px;
+  display: grid;
   gap: variables.$spacing-lg;
   align-items: center;
-  grid-template-columns: 80px auto auto;
 
   &:hover {
-    background-color: var(--card-hovered-background);
     border: 1px solid var(--card-border);
+    background-color: var(--card-hovered-background);
   }
 
   .subscription-image {
-    flex-shrink: 0;
+    position: relative;
+    height: 100px;
+    margin: -(variables.$spacing-normal);
+    mask-image: linear-gradient(black 50%, transparent);
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        var(--card-image-gradient-clr)
+      );
+    }
+
     a {
       display: block;
     }
 
     .subscription-avatar {
-      border-radius: variables.$radius-rounded;
       object-fit: cover;
-      outline: 2px solid rgba(variables.$clr-dusty-gray, 0.2);
-      outline-offset: 2px;
-      margin: 2px;
+      border-top-right-radius: variables.$radius-round;
+      border-top-left-radius: variables.$radius-round;
       aspect-ratio: 1;
     }
   }

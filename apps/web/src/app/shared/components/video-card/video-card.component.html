@@ -20,7 +20,12 @@
         [attr.aria-label]="video.owner.username"
         [title]="video.owner.displayName"
       >
-        <img [ngSrc]="video.owner.avatar.public_id" width="80" height="80" />
+        <img
+          class="avatar"
+          [ngSrc]="video.owner.avatar.public_id"
+          width="80"
+          height="80"
+        />
       </a>
     </div>
     <div>
@@ -33,6 +38,11 @@
         >
         <span>{{ video.views | abbreviateNumber }} views</span>
       </div>
+    </div>
+    <div>
+      <button class="options-button button icon ghost">
+        <i class="bx bx-dots-vertical-rounded sm"></i>
+      </button>
     </div>
   </div>
 </div>
