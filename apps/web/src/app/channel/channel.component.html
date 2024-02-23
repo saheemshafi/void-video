@@ -1,4 +1,4 @@
-@if (loading) {
+@if (loading$ | async) {
   <app-channel-skeleton />
 } @else {
   @if (channel$ | async; as channel) {
@@ -27,7 +27,7 @@
           <p>{{ channel.totalSubscribers | abbreviateNumber }} subscribers</p>
           <app-subscribe-button
             [channelId]="channel._id"
-            [isSubscribed]="isSubscribed"
+            [isSubscribed]="(isSubscribed$ | async) || false"
           />
         </div>
       </div>
@@ -36,6 +36,6 @@
 }
 
 <section>
-  <app-channel-nav [username]="username" />
+  <app-channel-nav [username]="(username$ | async) || ''" />
   <router-outlet />
 </section>
