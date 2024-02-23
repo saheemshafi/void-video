@@ -1,5 +1,11 @@
 import { isPlatformServer } from '@angular/common';
-import { Component, OnInit, PLATFORM_ID, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  PLATFORM_ID,
+  inject,
+} from '@angular/core';
 import { Observable, filter, map, of, switchMap } from 'rxjs';
 
 import { Playlist } from '~shared/interfaces/playlist.interface';

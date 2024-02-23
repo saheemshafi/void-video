@@ -1,0 +1,7 @@
+@if ((session$ | async) !== undefined) {
+  @if (session$ | async; as session) {
+    <ng-content />
+  } @else if (notLoggedInTemplate) {
+    <app-template-renderer [template]="notLoggedInTemplate" />
+  }
+}

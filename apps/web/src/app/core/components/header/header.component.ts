@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subject, filter, map, startWith, switchMap, tap } from 'rxjs';
 
@@ -9,6 +9,7 @@ import { AuthService } from '~shared/services/auth.service';
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
   private authService = inject(AuthService);

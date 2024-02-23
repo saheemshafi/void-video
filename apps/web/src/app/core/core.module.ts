@@ -10,6 +10,7 @@ import { SidebarComponent } from '~core/components/sidebar/sidebar.component';
 import { CoreRoutingModule } from '~core/core-routing.module';
 import { CoreComponent } from '~core/core.component';
 import { HomeComponent } from '~core/pages/home/home.component';
+import { SidebarSubscriptionSkeletonComponent } from '~core/components/sidebar-subscription-list/sidebar-subscription.skeleton';
 
 import { SharedModule } from '~shared/shared.module';
 
@@ -20,6 +21,7 @@ import { SharedModule } from '~shared/shared.module';
     SidebarComponent,
     HomeComponent,
     SidebarSubscriptionListComponent,
+    SidebarSubscriptionSkeletonComponent,
     SearchbarComponent,
   ],
   imports: [

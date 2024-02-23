@@ -1,6 +1,6 @@
 <div class="avatar-wrapper">
-  @if (session$ | async; as session) {
-    @if (session._id === channel._id) {
+  <app-if-session>
+    @if ((session$ | async)?._id == channel._id) {
       <input
         #avatarControl
         type="file"
@@ -13,7 +13,7 @@
         <i class="bx bxs-edit sm"></i>
       </button>
     }
-  }
+  </app-if-session>
   <img
     class="avatar"
     [ngSrc]="channel.avatar.public_id"
