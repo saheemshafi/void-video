@@ -1,34 +1,38 @@
-@if (channel$ | async; as channel) {
-  <section>
-    <figure class="banner">
-      @if (channel.banner) {
-        <img
-          [ngSrc]="channel.banner.public_id"
-          width="1280"
-          height="211"
-          priority
-          alt="{{ channel.displayName }}'s Banner"
-        />
-      }
-      <figcaption class="sr-only">
-        {{ channel.displayName }}'s Banner
-      </figcaption>
-    </figure>
-    <div class="channel-details">
-      <app-channel-avatar [channel]="channel" />
-      <div class="channel-meta">
-        <h1>{{ channel.displayName }}</h1>
-        <p>&#64;{{ channel.username }}</p>
+@if (loading) {
+  <app-channel-skeleton />
+} @else {
+  @if (channel$ | async; as channel) {
+    <section>
+      <figure class="banner">
+        @if (channel.banner) {
+          <img
+            [ngSrc]="channel.banner.public_id"
+            width="1280"
+            height="211"
+            priority
+            alt="{{ channel.displayName }}'s Banner"
+          />
+        }
+        <figcaption class="sr-only">
+          {{ channel.displayName }}'s Banner
+        </figcaption>
+      </figure>
+      <div class="channel-details">
+        <app-channel-avatar [channel]="channel" />
+        <div class="channel-meta">
+          <h1>{{ channel.displayName }}</h1>
+          <p>&#64;{{ channel.username }}</p>
+        </div>
+        <div class="channel-stats">
+          <p>{{ channel.totalSubscribers | abbreviateNumber }} subscribers</p>
+          <app-subscribe-button
+            [channelId]="channel._id"
+            [isSubscribed]="isSubscribed"
+          />
+        </div>
       </div>
-      <div class="channel-stats">
-        <p>{{ channel.totalSubscribers | abbreviateNumber }} subscribers</p>
-        <app-subscribe-button
-          [channelId]="channel._id"
-          [isSubscribed]="isSubscribed"
-        />
-      </div>
-    </div>
-  </section>
+    </section>
+  }
 }
 
 <section>

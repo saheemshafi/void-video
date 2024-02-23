@@ -4,7 +4,7 @@
 figure {
   margin: 0 0 variables.$spacing-normal 0;
   aspect-ratio: 2560 / 423;
-  background-color: variables.$clr-slate-gray;
+  background-color: rgba(variables.$clr-dusty-gray, 0.2);
   border-radius: variables.$radius-round;
   position: relative;
 
@@ -56,6 +56,15 @@ figure {
       app-subscribe-button {
         width: 100%;
       }
+    }
+  }
+}
+
+// channel.skeleton.ts
+.channel-stats {
+  .skeleton:last-child {
+    @media screen and (max-width: variables.$breakpoint-sm) {
+      max-width: none !important;
     }
   }
 }

@@ -16,22 +16,24 @@ export class ChannelComponent {
   private userService = inject(UserService);
   private subscriptionService = inject(SubscriptionService);
   private activatedRoute = inject(ActivatedRoute);
+  private platformId = inject(PLATFORM_ID);
+
   username: string = '';
-  channel$!: Observable<Channel>;
   isSubscribed = false;
-  private _platformId = inject(PLATFORM_ID);
+  loading = false;
+
+  channel$: Observable<Channel> = this.activatedRoute.paramMap.pipe(
+    tap(() => (this.loading = true)),
+    tap((params) => (this.username = <string>params.get('username'))),
+    switchMap((params) =>
+      this.userService.getChannel(<string>params.get('username'))
+    ),
+    tap(() => (this.loading = false)),
+    shareReplay(1)
+  );
 
   ngOnInit(): void {
-    this.channel$ = this.activatedRoute.paramMap
-      .pipe(
-        tap((params) => (this.username = <string>params.get('username'))),
-        switchMap((params) =>
-          this.userService.getChannel(<string>params.get('username'))
-        )
-      )
-      .pipe(shareReplay(1));
-
-    if (isPlatformServer(this._platformId)) return;
+    if (isPlatformServer(this.platformId)) return;
     this.channel$
       .pipe(
         switchMap((channel) =>
