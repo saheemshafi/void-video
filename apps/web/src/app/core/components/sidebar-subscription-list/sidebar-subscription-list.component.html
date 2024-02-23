@@ -23,6 +23,10 @@
           <p class="info-text">No channels subscribed.</p>
         }
       </ul>
+    } @else {
+      @for (_ of placeholders; track _) {
+        <app-sidebar-subscription-skeleton />
+      }
     }
   } @else {
     <p class="info-text">
