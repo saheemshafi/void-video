@@ -24,11 +24,6 @@ header {
     gap: variables.$spacing-sm;
   }
 
-  > .user-actions {
-    @include mixins.flex-cv;
-    gap: variables.$spacing-sm;
-  }
-
   app-searchbar {
     max-width: 450px;
   }

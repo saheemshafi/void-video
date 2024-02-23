@@ -9,22 +9,24 @@
     >
       <i class="bx bxs-dock-left sm"></i>
     </button>
-
     <app-searchbar />
   </div>
-  <div class="user-actions">
-    @if ((session$ | async) !== undefined) {
-      @if (session$ | async) {
-        <app-user-profile />
-      } @else {
-        <a
-          routerLink="/auth"
-          [queryParams]="{ 'callback-url': currentPageUrl$ | async }"
-          class="button primary"
-          >Sign In</a
-        >
-        <a routerLink="/auth/sign-up" class="button">Sign Up</a>
-      }
-    }
-  </div>
+  
+  <app-if-session [notLoggedInTemplate]="notLoggedInTemplate">
+    <div class="user-actions">
+      <app-user-profile />
+    </div>
+  </app-if-session>
+
+  <ng-template #notLoggedInTemplate>
+    <div class="user-actions">
+      <a
+        routerLink="/auth"
+        [queryParams]="{ 'callback-url': currentPageUrl$ | async }"
+        class="button primary"
+        >Sign In</a
+      >
+      <a routerLink="/auth/sign-up" class="button">Sign Up</a>
+    </div>
+  </ng-template>
 </header>

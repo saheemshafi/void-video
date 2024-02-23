@@ -21,6 +21,8 @@ import { CommentComponent } from '~shared/components/comment/comment.component';
 
 import { ReplaceLinksPipe } from '~shared/pipes/replace-links.pipe';
 import { ReplyFormComponent } from '~shared/components/reply-form/reply-form.component';
+import { IfSessionComponent } from '~shared/components/if-session/if-session.component';
+import { TemplateRendererComponent } from './components/template-renderer/template-renderer.component';
 
 const declarations = [
   SvgLoaderComponent,
@@ -36,6 +38,8 @@ const declarations = [
   VideoOptionsComponent,
   CommentComponent,
   ReplaceLinksPipe,
+  IfSessionComponent,
+  TemplateRendererComponent,
 ];
 
 @NgModule({

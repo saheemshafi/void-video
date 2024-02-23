@@ -267,3 +267,8 @@ i.bx.xs {
     opacity: 0.8;
   }
 }
+
+.user-actions {
+  @include mixins.flex-cv;
+  gap: variables.$spacing-sm;
+}
