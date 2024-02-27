@@ -22,7 +22,8 @@ import { CommentComponent } from '~shared/components/comment/comment.component';
 import { ReplaceLinksPipe } from '~shared/pipes/replace-links.pipe';
 import { ReplyFormComponent } from '~shared/components/reply-form/reply-form.component';
 import { IfSessionComponent } from '~shared/components/if-session/if-session.component';
-import { TemplateRendererComponent } from './components/template-renderer/template-renderer.component';
+import { TemplateRendererComponent } from '~shared/components/template-renderer/template-renderer.component';
+import { VideoCardSkeletonComponent } from '~shared/components/video-card/video-card.skeleton';
 
 const declarations = [
   SvgLoaderComponent,
@@ -40,6 +41,7 @@ const declarations = [
   ReplaceLinksPipe,
   IfSessionComponent,
   TemplateRendererComponent,
+  VideoCardSkeletonComponent,
 ];
 
 @NgModule({

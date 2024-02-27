@@ -10,6 +10,8 @@ import { VideoService } from '~shared/services/video.service';
 })
 export class HomeComponent {
   private videoService = inject(VideoService);
+  placeholders = Array.from(new Array(6), (_, i) => i);
+
   videos$ = this.videoService
     .getVideos({ limit: 21 })
     .pipe(map((data) => data.videos));

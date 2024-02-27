@@ -257,6 +257,7 @@ i.bx.xs {
   min-height: 4px;
   border-radius: 6px;
   animation: fade-in-out 600ms linear infinite alternate-reverse;
+  cursor: default;
 }
 
 @keyframes fade-in-out {

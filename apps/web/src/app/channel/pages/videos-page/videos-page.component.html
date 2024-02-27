@@ -1,6 +1,12 @@
 <h2 class="sr-only">Videos</h2>
 <app-item-grid>
-  @for (video of videos | async; track video._id) {
-    <app-video-card [video]="video" />
+  @if (videos$ | async; as videos) {
+    @for (video of videos; track video._id) {
+      <app-video-card [video]="video" />
+    }
+  } @else {
+    @for (placeholder of placeholders; track placeholder) {
+      <app-video-skeleton />
+    }
   }
 </app-item-grid>

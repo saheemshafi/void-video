@@ -13,12 +13,13 @@ import { VideoService } from '~shared/services/video.service';
 export class VideosPageComponent implements OnInit {
   private videoService = inject(VideoService);
   private activatedRoute = inject(ActivatedRoute);
-  videos!: Observable<Video[]>;
+  videos$!: Observable<Video[]>;
+  placeholders = Array.from(new Array(6), (_, i) => i);
 
   ngOnInit(): void {
     if (!this.activatedRoute.parent) return;
 
-    this.videos = this.activatedRoute.parent.paramMap.pipe(
+    this.videos$ = this.activatedRoute.parent.paramMap.pipe(
       switchMap((params) =>
         this.videoService
           .getVideos({ username: <string>params.get('username') })
