@@ -1,11 +1,18 @@
 <section>
   <h1>Browse</h1>
-  <app-item-grid>
-    @if (videos$ | async; as videos) {
+  <app-item-grid
+    infiniteScroll
+    [infiniteScrollDistance]="2"
+    [infiniteScrollThrottle]="50"
+    (scrolled)="next()"
+  >
+    @if (videos; as videos) {
       @for (video of videos; track video._id) {
         <app-video-card [video]="video" />
       }
-    } @else {
+    }
+
+    @if (loading$ | async) {
       @for (placeholder of placeholders; track placeholder) {
         <app-video-skeleton />
       }

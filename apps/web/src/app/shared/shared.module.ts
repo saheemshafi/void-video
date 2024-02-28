@@ -24,6 +24,7 @@ import { ReplyFormComponent } from '~shared/components/reply-form/reply-form.com
 import { IfSessionComponent } from '~shared/components/if-session/if-session.component';
 import { TemplateRendererComponent } from '~shared/components/template-renderer/template-renderer.component';
 import { VideoCardSkeletonComponent } from '~shared/components/video-card/video-card.skeleton';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 const declarations = [
   SvgLoaderComponent,
@@ -59,6 +60,11 @@ const declarations = [
     ReactiveFormsModule,
     NgOptimizedImage,
   ],
-  exports: [NgOptimizedImage, CdkMenuModule, ...declarations],
+  exports: [
+    NgOptimizedImage,
+    CdkMenuModule,
+    InfiniteScrollModule,
+    ...declarations,
+  ],
 })
 export class SharedModule {}
