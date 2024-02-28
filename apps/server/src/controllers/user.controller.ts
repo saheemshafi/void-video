@@ -38,6 +38,7 @@ import {
   revalidateSessionSchema,
 } from '../validations/user.validation';
 import fs from 'fs/promises';
+import redis from '../db/redis';
 
 const createAccount = asyncHandler(async (req: Request, res: Response) => {
   const {
@@ -136,6 +137,7 @@ const getSession = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const logout = asyncHandler(async (req: Request, res: Response) => {
+  redis.del(`session:${req.user?._id}`);
   res
     .clearCookie('token', cookieOptions)
     .clearCookie('refresh-token', cookieOptions)
@@ -270,6 +272,10 @@ const changeAvatar = asyncHandler(async (req, res) => {
   );
 
   await removeFilesFromCloudinary(req.user?.avatar.public_id || '');
+  if (user) {
+    redis.set(`session:${user._id}`, JSON.stringify(user));
+    redis.del(`channel:${user.username}`);
+  }
 
   res
     .status(STATUS_CODES.OK)
@@ -298,6 +304,11 @@ const changeBanner = asyncHandler(async (req, res) => {
     { new: true }
   );
 
+  if (user) {
+    redis.set(`session:${user._id}`, JSON.stringify(user));
+    redis.del(`channel:${user.username}`);
+  }
+
   if (req.user?.banner) {
     await removeFilesFromCloudinary(req.user?.banner?.public_id || '');
   }
@@ -311,6 +322,21 @@ const getChannelProfile = asyncHandler(async (req, res) => {
   const {
     params: { username },
   } = validateRequest(req, getChannelProfileSchema);
+
+  const cachedChannel = await redis.get(`channel:${username}`);
+
+  if (cachedChannel) {
+    res
+      .status(STATUS_CODES.OK)
+      .json(
+        new ApiResponse(
+          STATUS_CODES.OK,
+          'User channel retrieved from cache.',
+          JSON.parse(cachedChannel)
+        )
+      );
+    return;
+  }
 
   const channel = await User.aggregate([
     {
@@ -336,6 +362,7 @@ const getChannelProfile = asyncHandler(async (req, res) => {
       },
     },
   ]);
+  redis.set(`channel:${username}`, JSON.stringify(channel[0]), { EX: 60 * 8 }); // Cache for 8 minutes
 
   res
     .status(STATUS_CODES.OK)

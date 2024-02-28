@@ -19,6 +19,7 @@ export const STATUS_CODES = {
   INTERNAL_SERVER_ERROR: 500,
   SERVICE_UNAVAILABLE: 503,
   CONFLICT: 409,
+  TOO_MANY_REQUESTS: 429,
 } as const;
 
 export type STATUS_CODES_TYPE = typeof STATUS_CODES;
@@ -26,6 +27,15 @@ export type STATUS_CODES_TYPE = typeof STATUS_CODES;
 export const cookieOptions: CookieOptions = {
   httpOnly: true,
   signed: true,
-  secure: process.env.NODE_ENV === 'development' ? false : true,
-  sameSite: process.env.NODE_ENV === 'development' ? 'lax' : 'none',
 };
+
+export const RATE_LIMITS_TIME = {
+  ONE_SECOND: 1,
+  ONE_MINUTE: 60,
+  FIVE_MINUTES: 5 * 60,
+  TEN_MINUTES: 10 * 60,
+  ONE_HOUR: 60 * 60,
+  ONE_DAY: 60 * 60 * 24,
+  ONE_WEEK: 60 * 60 * 24 * 7,
+  FIFTEEN_DAYS: 60 * 60 * 24 * 15,
+} as const satisfies Record<Uppercase<string>, number>;
