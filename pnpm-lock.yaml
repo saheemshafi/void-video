@@ -241,6 +241,9 @@ importers:
       express:
         specifier: ^4.18.2
         version: 4.18.2
+      ngx-infinite-scroll:
+        specifier: ^17.0.0
+        version: 17.0.0(@angular/common@17.0.8)(@angular/core@17.0.8)
       rxjs:
         specifier: ~7.8.0
         version: 7.8.1
@@ -3857,7 +3860,6 @@ packages:
       react-interactive: 0.8.3(react@16.14.0)
       react-router-dom: 4.3.1(react@16.14.0)
     dev: false
-    bundledDependencies: false
 
   /brace-expansion@1.1.11:
     resolution: {integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==}
@@ -7079,6 +7081,17 @@ packages:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
     dev: true
 
+  /ngx-infinite-scroll@17.0.0(@angular/common@17.0.8)(@angular/core@17.0.8):
+    resolution: {integrity: sha512-pQXLuRiuhRuDKD3nmgyW1V08JVNBepmk6nb8qjHc5hgsWNts01+R/p33rYcRDzcut6/PWqGyrZ9o9i8swzMYMA==}
+    peerDependencies:
+      '@angular/common': '>=17.0.0 <18.0.0'
+      '@angular/core': '>=17.0.0 <18.0.0'
+    dependencies:
+      '@angular/common': 17.0.8(@angular/core@17.0.8)(rxjs@7.8.1)
+      '@angular/core': 17.0.8(rxjs@7.8.1)(zone.js@0.14.2)
+      tslib: 2.6.2
+    dev: false
+
   /nice-napi@1.0.2:
     resolution: {integrity: sha512-px/KnJAJZf5RuBGcfD+Sp2pAKq0ytz8j+1NehvgIGFkvtvFrDM3T8E4x/JJODXK9WZow8RRGrbA9QQ3hs+pDhA==}
     os: ['!win32']
@@ -7834,7 +7847,6 @@ packages:
       react: 16.14.0
       scheduler: 0.19.1
     dev: false
-    bundledDependencies: false
 
   /react-interactive@0.8.3(react@16.14.0):
     resolution: {integrity: sha512-mmRvA9aKP7zu9kVfP1AX1egX8tFlnE3DDXq92z0JTZezfOpmeQBzr77O1+mTV54OOmn+M2t6c5kFD5VnuFoM7A==}
@@ -7888,7 +7900,6 @@ packages:
       object-assign: 4.1.1
       prop-types: 15.8.1
     dev: false
-    bundledDependencies: false
 
   /read-package-json-fast@3.0.2:
     resolution: {integrity: sha512-0J+Msgym3vrLOUB3hzQCuZHII0xkNGCtz/HJH9xZshwv9DbDwkw1KaE3gx/e2J5rpEY5rtOy6cyhKOPrkP7FZw==}

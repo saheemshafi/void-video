@@ -1,6 +1,125 @@
 <h2 class="sr-only">Videos</h2>
 <app-item-grid>
-  @for (video of videos | async; track video._id) {
-    <app-video-card [video]="video" />
+  @if (videos$ | async; as videos) {
+    @for (video of videos; track video._id) {
+      <app-video-card [video]="video" />
+    } @empty {
+      <app-fullscreen-info
+        text="Channel doesn't have any videos"
+        [iconTemplate]="noVideosIcon"
+      ></app-fullscreen-info>
+      <ng-template #noVideosIcon>
+        <svg
+          class="fullscreen-info-icon"
+          width="764"
+          height="764"
+          viewBox="0 0 764 764"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g clip-path="url(#clip0_245_2)">
+            <g filter="url(#filter0_d_245_2)">
+              <rect
+                x="162.777"
+                y="35.7893"
+                width="515.853"
+                height="636.799"
+                rx="61"
+                transform="rotate(6.49375 162.777 35.7893)"
+                data-background
+              />
+              <rect
+                x="163.217"
+                y="36.3426"
+                width="514.853"
+                height="635.799"
+                rx="60.5"
+                transform="rotate(6.49375 163.217 36.3426)"
+                stroke="#878787"
+                stroke-opacity="0.18"
+              />
+            </g>
+            <g clip-path="url(#clip1_245_2)">
+              <path
+                d="M517.986 268.747L288.369 235.625C270.693 233.076 254.297 245.338 251.747 263.014L218.625 492.631C216.076 510.307 228.338 526.703 246.014 529.253L475.631 562.375C493.307 564.924 509.703 552.662 512.253 534.986L545.375 305.369C547.924 287.693 535.662 271.297 517.986 268.747Z"
+                stroke="white"
+                stroke-opacity="0.38"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                data-foreground
+              />
+              <path
+                d="M329.771 241.598L287.416 535.225"
+                stroke="white"
+                stroke-opacity="0.38"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                data-foreground
+              />
+              <path
+                d="M476.584 262.775L434.229 556.403"
+                stroke="white"
+                stroke-opacity="0.38"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                data-foreground
+              />
+              <path
+                d="M235.186 377.823L528.814 420.178"
+                stroke="white"
+                stroke-opacity="0.38"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                data-foreground
+              />
+              <path
+                d="M245.775 304.416L319.182 315.005"
+                stroke="white"
+                stroke-opacity="0.38"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                data-foreground
+              />
+              <path
+                d="M224.597 451.229L298.004 461.818"
+                stroke="white"
+                stroke-opacity="0.38"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                data-foreground
+              />
+              <path
+                d="M444.818 482.996L518.225 493.585"
+                stroke="white"
+                stroke-opacity="0.38"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                data-foreground
+              />
+              <path
+                d="M465.996 336.182L539.403 346.771"
+                stroke="white"
+                stroke-opacity="0.38"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                data-foreground
+              />
+            </g>
+          </g>
+        </svg>
+      </ng-template>
+    }
+  } @else {
+    @for (placeholder of placeholders; track placeholder) {
+      <app-video-skeleton />
+    }
   }
 </app-item-grid>

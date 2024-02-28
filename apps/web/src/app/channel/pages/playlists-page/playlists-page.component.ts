@@ -1,8 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, map, switchMap } from 'rxjs';
-import { PlaylistService } from '~/app/shared/services/playlist.service';
 
+import { PlaylistService } from '~shared/services/playlist.service';
 import { Playlist } from '~shared/interfaces/playlist.interface';
 
 @Component({
@@ -13,11 +13,12 @@ import { Playlist } from '~shared/interfaces/playlist.interface';
 export class PlaylistsPageComponent implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
   private playlistService = inject(PlaylistService);
-  playlists!: Observable<Playlist[]>;
+  playlists$!: Observable<Playlist[]>;
+  placeholders = Array.from(new Array(6), (_, i) => i);
 
   ngOnInit(): void {
     if (!this.activatedRoute.parent) return;
-    this.playlists = this.activatedRoute.parent?.paramMap.pipe(
+    this.playlists$ = this.activatedRoute.parent?.paramMap.pipe(
       switchMap((params) =>
         this.playlistService
           .getPlaylists({

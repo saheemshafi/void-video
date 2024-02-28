@@ -25,6 +25,7 @@
     "@ngneat/hot-toast": "6.1.0",
     "boxicons": "^2.1.4",
     "express": "^4.18.2",
+    "ngx-infinite-scroll": "^17.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"

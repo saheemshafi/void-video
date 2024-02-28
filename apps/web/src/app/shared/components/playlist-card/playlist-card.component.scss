@@ -76,7 +76,7 @@
       border-radius: 12px;
     }
 
-    &::before {
+    &:not(:has(.skeleton))::before {
       background-color: rgba(variables.$clr-dusty-gray, 0.1);
       content: '';
       z-index: -1;
