@@ -1,23 +1,40 @@
 import { isPlatformServer } from '@angular/common';
-import { PLATFORM_ID, inject } from '@angular/core';
+import { inject, PLATFORM_ID } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { catchError, map, of, tap } from 'rxjs';
+import { map, tap } from 'rxjs';
 import { AuthService } from '~shared/services/auth.service';
 
+const protectedRoutes = ['/studio'] as const;
+
 const isAuthRoute = (route: string): boolean => route.startsWith('/auth');
+const needsAuth = (route: string) =>
+  protectedRoutes.some((basePath) => route.startsWith(basePath));
 
 export const authGuard: CanActivateFn = (_, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
   const platformId = inject(PLATFORM_ID);
 
-  if (isPlatformServer(platformId) && isAuthRoute(state.url)) return false;
+  if (
+    isPlatformServer(platformId) &&
+    (isAuthRoute(state.url) || needsAuth(state.url))
+  ) {
+    return false;
+  }
 
-  if (isPlatformServer(platformId) && !isAuthRoute(state.url)) return true;
+  return authService.isAuthenticated().pipe(
+    map((isAuthenticated) => {
+      if (isAuthRoute(state.url) && !isAuthenticated) {
+        return true;
+      }
 
-  return authService.getSession().pipe(
-    catchError(() => of(false)),
-    map((session) => (session ? false : true)),
-    tap((isAuthenticated) => !isAuthenticated && router.navigate(['/']))
+      if (isAuthRoute(state.url) && isAuthenticated) {
+        router.navigate(['/']);
+        return false;
+      }
+
+      return isAuthenticated;
+    }),
+    tap((isAllowed) => !isAllowed && router.navigate(['/auth']))
   );
 };

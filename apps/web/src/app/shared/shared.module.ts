@@ -27,6 +27,7 @@ import { VideoCardSkeletonComponent } from '~shared/components/video-card/video-
 import { PlaylistCardSkeleton } from '~shared/components/playlist-card/playlist-card.skeleton';
 
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 const declarations = [
   SvgLoaderComponent,
@@ -54,6 +55,7 @@ const declarations = [
     ItemGridComponent,
     ReplyFormComponent,
     ...declarations,
+    NotFoundComponent,
   ],
   imports: [
     CommonModule,

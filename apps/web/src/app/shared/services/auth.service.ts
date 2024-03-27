@@ -4,8 +4,10 @@ import { Injectable, OnDestroy, PLATFORM_ID, inject } from '@angular/core';
 import {
   BehaviorSubject,
   NEVER,
+  Observable,
   catchError,
   map,
+  of,
   shareReplay,
   tap,
 } from 'rxjs';
@@ -103,7 +105,7 @@ export class AuthService implements OnDestroy {
       .get(`${environment.serverUrl}/users/logout`, {
         withCredentials: true,
       })
-      .pipe(tap({ next: () => this.sessionSubject.next(null) }));
+      .pipe(tap(() => this.sessionSubject.next(null)));
   }
 
   revalidateSession() {
@@ -117,10 +119,6 @@ export class AuthService implements OnDestroy {
       );
   }
 
-  changePassword() {}
-  resetPassword() {}
-  sendResetPasswordEmail() {}
-
   changeAvatar(avatar: File) {
     const formData = new FormData();
     formData.append('avatar', avatar);
@@ -129,6 +127,13 @@ export class AuthService implements OnDestroy {
       `${environment.serverUrl}/users/change-avatar`,
       formData,
       { withCredentials: true, reportProgress: true, observe: 'events' }
+    );
+  }
+
+  isAuthenticated(): Observable<boolean> {
+    return this.getSession().pipe(
+      catchError(() => of(false)),
+      map((session) => !!session)
     );
   }
 
